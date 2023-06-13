@@ -91,7 +91,7 @@ public class Bispo extends Peca {
 	
 	@Override
 	public String toString() {
-		return "B";
+		return super.toString() + "B";
 	}
 
 }

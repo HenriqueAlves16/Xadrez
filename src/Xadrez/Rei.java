@@ -42,7 +42,7 @@ public class Rei extends Peca {
 	
 	@Override
 	public String toString() {
-		return "K";
+		return super.toString() + "K";
 	}
 	
 	

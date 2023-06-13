@@ -85,7 +85,7 @@ public class Torre extends Peca {
 
 	@Override
 	public String toString() {
-		return "T";
+		return super.toString() + "T";
 	}
 	
 	

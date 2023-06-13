@@ -62,6 +62,6 @@ public class Peao extends Peca {
 	
 	@Override
 	public String toString() {
-		return "P";
+		return super.toString() + "P";
 	}
 }

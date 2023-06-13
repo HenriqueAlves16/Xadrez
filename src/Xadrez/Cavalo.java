@@ -48,6 +48,6 @@ public class Cavalo extends Peca {
 	
 	@Override
 	public String toString() {
-		return "N";
+		return super.toString() + "N";
 	}
 }

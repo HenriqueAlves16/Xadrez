@@ -107,7 +107,7 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
 	    //Peões:
 	    for(int i = 0; i < 8; i++) {
 	    	tabuleiro[1][i].setPeca(new Peao("branco", tabuleiro[1][i], 0, 0, "Imagens/w_pawn_png_128px.png"));
-	    	tabuleiro[6][i].setPeca(new Peao("preto", tabuleiro[1][i], 0, 0, "Imagens/b_pawn_png_128px.png"));
+	    	tabuleiro[6][7 - i].setPeca(new Peao("preto", tabuleiro[6][7 - i], 0, 0, "Imagens/b_pawn_png_128px.png"));
 	    }
 	    
 	    //Casas vazias:
@@ -126,7 +126,7 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
 	                String letra = tabuleiro[l][c].getPeca().toString();
 	                System.out.print(letra + "  ");
 	            } catch (NullPointerException e) {
-	                System.out.print("-  ");
+	                System.out.print("-   ");
 	            }
 		    }
 		    System.out.println("");
@@ -158,11 +158,10 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
 	//Método que muda o tabuleiro quando um lance ocorre:
 	public void mudaTabuleiro(Casa casaOrigem, Casa casaDestino) {
 		Peca peca = casaOrigem.getPeca();
-		if(peca.getLancesPossiveis().contains(casaDestino)) {
-			casaOrigem.setPeca(null);
-			casaDestino.setPeca(peca);
-			peca.setPosicao(casaDestino);
-		}
+		casaOrigem.setPeca(null);
+		casaDestino.setPeca(peca);
+		peca.setPosicao(casaDestino);
+		peca.lancesValidos();
 	}
 
 	//Método que imprime o tabuleiro graficamente:
@@ -205,11 +204,10 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
 	
 	@Override
     public void mousePressed(MouseEvent e) {
-        if(e.getX() < 8 * TAMANHO_CASA && e.getY() < 8 * TAMANHO_CASA){                    // gets the X and Y coordinates of where you click
-            //if inside the board
+        if(e.getX() < 8 * TAMANHO_CASA && e.getY() < 8 * TAMANHO_CASA){                    
             xPressed = e.getX();
             yPressed = e.getY();
-            System.out.println("Pressed, x=" + xPressed + "y=" + yPressed);
+            //System.out.println("Pressed, x=" + xPressed + "y=" + yPressed);
         }
     }
 	
@@ -232,28 +230,17 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
             	try {
 	            	Peca pecaSelecionada = tabuleiro[linhaPressionada][colunaPressionada].getPeca();
 	            	String corPeca = pecaSelecionada.getCor();
-	            	System.out.println(pecaSelecionada);
+	            	System.out.println(pecaSelecionada + "" + pecaSelecionada.getPosicao());
 	            	
-	                if(linhaLiberada == 0 && linhaPressionada == 1 && pecaSelecionada instanceof Peao && corPeca.equals("branco")) {                           // Promoção do peão branco (vai da linha 1 para 0 na interface) -> vira rainha
-	                	//dragPiece = "" + xPressed/TAMANHO_CASA + xReleased/TAMANHO_CASA + ChessGame.board[newY/tile][newX/tile] +"Q" +"P";
-	                }
-	                else if(linhaLiberada == 7 && linhaPressionada == 6 && pecaSelecionada instanceof Peao && corPeca.equals("preto")) {                      //Promoção do peão branco (vai da linha 6 para 7 na interface) 
-	                	//dragPiece = "" + xPressed/TAMANHO_CASA + xReleased/TAMANHO_CASA + ChessGame.board[newY/tile][newX/tile] +"q" +"p";
-	                }
-	                else{
-	                	//dragPiece = "" + yPressed/TAMANHO_CASA + xPressed/TAMANHO_CASA + yReleased/TAMANHO_CASA + xReleased/TAMANHO_CASA + ChessGame.board[newY/tile][newX/tile];               // case for all other moves
-	                }
-	                
                     System.out.println(pecaSelecionada.getLancesPossiveis());
 	                if(pecaSelecionada.getLancesPossiveis().contains(casaDestino)){		//é um lance possível
-	                	System.out.println("é possível");
 	                    mudaTabuleiro(casaSelecionada, casaDestino);
 	                }
             	} catch(NullPointerException exp) {}
-            	
-
+            
             }
             repaint();
+            imprimeTabuleiro();
         }
     }
 	 

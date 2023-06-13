@@ -91,7 +91,10 @@ public abstract class Peca extends JPanel{
 	//toString():
 	@Override
 	public String toString() {
-		return "Peca [cor=" + cor + ", posicao=" + posicao + ", capturado=" + capturado + "]";
+		if(this.cor.equals("branco")) {
+			return "W";
+		}
+		return "B";
 	}
 	
 	public abstract int lancesValidos();

@@ -144,6 +144,6 @@ public class Rainha extends Peca {
 	
 	@Override
 	public String toString() {
-		return "Q";
+		return super.toString() + "Q";
 	}
 }
