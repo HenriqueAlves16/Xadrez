@@ -52,17 +52,6 @@ public class Jogo {
 		return false;
 	}
 	
-	//Método que muda o tabuleiro quando um lance ocorre:
-	public void mudaTabuleiro(Casa casaOrigem, Casa casaDestino) {
-		Peca peca = casaOrigem.getPeca();
-		if(validaLance(peca, casaDestino)) {
-			adicionaLance(peca, casaDestino);
-			casaOrigem.setPeca(null);
-			casaDestino.setPeca(peca);
-			peca.setPosicao(casaDestino);
-		}
-	}
-	
 	/*Método que verifica se o jogo acabou:
 	public boolean verificaFim() {
 		//Xeque-Mate:

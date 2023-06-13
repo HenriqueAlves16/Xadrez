@@ -21,6 +21,7 @@ import java.io.IOException;
 public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionListener{
 	private static Casa[][] tabuleiro;
 	private static final int TAMANHO_CASA = 75;
+	private int xReleased, yReleased, xPressed, yPressed;
 	
 	//Inicializa o tabuleiro na configuração inicial
 	Tabuleiro(){
@@ -153,6 +154,16 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
 	public void removePeca(char coluna, int linha, Peca peca) {
 	    tabuleiro[linha][coluna - 'a'].setPeca(null);
 	}
+	
+	//Método que muda o tabuleiro quando um lance ocorre:
+	public void mudaTabuleiro(Casa casaOrigem, Casa casaDestino) {
+		Peca peca = casaOrigem.getPeca();
+		if(peca.getLancesPossiveis().contains(casaDestino)) {
+			casaOrigem.setPeca(null);
+			casaDestino.setPeca(peca);
+			peca.setPosicao(casaDestino);
+		}
+	}
 
 	//Método que imprime o tabuleiro graficamente:
 	@Override
@@ -161,27 +172,105 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
         this.addMouseListener(this);                
         this.addMouseMotionListener(this);
 
-        for (int linha = 0; linha < 8; linha += 1){
+        //Percorre tabuleiro
+        for (int linha = 0; linha < 8; linha++){
         	for(char col = 0; col < 8; col++) {
 	            setVisible(true);           // testar fora                                                   
-	            setSize(600,600);
+	            setSize(640,640);
 	            
-	            if((linha + col) % 2 == 0) {
+	            //Pinta as casas
+	            if((linha + col) % 2 == 1) {
 		            g.setColor(Color.GRAY);                                     
 		            g.fillRect(col * TAMANHO_CASA, linha * TAMANHO_CASA, TAMANHO_CASA, TAMANHO_CASA);               
 	            }	else	{
 	            	g.setColor(Color.WHITE);                                          
 		            g.fillRect(col * TAMANHO_CASA, linha * TAMANHO_CASA, TAMANHO_CASA, TAMANHO_CASA);                       
 	            } 
-	            
+        	}
+        }
+        
+        //Loops separados para as peças não serem sobrepostas pelas casas
+        for (int linha = 0; linha < 8; linha++){
+        	for(char col = 0; col < 8; col++) {
+	            //Desenha as imagens:
 	            Peca peca = getCasa((char)(col + 'a'), linha + 1).getPeca();
 	            Image imagem;
 	            try {
 	            	imagem = peca.getResizedIcon().getImage();
-	            	g.drawImage(imagem, col * TAMANHO_CASA, linha * TAMANHO_CASA, this);
-	            }	catch(NullPointerException e)	{}
-	            
+	            	g.drawImage(imagem, col * TAMANHO_CASA, (7-linha) * TAMANHO_CASA, this);
+	            }	catch(NullPointerException e)	{}   
         	}
         }
 	}
+	
+	@Override
+    public void mousePressed(MouseEvent e) {
+        if(e.getX() < 8 * TAMANHO_CASA && e.getY() < 8 * TAMANHO_CASA){                    // gets the X and Y coordinates of where you click
+            //if inside the board
+            xPressed = e.getX();
+            yPressed = e.getY();
+            System.out.println("Pressed, x=" + xPressed + "y=" + yPressed);
+        }
+    }
+	
+	@Override
+    public void mouseReleased(MouseEvent e) {                   
+        if(e.getX() < 8 * TAMANHO_CASA && e.getY() < 8 * TAMANHO_CASA){             //Permite movimento apenas dentro do tabuleiro
+        	xReleased = e.getX();
+        	yReleased = e.getY();
+            String dragPiece;
+            if(e.getButton() == MouseEvent.BUTTON1){                 				//Movimenta com o botão esquerdo
+            	int linhaPressionada = 7 - yPressed/TAMANHO_CASA;
+            	int colunaPressionada = xPressed/TAMANHO_CASA;
+            	Casa casaSelecionada = getCasa((char)('a' + colunaPressionada), linhaPressionada + 1);
+            			
+            	int linhaLiberada = 7 - yReleased/TAMANHO_CASA;            	
+            	int colunaLiberada = xReleased/TAMANHO_CASA;
+            	Casa casaDestino = getCasa((char)('a' + colunaLiberada), linhaLiberada + 1);
+            	
+            	//System.out.println(casaSelecionada +" "+ casaDestino);
+            	try {
+	            	Peca pecaSelecionada = tabuleiro[linhaPressionada][colunaPressionada].getPeca();
+	            	String corPeca = pecaSelecionada.getCor();
+	            	System.out.println(pecaSelecionada);
+	            	
+	                if(linhaLiberada == 0 && linhaPressionada == 1 && pecaSelecionada instanceof Peao && corPeca.equals("branco")) {                           // Promoção do peão branco (vai da linha 1 para 0 na interface) -> vira rainha
+	                	//dragPiece = "" + xPressed/TAMANHO_CASA + xReleased/TAMANHO_CASA + ChessGame.board[newY/tile][newX/tile] +"Q" +"P";
+	                }
+	                else if(linhaLiberada == 7 && linhaPressionada == 6 && pecaSelecionada instanceof Peao && corPeca.equals("preto")) {                      //Promoção do peão branco (vai da linha 6 para 7 na interface) 
+	                	//dragPiece = "" + xPressed/TAMANHO_CASA + xReleased/TAMANHO_CASA + ChessGame.board[newY/tile][newX/tile] +"q" +"p";
+	                }
+	                else{
+	                	//dragPiece = "" + yPressed/TAMANHO_CASA + xPressed/TAMANHO_CASA + yReleased/TAMANHO_CASA + xReleased/TAMANHO_CASA + ChessGame.board[newY/tile][newX/tile];               // case for all other moves
+	                }
+	                
+                    System.out.println(pecaSelecionada.getLancesPossiveis());
+	                if(pecaSelecionada.getLancesPossiveis().contains(casaDestino)){		//é um lance possível
+	                	System.out.println("é possível");
+	                    mudaTabuleiro(casaSelecionada, casaDestino);
+	                }
+            	} catch(NullPointerException exp) {}
+            	
+
+            }
+            repaint();
+        }
+    }
+	 
+	//even though we don't use these methods we still need them to avoid an error
+    @Override
+    public void mouseEntered(MouseEvent e) { }
+
+    @Override
+    public void mouseExited(MouseEvent e) { }
+
+    @Override
+    public void mouseDragged(MouseEvent e) { }
+
+    @Override
+    public void mouseMoved(MouseEvent e) { }
+
+    @Override
+    public void mouseClicked(MouseEvent e) { }
+
 }

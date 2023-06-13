@@ -1,6 +1,8 @@
 package Xadrez;
 import java.util.ArrayList;
 
+import javax.swing.JFrame;
+
 public class Main {
 
 	public static void main(String[] args) {
@@ -65,6 +67,13 @@ public class Main {
 		frame.add(peaoPreto);
 		*/
 		Tabuleiro tabuleiro = new Tabuleiro();
+		JFrame f = new JFrame("Xadrez");        //Inicializa a janela
+        f.add(tabuleiro);                                                              //Adiciona a interface (JPanel) no frame
+        f.setSize(640, 640);                                                     
+        f.setVisible(true);                                                      
+        f.setResizable(false);                                                   
+        f.setLocationRelativeTo(null);                                           
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
 }
