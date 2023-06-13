@@ -21,7 +21,9 @@ import java.io.IOException;
 public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionListener{
 	private static Casa[][] tabuleiro;
 	private static final int TAMANHO_CASA = 75;
-	private int xReleased, yReleased, xPressed, yPressed;
+	private int xReleased, yReleased, xPressed, yPressed, mouseX, mouseY;
+	private boolean dragging;
+	Peca pecaSelecionada;
 	
 	//Inicializa o tabuleiro na configuração inicial
 	Tabuleiro(){
@@ -186,21 +188,31 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
 	            }	else	{
 	            	g.setColor(Color.WHITE);                                          
 		            g.fillRect(col * TAMANHO_CASA, linha * TAMANHO_CASA, TAMANHO_CASA, TAMANHO_CASA);                       
-	            } 
+	            }
         	}
         }
-        
+    
         //Loops separados para as peças não serem sobrepostas pelas casas
         for (int linha = 0; linha < 8; linha++){
         	for(char col = 0; col < 8; col++) {
-	            //Desenha as imagens:
-	            Peca peca = getCasa((char)(col + 'a'), linha + 1).getPeca();
-	            Image imagem;
 	            try {
-	            	imagem = peca.getResizedIcon().getImage();
-	            	g.drawImage(imagem, col * TAMANHO_CASA, (7-linha) * TAMANHO_CASA, this);
-	            }	catch(NullPointerException e)	{}   
+	        		Peca peca = getCasa((char)(col + 'a'), linha + 1).getPeca();
+	        		if(!dragging || !peca.equals(pecaSelecionada)) {	            
+			            Image imagem;
+			           	imagem = peca.getResizedIcon().getImage();
+			           	g.drawImage(imagem, col * TAMANHO_CASA, (7-linha) * TAMANHO_CASA, this);
+			        }
+	            } catch(NullPointerException e)	{}   
         	}
+        }
+        
+        if(dragging) {
+        	Image imagem;
+            try {
+            	imagem = pecaSelecionada.getResizedIcon().getImage();
+            	pecaSelecionada.setVisible(false);
+            	g.drawImage(imagem, mouseX, mouseY, this);
+            }	catch(NullPointerException e)	{}
         }
 	}
 	
@@ -209,6 +221,9 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
         if(e.getX() < 8 * TAMANHO_CASA && e.getY() < 8 * TAMANHO_CASA){                    
             xPressed = e.getX();
             yPressed = e.getY();
+            int linhaPressionada = 7 - yPressed/TAMANHO_CASA;
+        	int colunaPressionada = xPressed/TAMANHO_CASA;
+        	pecaSelecionada = getCasa((char)('a' + colunaPressionada), linhaPressionada + 1).getPeca();
             //System.out.println("Pressed, x=" + xPressed + "y=" + yPressed);
         }
     }
@@ -241,20 +256,26 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
             	} catch(NullPointerException exp) {}
             
             }
+            dragging = false;	
             repaint();
             //imprimeTabuleiro();
         }
     }
-	 
+	
+    @Override
+    public void mouseDragged(MouseEvent e) {
+    	mouseX = e.getX();
+        mouseY = e.getY();
+        dragging = true;
+        repaint();
+    }	
+    
 	//even though we don't use these methods we still need them to avoid an error
     @Override
     public void mouseEntered(MouseEvent e) { }
 
     @Override
     public void mouseExited(MouseEvent e) { }
-
-    @Override
-    public void mouseDragged(MouseEvent e) { }
 
     @Override
     public void mouseMoved(MouseEvent e) { }
