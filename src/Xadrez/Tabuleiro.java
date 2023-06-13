@@ -80,8 +80,8 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
 	public void inicializaTabuleiro(Casa[][] tabuleiro) {
 		//Torres:
 		tabuleiro[0][0].setPeca(new Torre("branco", tabuleiro[0][0], 0, 0, "Imagens/w_rook_png_128px.png"));
-		tabuleiro[0][7].setPeca(new Torre("branco", tabuleiro[0][0], 0, 0, "Imagens/w_rook_png_128px.png"));
-		tabuleiro[7][0].setPeca(new Torre("preto", tabuleiro[7][7], 0, 0, "Imagens/b_rook_png_128px.png"));
+		tabuleiro[0][7].setPeca(new Torre("branco", tabuleiro[0][7], 0, 0, "Imagens/w_rook_png_128px.png"));
+		tabuleiro[7][0].setPeca(new Torre("preto", tabuleiro[7][0], 0, 0, "Imagens/b_rook_png_128px.png"));
 		tabuleiro[7][7].setPeca(new Torre("preto", tabuleiro[7][7], 0, 0, "Imagens/b_rook_png_128px.png"));
 		
 		// Cavalos:
@@ -158,10 +158,12 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
 	//Método que muda o tabuleiro quando um lance ocorre:
 	public void mudaTabuleiro(Casa casaOrigem, Casa casaDestino) {
 		Peca peca = casaOrigem.getPeca();
-		casaOrigem.setPeca(null);
-		casaDestino.setPeca(peca);
-		peca.setPosicao(casaDestino);
-		peca.lancesValidos();
+		if(peca.getLancesPossiveis().contains(casaDestino)){
+			casaDestino.setPeca(peca);
+			casaOrigem.setPeca(null);
+			peca.setPosicao(casaDestino);
+			atualizaLancesECapturas();
+		}
 	}
 
 	//Método que imprime o tabuleiro graficamente:
@@ -226,7 +228,7 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
             	int colunaLiberada = xReleased/TAMANHO_CASA;
             	Casa casaDestino = getCasa((char)('a' + colunaLiberada), linhaLiberada + 1);
             	
-            	//System.out.println(casaSelecionada +" "+ casaDestino);
+            	System.out.println(casaSelecionada +" "+ casaDestino);
             	try {
 	            	Peca pecaSelecionada = tabuleiro[linhaPressionada][colunaPressionada].getPeca();
 	            	String corPeca = pecaSelecionada.getCor();
@@ -240,7 +242,7 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
             
             }
             repaint();
-            imprimeTabuleiro();
+            //imprimeTabuleiro();
         }
     }
 	 

@@ -35,17 +35,22 @@ public class Peao extends Peca {
 	    // Verifica possíveis capturas diagonais:
 	    try {
 		    Casa casaDiagonalEsquerda = Tabuleiro.getCasa((char) (colunaAtual - 1), linhaAtual + delta);
-		    if (casaDiagonalEsquerda.getPeca() != null && !casaDiagonalEsquerda.getPeca().getCor().equals(this.getCor())) {
+		    if (!casaDiagonalEsquerda.getPeca().getCor().equals(this.getCor())) {
+		    	System.out.println("diag esq");
 		        lancesValidos.add(casaDiagonalEsquerda);
 	        	capturasValidas.add(casaDiagonalEsquerda.getPeca());
 		    }
 	   
 		    Casa casaDiagonalDireita = Tabuleiro.getCasa((char) (colunaAtual + 1), linhaAtual + delta);
-		    if (casaDiagonalDireita.getPeca() != null && !casaDiagonalDireita.getPeca().getCor().equals(this.getCor())) {
+		    if (!casaDiagonalDireita.getPeca().getCor().equals(this.getCor())) {
+		    	System.out.println("diag dir");
 		        lancesValidos.add(casaDiagonalDireita);
 	        	capturasValidas.add(casaDiagonalDireita.getPeca());
 		    }
-	    } catch(IndexOutOfBoundsException e) {}
+	    } catch(IndexOutOfBoundsException e) {
+	    	
+	    } catch(NullPointerException e) {}
+	    
 	    
 	    this.setLancesPossiveis(lancesValidos);
 	    this.setCapturasPossiveis(capturasValidas);
