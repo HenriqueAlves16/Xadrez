@@ -9,7 +9,7 @@ public class JogadorHumano extends Jogador {
 
 	@Override
 	public void fazJogada() {
-		// TODO Auto-generated method stub
+		
 		
 	}
 

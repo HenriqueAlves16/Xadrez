@@ -67,6 +67,9 @@ public class Main {
 		frame.add(peaoPreto);
 		*/
 		Tabuleiro tabuleiro = new Tabuleiro();
+		JogadorHumano jogador1 = new JogadorHumano("branco");
+		JogadorMaquina jogador2 = new JogadorMaquina("preto");
+		
 		JFrame f = new JFrame("Xadrez");        //Inicializa a janela
         f.add(tabuleiro);                                                              //Adiciona a interface (JPanel) no frame
         f.setSize(640, 640);                                                     
@@ -74,7 +77,8 @@ public class Main {
         f.setResizable(false);                                                   
         f.setLocationRelativeTo(null);                                           
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        Jogo jogo = new Jogo(null, tabuleiro);
+		Jogo jogo = new Jogo(jogador1, jogador2, tabuleiro);
+
 	}
 
 }

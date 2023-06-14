@@ -169,12 +169,14 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
 	
 	//Método que muda o tabuleiro quando um lance ocorre:
 	public void mudaTabuleiro(Casa casaOrigem, Casa casaDestino) {
+		System.out.println("AAAAAAA");
 		Peca peca = casaOrigem.getPeca();
+		//System.out.println(peca);
 		if(peca.getLancesPossiveis().contains(casaDestino)){
+			//System.out.println("aaaaaaaaa");
 			casaDestino.setPeca(peca);
 			casaOrigem.setPeca(null);
 			peca.setPosicao(casaDestino);
-			jogo.finalizaTurno();
 		}
 	}
 
@@ -270,6 +272,7 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
                     System.out.println(pecaSelecionada.getLancesPossiveis());
 	                if(pecaSelecionada.getLancesPossiveis().contains(casaDestino)){		//é um lance possível
 	                    mudaTabuleiro(casaSelecionada, casaDestino);
+	                    jogo.finalizaTurno();
 	                }
             	} catch(NullPointerException exp) {}
             

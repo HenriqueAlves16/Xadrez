@@ -9,15 +9,17 @@ public class Jogo {
 	private int numeroLance;
 	private String turno;
 	
-	public Jogo(Jogador jogador2, Tabuleiro tabuleiro) {
+	public Jogo(Jogador jogador1, Jogador jogador2, Tabuleiro tabuleiro) {
 		this.listaLances = "";
-		//this.jogador1 = new JogadorHumano();
-		this.jogador2 = jogador2;
 		this.numeroLance = 1;
 		this.turno = "branco";
 		this.tabuleiro = tabuleiro;
 		tabuleiro.setJogo(this);
 		atualizaLancesECapturas();
+		this.jogador1 = jogador1;
+		this.jogador2 = jogador2;
+		jogador1.setJogo(this);
+		jogador2.setJogo(this);
 	}
 	
 	//getters e setters:
@@ -116,7 +118,14 @@ public class Jogo {
 		atualizaLancesECapturas();
 		String novoTurno = (turno.equals("branco")) ? "preto" : "branco";
 		setTurno(novoTurno);
+		if(jogador2 instanceof JogadorMaquina) {
+			System.out.println("jogadorMaquina");
+			((JogadorMaquina)jogador2).fazJogada();
+			String novoTurnoMaquina = (turno.equals("branco")) ? "preto" : "branco";
+			setTurno(novoTurnoMaquina);
+		}
 	}
+	
 
 	
 	
