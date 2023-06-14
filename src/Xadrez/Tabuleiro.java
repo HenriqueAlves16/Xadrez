@@ -200,7 +200,15 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
 	        		if(!dragging || !peca.equals(pecaSelecionada)) {	            
 			            Image imagem;
 			           	imagem = peca.getResizedIcon().getImage();
-			           	g.drawImage(imagem, col * TAMANHO_CASA, (7-linha) * TAMANHO_CASA, this);
+			           	if(peca instanceof Rainha) {
+				           	g.drawImage(imagem, col * TAMANHO_CASA + 3, (7-linha) * TAMANHO_CASA + 6, this);
+			           	}	else if(peca instanceof Rei || peca instanceof Bispo)	{
+				           	g.drawImage(imagem, col * TAMANHO_CASA + 5, (7-linha) * TAMANHO_CASA + 6, this);
+			           	}	else if(peca instanceof Cavalo || peca instanceof Torre)	{
+				           	g.drawImage(imagem, col * TAMANHO_CASA + 9, (7-linha) * TAMANHO_CASA + 6, this);
+			           	}	else	{
+				           	g.drawImage(imagem, col * TAMANHO_CASA + 11, (7-linha) * TAMANHO_CASA + 6, this);
+			           	}	
 			        }
 	            } catch(NullPointerException e)	{}   
         	}
@@ -211,7 +219,7 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
             try {
             	imagem = pecaSelecionada.getResizedIcon().getImage();
             	pecaSelecionada.setVisible(false);
-            	g.drawImage(imagem, mouseX, mouseY, this);
+            	g.drawImage(imagem, mouseX - imagem.getWidth(pecaSelecionada) / 2, mouseY - imagem.getHeight(pecaSelecionada) / 2, this);
             }	catch(NullPointerException e)	{}
         }
 	}
@@ -258,7 +266,7 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
             }
             dragging = false;	
             repaint();
-            //imprimeTabuleiro();
+            imprimeTabuleiro();
         }
     }
 	
@@ -270,7 +278,7 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
         repaint();
     }	
     
-	//even though we don't use these methods we still need them to avoid an error
+	//Métodos que devem ser "implementados" devido à interface
     @Override
     public void mouseEntered(MouseEvent e) { }
 
