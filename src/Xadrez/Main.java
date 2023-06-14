@@ -74,6 +74,7 @@ public class Main {
         f.setResizable(false);                                                   
         f.setLocationRelativeTo(null);                                           
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        Jogo jogo = new Jogo(null, tabuleiro);
 	}
 
 }

@@ -24,6 +24,7 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
 	private int xReleased, yReleased, xPressed, yPressed, mouseX, mouseY;
 	private boolean dragging;
 	Peca pecaSelecionada;
+	Jogo jogo;
 	
 	//Inicializa o tabuleiro na configuração inicial
 	Tabuleiro(){
@@ -34,9 +35,8 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
 		    }
 		}
 		inicializaTabuleiro(tabuleiro);
-		atualizaLancesECapturas();
-		
 	}
+	
 	
 	//Inicializa o tabuleiro com uma peça em determinada posicao:
 	/*Tabuleiro(Peca peca){
@@ -65,6 +65,26 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
 	}*/
 	
 	
+	public Peca getPecaSelecionada() {
+		return pecaSelecionada;
+	}
+
+
+	public void setPecaSelecionada(Peca pecaSelecionada) {
+		this.pecaSelecionada = pecaSelecionada;
+	}
+
+
+	public Jogo getJogo() {
+		return jogo;
+	}
+
+
+	public void setJogo(Jogo jogo) {
+		this.jogo = jogo;
+	}
+
+
 	//Getters e setters:
 	public static Casa[][] getTabuleiro() {
 		return tabuleiro;
@@ -135,16 +155,6 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
 		}
 	}
 	
-	public void atualizaLancesECapturas() {
-		for (int l = 0; l < 8; l++) {
-		    for (int c = 0; c < 8; c++) {
-		    	try {
-		    		tabuleiro[l][c].getPeca().lancesValidos();
-		    	} catch(NullPointerException e) {}
-		    }
-		}
-	}
-	
 	//Método que adiciona uma peça ao tabuleiro e o atualiza:
 	public void adicionaPeca(Peca peca) {
 	    int linha = peca.getPosicao().getLinha();
@@ -164,7 +174,7 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
 			casaDestino.setPeca(peca);
 			casaOrigem.setPeca(null);
 			peca.setPosicao(casaDestino);
-			atualizaLancesECapturas();
+			jogo.finalizaTurno();
 		}
 	}
 
@@ -237,8 +247,8 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
     }
 	
 	@Override
-    public void mouseReleased(MouseEvent e) {                   
-        if(e.getX() < 8 * TAMANHO_CASA && e.getY() < 8 * TAMANHO_CASA){             //Permite movimento apenas dentro do tabuleiro
+    public void mouseReleased(MouseEvent e) { 		//tratar caso de soltar fora do tabuleiro                  
+        if(e.getX() < 8 * TAMANHO_CASA && e.getY() < 8 * TAMANHO_CASA && pecaSelecionada.getCor().equals(jogo.getTurno())){             //Permite movimento apenas dentro do tabuleiro e na vez do jogador correto ()poderia melhorar criando uma exceção
         	xReleased = e.getX();
         	yReleased = e.getY();
             String dragPiece;
@@ -272,10 +282,12 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
 	
     @Override
     public void mouseDragged(MouseEvent e) {
-    	mouseX = e.getX();
-        mouseY = e.getY();
-        dragging = true;
-        repaint();
+    	if(pecaSelecionada.getCor().equals(jogo.getTurno())) {
+	    	mouseX = e.getX();
+	        mouseY = e.getY();
+	        dragging = true;
+	        repaint();
+    	}
     }	
     
 	//Métodos que devem ser "implementados" devido à interface
