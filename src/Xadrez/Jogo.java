@@ -1,5 +1,7 @@
 package Xadrez;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
+
 
 public class Jogo {
 	private String listaLances;
@@ -216,16 +218,91 @@ public class Jogo {
 	}
 
 	//Método que verifica se o jogo acabou:
-	/*public boolean verificaFim() {
+	//Usar um enum:
+	public int verificaFim() {
+		Jogador jogadorBranco = (jogador1.getCor().equals("branco")) ? jogador1 : jogador2;
+		Jogador jogadorPreto = (jogador1.getCor().equals("preto")) ? jogador1 : jogador2;
+		
+		Rei reiPreto = encontraRei("preto");
+		Rei reiBranco = encontraRei("branco");
+		
 		//Xeque-Mate:
 		if(turno.equals("preto")) {
-			
+			if(jogadorBranco.getCasasAtacadas().contains(reiPreto.getPosicao()) && reiPreto.getLancesPossiveis().size() == 0) {
+				return 10;
+			}
+		}	else	{
+			if(jogadorPreto.getCasasAtacadas().contains(reiBranco.getPosicao()) && reiBranco.getLancesPossiveis().size() == 0) {
+				return -10;
+			}
 		}
+		
 		//Afogamento:
+		if(turno.equals("branco"))	{
+			if(jogadorBranco.getLancesPossiveis().size() == 0) {
+				return 1;
+			}
+		}	else	{
+			if(jogadorPreto.getLancesPossiveis().size() == 0) {
+				return -1;
+			}
+		}
+		
 		//Material insuficiente:
-	}*/
+		int cavalosBrancos = 0;
+		int cavalosPretos = 0;
+		int bisposBrancos = 0;
+		int bisposPretos = 0;
+		boolean outrasPecas = false;
+		
+		//Contando os cavalos e bispos:
+		for (int l = 0; l < 8; l++) {
+		    for (int c = 0; c < 8; c++) {
+		        try {
+		            if (Tabuleiro.getTabuleiro()[l][c].getPeca() instanceof Cavalo && Tabuleiro.getTabuleiro()[l][c].getPeca().getCor().equals("branco")) {
+		                cavalosBrancos++;
+		            } else if (Tabuleiro.getTabuleiro()[l][c].getPeca() instanceof Cavalo && Tabuleiro.getTabuleiro()[l][c].getPeca().getCor().equals("preto")) {
+		                cavalosPretos++;
+		            } else if (Tabuleiro.getTabuleiro()[l][c].getPeca() instanceof Bispo && Tabuleiro.getTabuleiro()[l][c].getPeca().getCor().equals("branco")) {
+		                bisposBrancos++;
+		            } else if (Tabuleiro.getTabuleiro()[l][c].getPeca() instanceof Bispo && Tabuleiro.getTabuleiro()[l][c].getPeca().getCor().equals("preto")) {
+		                bisposPretos++;
+		            } else if (!(Tabuleiro.getTabuleiro()[l][c].getPeca() instanceof Rei)) {
+		                outrasPecas = true; //Define a variável de controle como true para interromper o loop
+		                break;
+		            }
+		        } catch (NullPointerException e) {}
+		    }
+
+		    if (outrasPecas) {
+		        break; // Interrompe o loop externo
+		    }
+		}
+
+		//Casos possíveis de empate:
+		if(!outrasPecas) {
+			if(cavalosBrancos <= 2 && cavalosPretos <= 2 && bisposBrancos == 0 && bisposPretos == 0) {
+				return 1;
+			}	else if(cavalosBrancos == 0 && cavalosPretos == 0 && bisposBrancos <= 1 && bisposPretos <= 1) {
+				return 1;
+			}
+		}
+		
+		return 0;
+	}
 	
-	
+	public Rei encontraRei(String cor) {
+		for (int l = 0; l < 8; l++) {
+		    for (int c = 0; c < 8; c++) {
+		    	try {
+			        if(Tabuleiro.getTabuleiro()[l][c].getPeca() instanceof Rei && Tabuleiro.getTabuleiro()[l][c].getPeca().getCor().equals(cor)) {
+			        	return (Rei)Tabuleiro.getTabuleiro()[l][c].getPeca();
+			        }
+		    	} catch(NullPointerException e) {}
+		    }
+		}
+		return null;
+	}
 	
 	
 	
