@@ -13,13 +13,16 @@ public class Jogo {
 		this.listaLances = "";
 		this.numeroLance = 1;
 		this.turno = "branco";
-		this.tabuleiro = tabuleiro;
-		tabuleiro.setJogo(this);
-		atualizaLancesECapturas();
+		
+		this.tabuleiro = tabuleiro;	
+		
 		this.jogador1 = jogador1;
 		this.jogador2 = jogador2;
-		jogador1.setJogo(this);
-		jogador2.setJogo(this);
+		
+		System.out.println("associando coisas ao jogo");
+		associacaoJogo();
+		System.out.println("Atualizando os lances e capturas");
+		atualizaLancesECapturas();
 	}
 	
 	//getters e setters:
@@ -71,6 +74,20 @@ public class Jogo {
 		this.turno = turno;
 	}
 	
+	//Associa o jogo ao tabuleiro e peças:
+	public void associacaoJogo() {
+		tabuleiro.setJogo(this);
+		for (int l = 0; l < 8; l++) {
+		    for (int c = 0; c < 8; c++) {
+		    	try {
+		    		Tabuleiro.getTabuleiro()[l][c].getPeca().setJogo(this);
+		    	} catch(NullPointerException e) {}
+		    }
+		}
+		jogador1.setJogo(this);
+		jogador2.setJogo(this);
+	}
+	
 	//Método que verifica se um lance é válido:
 	public boolean validaLance(Peca peca, Casa casaDestino) {
 		if(peca.getCor().equals(turno) && peca.getLancesPossiveis().contains(casaDestino)) {
@@ -91,18 +108,22 @@ public class Jogo {
 	
 	//Método que verifica se o jogador de turno ativo está em xeque:
 	public boolean verificaXeque() {
+		Jogador jogadorBranco = (jogador1.getCor().equals("branco")) ? jogador1 : jogador2;
+		Jogador jogadorPreto = (jogador1.getCor().equals("preto")) ? jogador1 : jogador2;
+		
 		if(turno.equals("branco")) {
-			for(Peca peca : jogador2.getCapturasPossiveis()) {
+			for(Peca peca : jogadorPreto.getCapturasPossiveis()) {
 				if(peca instanceof Rei) return true;
 			}
 		}	else	{
-			for(Peca peca : jogador1.getCapturasPossiveis()) {
+			for(Peca peca : jogadorBranco.getCapturasPossiveis()) {
 				if(peca instanceof Rei) return true;
 			}
 		}
 		return false;
 	}
 	
+	//Atualiza os lances possíveis para cada peça separadamente e para cada jogador
 	public void atualizaLancesECapturas() {
 		for (int l = 0; l < 8; l++) {
 		    for (int c = 0; c < 8; c++) {
@@ -111,24 +132,39 @@ public class Jogo {
 		    	} catch(NullPointerException e) {}
 		    }
 		}
+		
+		jogador1.verificaCapturasPossiveis();
+		jogador1.verificaCasasAtacadas();
+		jogador1.verificaLancesPossiveis();
+		jogador2.verificaCapturasPossiveis();
+		jogador2.verificaCasasAtacadas();
+		jogador2.verificaLancesPossiveis();
 	}
 	
-	//
-	public void finalizaTurno() {
+	//Método que faz uma jogada a partir da peça selecionada
+	//Passar parte da implementação para JogadorHumano
+	public void fazLance(Peca pecaSelecionada, Casa casaDestino) {
+		if(pecaSelecionada.getLancesPossiveis().contains(casaDestino)){
+			System.out.println("chamada para mudar o tabuleiro");
+            tabuleiro.mudaTabuleiro(pecaSelecionada.getPosicao(), casaDestino);		
+        }
+		System.out.println("chamada para atualizar as capturas");
 		atualizaLancesECapturas();
+		finalizaTurno();
+	}
+	
+	//Muda turno e faz o lance do computador, se esse for o caso
+	public void finalizaTurno() {
+		System.out.println("finalizando turno");
 		String novoTurno = (turno.equals("branco")) ? "preto" : "branco";
 		setTurno(novoTurno);
 		if(jogador2 instanceof JogadorMaquina) {
-			System.out.println("jogadorMaquina");
 			((JogadorMaquina)jogador2).fazJogada();
 			String novoTurnoMaquina = (turno.equals("branco")) ? "preto" : "branco";
 			setTurno(novoTurnoMaquina);
 		}
 	}
-	
 
-	
-	
 	//Método que verifica se o jogo acabou:
 	/*public boolean verificaFim() {
 		//Xeque-Mate:

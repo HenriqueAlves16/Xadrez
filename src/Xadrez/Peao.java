@@ -3,12 +3,26 @@ package Xadrez;
 import java.util.ArrayList;
 
 public class Peao extends Peca {
+	private ArrayList<Casa> casasAtacadas;
+	
+	//Construtor:
 	public Peao(String cor, Casa posicao, int x, int y, String path) {
 		super(cor, posicao, x, y, path);
+		this.casasAtacadas = new ArrayList<Casa>();
 	}
 	
-	public int lancesValidos() throws IndexOutOfBoundsException {
+	//Getters e Setters:
+	public ArrayList<Casa> getCasasAtacadas() {
+		return casasAtacadas;
+	}
+
+	public void setCasasAtacadas(ArrayList<Casa> casasAtacadas) {
+		this.casasAtacadas = casasAtacadas;
+	}
+	
+	public int lancesValidos() {
 	    ArrayList<Casa> lancesValidos = new ArrayList<Casa>();
+	    ArrayList<Casa> casasAtacadas = new ArrayList<Casa>();
 	    ArrayList<Peca> capturasValidas = new ArrayList<Peca>();
 
 	    char colunaAtual = getPosicao().getColuna();
@@ -35,31 +49,30 @@ public class Peao extends Peca {
 	    // Verifica possíveis capturas diagonais:
 	    try {
 	    	Casa casaDiagonalDireita = Tabuleiro.getCasa((char) (colunaAtual + 1), linhaAtual + delta);
-		    if (!casaDiagonalDireita.getPeca().getCor().equals(this.getCor())) {
-		    	System.out.println("diag dir");
+		    if (casaDiagonalDireita.getPeca() != null && !casaDiagonalDireita.getPeca().getCor().equals(this.getCor())) {
 		        lancesValidos.add(casaDiagonalDireita);
 	        	capturasValidas.add(casaDiagonalDireita.getPeca());
+		    } else if(casaDiagonalDireita.getPeca() == null) {
+		    	casasAtacadas.add(casaDiagonalDireita);
 		    }
-	    } catch(IndexOutOfBoundsException e) {
-	    	
-	    } catch(NullPointerException e) {}
-	    
+	    } catch(IndexOutOfBoundsException e) {}
+	    	    
 	    try	{
 		    Casa casaDiagonalEsquerda = Tabuleiro.getCasa((char) (colunaAtual - 1), linhaAtual + delta);
-		    if (!casaDiagonalEsquerda.getPeca().getCor().equals(this.getCor())) {
-		    	System.out.println("diag esq");
+		    if (casaDiagonalEsquerda.getPeca() != null && !casaDiagonalEsquerda.getPeca().getCor().equals(this.getCor())) {
 		        lancesValidos.add(casaDiagonalEsquerda);
-	        	capturasValidas.add(casaDiagonalEsquerda.getPeca());
+	        	capturasValidas.add(casaDiagonalEsquerda.getPeca());	    
+		    } else if(casaDiagonalEsquerda.getPeca() == null) {
+		    	casasAtacadas.add(casaDiagonalEsquerda);
 		    }
-		} catch(IndexOutOfBoundsException e) {
-	    	
-	    } catch(NullPointerException e) {}
+		} catch(IndexOutOfBoundsException e) {}
 	    
 	    this.setLancesPossiveis(lancesValidos);
+	    this.setCasasAtacadas(casasAtacadas);
 	    this.setCapturasPossiveis(capturasValidas);
 	    return lancesValidos.size();
 	}
-	
+
 	public String getImagePath() {
 		if(getCor().equals("branco")) {
 			return "Imagens/w_pawn_png_128px.png";

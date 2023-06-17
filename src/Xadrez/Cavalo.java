@@ -8,8 +8,9 @@ public class Cavalo extends Peca {
 	}
 	
 	
-	public int lancesValidos() throws IndexOutOfBoundsException{
+	public int lancesValidos() {
 		ArrayList<Casa> lancesValidos = new ArrayList<Casa>();
+		ArrayList<Casa> casasAtacadas = new ArrayList<Casa>();
 	    ArrayList<Peca> capturasValidas = new ArrayList<Peca>();
 
 	    char colunaAtual = getPosicao().getColuna();
@@ -35,6 +36,7 @@ public class Cavalo extends Peca {
 	    
 	    this.setLancesPossiveis(lancesValidos);
 	    this.setCapturasPossiveis(capturasValidas);
+	    this.setCasasAtacadas(lancesValidos);
 	    return lancesValidos.size();
 	}
 	

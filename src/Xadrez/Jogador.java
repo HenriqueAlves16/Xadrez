@@ -4,6 +4,7 @@ import java.util.ArrayList;
 public abstract class Jogador {
 	private String cor;
 	private ArrayList<Peca> capturasPossiveis;
+	private ArrayList<Casa> casasAtacadas;
 	private ArrayList<Lance> lancesPossiveis;
 	private boolean emXeque;
 	private Jogo jogo;
@@ -14,8 +15,9 @@ public abstract class Jogador {
 		this.emXeque = false;
 		this.capturasPossiveis = new ArrayList<Peca>();
 		this.lancesPossiveis = new ArrayList<Lance>();
+		this.casasAtacadas = new ArrayList<Casa>();
 	}
-
+	
 	//Getters e setters:
 	public String getCor() {
 		return cor;
@@ -40,6 +42,14 @@ public abstract class Jogador {
 	public void setCapturasPossiveis(ArrayList<Peca> capturasPossiveis) {
 		this.capturasPossiveis = capturasPossiveis;
 	}
+	
+	public ArrayList<Casa> getCasasAtacadas() {
+		return casasAtacadas;
+	}
+
+	public void setCasasAtacadas(ArrayList<Casa> casasAtacadas) {
+		this.casasAtacadas = casasAtacadas;
+	}
 
 	public boolean isEmXeque() {
 		return emXeque;
@@ -61,16 +71,20 @@ public abstract class Jogador {
 	public void verificaCapturasPossiveis(){
 		ArrayList<Peca> listaPecas = new ArrayList<Peca>();
 		
+		//Percorre o tabuleiro
 		for(int l = 0; l < 8; l++) {
 			for(char c = 'a'; c <= 'h'; c++) {
 				try {
-					Peca peca = Tabuleiro.getCasa(c, l).getPeca(); 
+					Peca peca = Tabuleiro.getCasa(c, l + 1).getPeca(); 
 					String corPeca = peca.getCor();
 					
+					//Se a peça é da cor do jogador, vamos adicionar todas as capturas possíveis da peça para o jogador
 					if(corPeca.equals(this.cor)) {
 						listaPecas.addAll(peca.getCapturasPossiveis());
 					}
-				}	catch(NullPointerException e) {}
+				}	catch(NullPointerException e) {
+					
+				}	catch(IndexOutOfBoundsException e) {}
 			}
 		}
 		setCapturasPossiveis(listaPecas);
@@ -85,6 +99,7 @@ public abstract class Jogador {
 					Peca peca = Tabuleiro.getCasa(c, l + 1).getPeca(); 
 					String corPeca = peca.getCor();
 					
+					//Se a peça é da cor do jogador, vamos adicionar todas os lances possíveis da peça para o jogador
 					if(corPeca.equals(this.cor)) {
 						for(int i = 0; i < peca.getLancesPossiveis().size(); i++) {				//Percorre cada possível lance 
 							Casa casaDestinoPossivel = peca.getLancesPossiveis().get(i);
@@ -95,6 +110,41 @@ public abstract class Jogador {
 			}
 		}
 		setLancesPossiveis(listaLances);
+	}
+	
+	public void verificaCasasAtacadas() {
+		ArrayList<Casa> listaCasas = new ArrayList<Casa>();
+		
+		for(int l = 0; l < 8; l++) {					//Percorre o tabuleiro
+			for(char c = 'a'; c <= 'h'; c++) {
+				try {
+					Peca peca = Tabuleiro.getCasa(c, l + 1).getPeca(); 
+					
+					//Se a cor da peça é igual à cor do jogador, adicionamos as casas atacadas pela peça ao jogador
+					if(peca.getCor().equals(this.cor)) {
+						System.out.println("casas atacadas pelo " + peca + " " + peca.getCasasAtacadas());
+						if(peca instanceof Peao) {
+							//System.out.println("casas atacadas peao" + ((Peao)peca).getCasasAtacadas());
+							for(int g = 0; g < ((Peao)peca).getCasasAtacadas().size(); g++) {
+								Casa casa = ((Peao)peca).getCasasAtacadas().get(g);
+								if(!listaCasas.contains(casa)) {
+									listaCasas.add(casa);
+								}
+							}
+						}	else	{
+							for(int g = 0; g < peca.getCasasAtacadas().size(); g++) {
+								Casa casa = peca.getLancesPossiveis().get(g);
+								if(!listaCasas.contains(casa)) {
+									listaCasas.add(casa);
+								}
+							}
+						}
+					}
+				}	catch(NullPointerException e) {}
+			}
+		}
+		setCasasAtacadas(listaCasas);
+		System.out.println("casas atacadas pelo jogador " + cor + " " + getCasasAtacadas());
 	}
 	
 	//Método que executa a jogada:

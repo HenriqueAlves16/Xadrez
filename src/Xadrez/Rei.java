@@ -7,9 +7,12 @@ public class Rei extends Peca {
 		super(cor, posicao, x, y, path);
 	}
 	
-	public int lancesValidos() throws IndexOutOfBoundsException{
+	public int lancesValidos() {
 		ArrayList<Casa> lancesValidos = new ArrayList<Casa>();
 	    ArrayList<Peca> capturasValidas = new ArrayList<Peca>();
+	    Jogador oponente = (getCor().equals(getJogo().getJogador1().getCor())) ? getJogo().getJogador2() : getJogo().getJogador1();
+	    ArrayList<Casa> casasInvalidas = oponente.getCasasAtacadas();
+	    System.out.println("cor rei:" + this.getCor() + " // oponente: " + oponente.getCor());
 	    
 	    char colunaAtual = getPosicao().getColuna();
 	    int linhaAtual = getPosicao().getLinha();
@@ -18,15 +21,16 @@ public class Rei extends Peca {
 	    	for(int l = linhaAtual - 1; l <= linhaAtual + 1; l++) {
 	    		try {
 		    		Casa casa = Tabuleiro.getCasa(c, l);
-			        if (casa.getPeca() == null) {
+			        if (casa.getPeca() == null && !(casasInvalidas.contains(casa))) {
 			            lancesValidos.add(casa);
-			        } else if (!casa.getPeca().getCor().equals(this.getCor())) {
+			        } else if (!casa.getPeca().getCor().equals(this.getCor())  && !(casasInvalidas.contains(casa))) {
 			            lancesValidos.add(casa);
 			        	capturasValidas.add(casa.getPeca());
 			        }
 	    		}	catch (IndexOutOfBoundsException e) {}
 	    	}
-	    }    
+	    }
+	    	    
 	    this.setLancesPossiveis(lancesValidos);
 	    this.setCapturasPossiveis(capturasValidas);
 	    return lancesValidos.size();

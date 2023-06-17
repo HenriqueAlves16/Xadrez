@@ -131,6 +131,7 @@ public class Rainha extends Peca {
 
 	    this.setLancesPossiveis(lancesValidos);
 	    this.setCapturasPossiveis(capturasValidas);
+	    this.setCasasAtacadas(lancesValidos);
 	    return lancesValidos.size();
 	}
 	

@@ -10,7 +10,10 @@ public class JogadorMaquina extends Jogador {
 	
 	@Override
 	public void fazJogada() {
+		//Atualiza os lances e capturas possíveis (?)
 		verificaLancesPossiveis();
+		
+		//Escolhe um lance aleatório
 		Random random = new Random();
 		int numeroAleatorio = random.nextInt(getLancesPossiveis().size());
 		Lance lanceAleatorio = getLancesPossiveis().get(numeroAleatorio);
@@ -18,7 +21,11 @@ public class JogadorMaquina extends Jogador {
 		Peca pecaSelecionada = lanceAleatorio.getPecaMovida();
 		Casa casaOrigem = pecaSelecionada.getPosicao();
 
+		//Muda o tabuleiro fazendo o lance aleatório
 		getJogo().getTabuleiro().mudaTabuleiro(casaOrigem, lanceAleatorio.getCasaDestino());
+		
+		//Atualiza as listas de controle
+		getJogo().atualizaLancesECapturas();
 	}
 
 }

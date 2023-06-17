@@ -70,8 +70,10 @@ public class Torre extends Peca {
 	        }
 	    }
 	    
+	    
 	    this.setLancesPossiveis(lancesValidos);
 	    this.setCapturasPossiveis(capturasValidas);
+	    this.setCasasAtacadas(lancesValidos);
 	    return lancesValidos.size();
 	}
 	

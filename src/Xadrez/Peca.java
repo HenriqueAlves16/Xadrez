@@ -23,7 +23,12 @@ public abstract class Peca extends JPanel{
 	private Casa posicao;
 	private boolean capturado;
 	private ArrayList<Casa> lancesPossiveis;
+	private ArrayList<Casa> casasAtacadas;
+	
+
 	private ArrayList<Peca> capturasPossiveis;
+	private Jogo jogo;
+
 	
 	//Construtor:
 	public Peca(String cor, Casa posicao, int x, int y, String path) {
@@ -32,6 +37,7 @@ public abstract class Peca extends JPanel{
 		this.capturado = false;
 		lancesPossiveis = new ArrayList<Casa>();
 		capturasPossiveis = new ArrayList<Peca>();
+		casasAtacadas = new ArrayList<Casa>();
 		
 		imagem = new ImageIcon(path);
 		imageCorner = new Point(x, y); //fazer com posicao ao invés de x,y
@@ -79,7 +85,15 @@ public abstract class Peca extends JPanel{
 	public void setCapturasPossiveis(ArrayList<Peca> capturasPossiveis) {
 		this.capturasPossiveis = capturasPossiveis;
 	}
+	
+	public ArrayList<Casa> getCasasAtacadas() {
+		return casasAtacadas;
+	}
 
+	public void setCasasAtacadas(ArrayList<Casa> casasAtacadas) {
+		this.casasAtacadas = casasAtacadas;
+	}
+	
 	public ImageIcon getResizedIcon() {
 		return resizedIcon;
 	}
@@ -88,6 +102,13 @@ public abstract class Peca extends JPanel{
 		this.resizedIcon = resizedIcon;
 	}
 
+	public Jogo getJogo() {
+		return jogo;
+	}
+
+	public void setJogo(Jogo jogo) {
+		this.jogo = jogo;
+	}
 	//toString():
 	@Override
 	public String toString() {
