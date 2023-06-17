@@ -9,6 +9,7 @@ public class Torre extends Peca {
 	
 	public int lancesValidos() {
 	    ArrayList<Casa> lancesValidos = new ArrayList<Casa>();
+		ArrayList<Casa> casasAtacadas = new ArrayList<Casa>();
 	    ArrayList<Peca> capturasValidas = new ArrayList<Peca>();
 
 	    char colunaAtual = getPosicao().getColuna();
@@ -17,6 +18,7 @@ public class Torre extends Peca {
 	    // Movimento para cima
 	    for (int i = linhaAtual + 1; i <= 8; i++) {
 	        Casa casa = Tabuleiro.getCasa(colunaAtual, i);
+	        casasAtacadas.add(casa);
 	        if (casa.getPeca() == null) {
 	        	lancesValidos.add(casa);
 	        }	else if(!casa.getPeca().getCor().equals(this.getCor())) {
@@ -31,6 +33,7 @@ public class Torre extends Peca {
 	    // Movimento para baixo
 	    for (int i = linhaAtual - 1; i >= 1; i--) {
 	        Casa casa = Tabuleiro.getCasa(colunaAtual, i);
+	        casasAtacadas.add(casa);
 	        if (casa.getPeca() == null) {
 	        	lancesValidos.add(casa);
 	        }	else if(!casa.getPeca().getCor().equals(this.getCor())) {
@@ -45,6 +48,7 @@ public class Torre extends Peca {
 	    // Movimento para a direita
 	    for (char c = (char) (colunaAtual + 1); c <= 'h'; c++) {
 	        Casa casa = Tabuleiro.getCasa(c, linhaAtual);
+	        casasAtacadas.add(casa);
 	        if (casa.getPeca() == null) {
 	        	lancesValidos.add(casa);
 	        }	else if(!casa.getPeca().getCor().equals(this.getCor())) {
@@ -59,6 +63,7 @@ public class Torre extends Peca {
 	    // Movimento para a esquerda
 	    for (char c = (char) (colunaAtual - 1); c >= 'a'; c--) {
 	        Casa casa = Tabuleiro.getCasa(c, linhaAtual);
+	        casasAtacadas.add(casa);
 	        if (casa.getPeca() == null) {
 	        	lancesValidos.add(casa);
 	        }	else if(!casa.getPeca().getCor().equals(this.getCor())) {
@@ -73,7 +78,7 @@ public class Torre extends Peca {
 	    
 	    this.setLancesPossiveis(lancesValidos);
 	    this.setCapturasPossiveis(capturasValidas);
-	    this.setCasasAtacadas(lancesValidos);
+	    this.setCasasAtacadas(casasAtacadas);
 	    return lancesValidos.size();
 	}
 	
@@ -87,7 +92,7 @@ public class Torre extends Peca {
 
 	@Override
 	public String toString() {
-		return super.toString() + "T";
+		return super.toString() + "R";
 	}
 	
 	

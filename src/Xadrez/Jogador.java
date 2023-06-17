@@ -101,6 +101,7 @@ public abstract class Jogador {
 					
 					//Se a peça é da cor do jogador, vamos adicionar todas os lances possíveis da peça para o jogador
 					if(corPeca.equals(this.cor)) {
+						//System.out.println("Lances validos para o " + peca + ": " + peca.getLancesPossiveis());
 						for(int i = 0; i < peca.getLancesPossiveis().size(); i++) {				//Percorre cada possível lance 
 							Casa casaDestinoPossivel = peca.getLancesPossiveis().get(i);
 							listaLances.add(new Lance(peca, casaDestinoPossivel));
@@ -122,7 +123,7 @@ public abstract class Jogador {
 					
 					//Se a cor da peça é igual à cor do jogador, adicionamos as casas atacadas pela peça ao jogador
 					if(peca.getCor().equals(this.cor)) {
-						System.out.println("casas atacadas pelo " + peca + " " + peca.getCasasAtacadas());
+						//System.out.println("casas atacadas pelo " + peca + " " + peca.getCasasAtacadas());
 						if(peca instanceof Peao) {
 							//System.out.println("casas atacadas peao" + ((Peao)peca).getCasasAtacadas());
 							for(int g = 0; g < ((Peao)peca).getCasasAtacadas().size(); g++) {
@@ -133,14 +134,16 @@ public abstract class Jogador {
 							}
 						}	else	{
 							for(int g = 0; g < peca.getCasasAtacadas().size(); g++) {
-								Casa casa = peca.getLancesPossiveis().get(g);
+								Casa casa = peca.getCasasAtacadas().get(g);
 								if(!listaCasas.contains(casa)) {
 									listaCasas.add(casa);
 								}
 							}
 						}
 					}
-				}	catch(NullPointerException e) {}
+				}	catch(NullPointerException e) {
+					
+				}	catch(IndexOutOfBoundsException e) {}
 			}
 		}
 		setCasasAtacadas(listaCasas);

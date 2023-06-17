@@ -125,20 +125,69 @@ public class Jogo {
 	
 	//Atualiza os lances possíveis para cada peça separadamente e para cada jogador
 	public void atualizaLancesECapturas() {
-		for (int l = 0; l < 8; l++) {
-		    for (int c = 0; c < 8; c++) {
-		    	try {
-		    		Tabuleiro.getTabuleiro()[l][c].getPeca().lancesValidos();
-		    	} catch(NullPointerException e) {}
-		    }
-		}
 		
-		jogador1.verificaCapturasPossiveis();
-		jogador1.verificaCasasAtacadas();
-		jogador1.verificaLancesPossiveis();
-		jogador2.verificaCapturasPossiveis();
-		jogador2.verificaCasasAtacadas();
-		jogador2.verificaLancesPossiveis();
+		Jogador jogadorBranco = (jogador1.getCor().equals("branco")) ? jogador1 : jogador2;
+		Jogador jogadorPreto = (jogador1.getCor().equals("preto")) ? jogador1 : jogador2;
+		
+		if(turno.equals("branco")) {
+			for (int l = 0; l < 8; l++) {
+			    for (int c = 0; c < 8; c++) {
+			    	try {
+			    		Peca peca = Tabuleiro.getTabuleiro()[l][c].getPeca();
+			    		if(peca.getCor().equals("branco")) {
+			    			peca.lancesValidos();
+			    		}
+			    	} catch(NullPointerException e) {}
+			    }
+			}
+			
+			for (int l = 0; l < 8; l++) {
+			    for (int c = 0; c < 8; c++) {
+			    	try {
+			    		Peca peca = Tabuleiro.getTabuleiro()[l][c].getPeca();
+			    		if(peca.getCor().equals("preto")) {
+			    			peca.lancesValidos();
+			    		}
+			    	} catch(NullPointerException e) {}
+			    }
+			}
+			
+			jogadorBranco.verificaCapturasPossiveis();
+			jogadorBranco.verificaCasasAtacadas();
+			jogadorBranco.verificaLancesPossiveis();
+			jogadorPreto.verificaCapturasPossiveis();
+			jogadorPreto.verificaCasasAtacadas();
+			jogadorPreto.verificaLancesPossiveis();
+		}	else	{
+			for (int l = 0; l < 8; l++) {
+			    for (int c = 0; c < 8; c++) {
+			    	try {
+			    		Peca peca = Tabuleiro.getTabuleiro()[l][c].getPeca();
+			    		if(peca.getCor().equals("preto")) {
+			    			peca.lancesValidos();
+			    		}
+			    	} catch(NullPointerException e) {}
+			    }
+			}
+			
+			for (int l = 0; l < 8; l++) {
+			    for (int c = 0; c < 8; c++) {
+			    	try {
+			    		Peca peca = Tabuleiro.getTabuleiro()[l][c].getPeca();
+			    		if(peca.getCor().equals("branco")) {
+			    			peca.lancesValidos();
+			    		}
+			    	} catch(NullPointerException e) {}
+			    }
+			}
+			
+			jogadorPreto.verificaCapturasPossiveis();
+			jogadorPreto.verificaCasasAtacadas();
+			jogadorPreto.verificaLancesPossiveis();
+			jogadorBranco.verificaCapturasPossiveis();
+			jogadorBranco.verificaCasasAtacadas();
+			jogadorBranco.verificaLancesPossiveis();
+		}
 	}
 	
 	//Método que faz uma jogada a partir da peça selecionada
@@ -163,6 +212,7 @@ public class Jogo {
 			String novoTurnoMaquina = (turno.equals("branco")) ? "preto" : "branco";
 			setTurno(novoTurnoMaquina);
 		}
+		atualizaLancesECapturas();
 	}
 
 	//Método que verifica se o jogo acabou:

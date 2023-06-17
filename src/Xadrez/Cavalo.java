@@ -23,6 +23,7 @@ public class Cavalo extends Peca {
 	            if (Math.abs(delta1) != Math.abs(delta2)) {
 	                try {
 	                    Casa casa = Tabuleiro.getCasa((char) (colunaAtual + delta1), linhaAtual + delta2);
+	                    casasAtacadas.add(casa);
 	                    if (casa.getPeca() == null) {
 	                        lancesValidos.add(casa);
 	                    }	else if(!casa.getPeca().getCor().equals(this.getCor())){
@@ -36,7 +37,7 @@ public class Cavalo extends Peca {
 	    
 	    this.setLancesPossiveis(lancesValidos);
 	    this.setCapturasPossiveis(capturasValidas);
-	    this.setCasasAtacadas(lancesValidos);
+	    this.setCasasAtacadas(casasAtacadas);
 	    return lancesValidos.size();
 	}
 	

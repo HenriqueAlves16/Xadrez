@@ -11,6 +11,7 @@ public class Bispo extends Peca {
 	public int lancesValidos() {
 	    ArrayList<Casa> lancesValidos = new ArrayList<Casa>();
 	    ArrayList<Peca> capturasValidas = new ArrayList<Peca>();
+		ArrayList<Casa> casasAtacadas = new ArrayList<Casa>();
 	    
 	    char colunaAtual = getPosicao().getColuna();
 	    int linhaAtual = getPosicao().getLinha();
@@ -18,6 +19,7 @@ public class Bispo extends Peca {
 	    // Movimento na diagonal superior direita
 	    for (int coluna = (colunaAtual + 1), linha = linhaAtual + 1; coluna <= 'h' && linha <= 8; coluna++, linha++) {
 	        Casa casa = Tabuleiro.getCasa((char)coluna, linha);
+	        casasAtacadas.add(casa);
 	        
 	        if (casa.getPeca() == null) {
 	            lancesValidos.add(casa);
@@ -33,6 +35,7 @@ public class Bispo extends Peca {
 	    // Movimento na diagonal superior esquerda
 	    for (int coluna = (colunaAtual - 1), linha = linhaAtual + 1; coluna >= 'a' && linha <= 8; coluna--, linha++) {
 	        Casa casa = Tabuleiro.getCasa((char)coluna, linha);
+	        casasAtacadas.add(casa);
 	        
 	        if (casa.getPeca() == null) {
 	            lancesValidos.add(casa);
@@ -48,6 +51,7 @@ public class Bispo extends Peca {
 	    // Movimento na diagonal inferior direita
 	    for (int coluna = (colunaAtual + 1), linha = linhaAtual - 1; coluna <= 'h' && linha >= 1; coluna++, linha--) {
 	        Casa casa = Tabuleiro.getCasa((char)coluna, linha);
+	        casasAtacadas.add(casa);
 	        
 	        if (casa.getPeca() == null) {
 	            lancesValidos.add(casa);
@@ -64,6 +68,8 @@ public class Bispo extends Peca {
 	    // Movimento na diagonal inferior esquerda
 	    for (int coluna = (colunaAtual - 1), linha = linhaAtual - 1; coluna >= 'a' && linha >= 1; coluna--, linha--) {
 	        Casa casa = Tabuleiro.getCasa((char) coluna, linha);
+	        casasAtacadas.add(casa);
+	        
 	        if (casa.getPeca() == null) {
 	            lancesValidos.add(casa);
 	        } else if (!casa.getPeca().getCor().equals(this.getCor())) {
@@ -78,7 +84,7 @@ public class Bispo extends Peca {
 	    
 	    this.setLancesPossiveis(lancesValidos);
 	    this.setCapturasPossiveis(capturasValidas);
-	    this.setCasasAtacadas(lancesValidos);
+	    this.setCasasAtacadas(casasAtacadas);
 	    return lancesValidos.size();
 	}
 	

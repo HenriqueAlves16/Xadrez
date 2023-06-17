@@ -10,6 +10,7 @@ public class Rainha extends Peca {
 	public int lancesValidos(){
 		ArrayList<Casa> lancesValidos = new ArrayList<Casa>();
 	    ArrayList<Peca> capturasValidas = new ArrayList<Peca>();
+	    ArrayList<Casa> casasAtacadas = new ArrayList<Casa>();
 
 	    char colunaAtual = getPosicao().getColuna();
 	    int linhaAtual = getPosicao().getLinha();
@@ -17,6 +18,8 @@ public class Rainha extends Peca {
 	    // Movimento para cima
 	    for (int i = linhaAtual + 1; i <= 8; i++) {
 	        Casa casa = Tabuleiro.getCasa(colunaAtual, i);
+	        casasAtacadas.add(casa);
+	        
 	        if (casa.getPeca() == null) {
 	        	lancesValidos.add(casa);
 	        }	else if(!casa.getPeca().getCor().equals(this.getCor())) {
@@ -31,6 +34,8 @@ public class Rainha extends Peca {
 	    // Movimento para baixo
 	    for (int i = linhaAtual - 1; i >= 1; i--) {
 	        Casa casa = Tabuleiro.getCasa(colunaAtual, i);
+	        casasAtacadas.add(casa);
+	        
 	        if (casa.getPeca() == null) {
 	        	lancesValidos.add(casa);
 	        }	else if(!casa.getPeca().getCor().equals(this.getCor())) {
@@ -45,6 +50,8 @@ public class Rainha extends Peca {
 	    // Movimento para a direita
 	    for (char c = (char) (colunaAtual + 1); c <= 'h'; c++) {
 	        Casa casa = Tabuleiro.getCasa(c, linhaAtual);
+	        casasAtacadas.add(casa);
+	        
 	        if (casa.getPeca() == null) {
 	        	lancesValidos.add(casa);
 	        }	else if(!casa.getPeca().getCor().equals(this.getCor())) {
@@ -59,6 +66,8 @@ public class Rainha extends Peca {
 	    // Movimento para a esquerda
 	    for (char c = (char) (colunaAtual - 1); c >= 'a'; c--) {
 	        Casa casa = Tabuleiro.getCasa(c, linhaAtual);
+	        casasAtacadas.add(casa);
+	        
 	        if (casa.getPeca() == null) {
 	        	lancesValidos.add(casa);
 	        }	else if(!casa.getPeca().getCor().equals(this.getCor())) {
@@ -73,6 +82,7 @@ public class Rainha extends Peca {
 	 // Movimento na diagonal superior direita
 	    for (int coluna = (colunaAtual + 1), linha = linhaAtual + 1; coluna <= 'h' && linha <= 8; coluna++, linha++) {
 	        Casa casa = Tabuleiro.getCasa((char)coluna, linha);
+	        casasAtacadas.add(casa);
 	        
 	        if (casa.getPeca() == null) {
 	            lancesValidos.add(casa);
@@ -88,6 +98,7 @@ public class Rainha extends Peca {
 	    // Movimento na diagonal superior esquerda
 	    for (int coluna = (colunaAtual - 1), linha = linhaAtual + 1; coluna >= 'a' && linha <= 8; coluna--, linha++) {
 	        Casa casa = Tabuleiro.getCasa((char)coluna, linha);
+	        casasAtacadas.add(casa);
 	        
 	        if (casa.getPeca() == null) {
 	            lancesValidos.add(casa);
@@ -103,6 +114,7 @@ public class Rainha extends Peca {
 	    // Movimento na diagonal inferior direita
 	    for (int coluna = (colunaAtual + 1), linha = linhaAtual - 1; coluna <= 'h' && linha >= 1; coluna++, linha--) {
 	        Casa casa = Tabuleiro.getCasa((char)coluna, linha);
+	        casasAtacadas.add(casa);
 	        
 	        if (casa.getPeca() == null) {
 	            lancesValidos.add(casa);
@@ -118,6 +130,8 @@ public class Rainha extends Peca {
 	    // Movimento na diagonal inferior esquerda
 	    for (int coluna = (colunaAtual - 1), linha = linhaAtual - 1; coluna >= 'a' && linha >= 1; coluna--, linha--) {
 	        Casa casa = Tabuleiro.getCasa((char) coluna, linha);
+	        casasAtacadas.add(casa);
+	        
 	        if (casa.getPeca() == null) {
 	            lancesValidos.add(casa);
 	        } else if (!casa.getPeca().getCor().equals(this.getCor())) {
@@ -131,7 +145,7 @@ public class Rainha extends Peca {
 
 	    this.setLancesPossiveis(lancesValidos);
 	    this.setCapturasPossiveis(capturasValidas);
-	    this.setCasasAtacadas(lancesValidos);
+	    this.setCasasAtacadas(casasAtacadas);
 	    return lancesValidos.size();
 	}
 	
