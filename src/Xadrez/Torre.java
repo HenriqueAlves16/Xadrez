@@ -19,7 +19,7 @@ public class Torre extends Peca {
 	    for (int i = linhaAtual + 1; i <= 8; i++) {
 	        Casa casa = Tabuleiro.getCasa(colunaAtual, i);
 	        casasAtacadas.add(casa);
-	        if (casa.getPeca() == null) {
+	        if (casa.getPeca() == null || (casa.getPeca() != null && casa.getPeca() instanceof Rei && !casa.getPeca().getCor().equals(this.getCor()))) {	//Se não há peça ou há um rei inimigo
 	        	lancesValidos.add(casa);
 	        }	else if(!casa.getPeca().getCor().equals(this.getCor())) {
 	        	capturasValidas.add(casa.getPeca());
@@ -34,7 +34,7 @@ public class Torre extends Peca {
 	    for (int i = linhaAtual - 1; i >= 1; i--) {
 	        Casa casa = Tabuleiro.getCasa(colunaAtual, i);
 	        casasAtacadas.add(casa);
-	        if (casa.getPeca() == null) {
+	        if (casa.getPeca() == null || (casa.getPeca() != null && casa.getPeca() instanceof Rei && !casa.getPeca().getCor().equals(this.getCor()))) {	//Se não há peça ou há um rei inimigo) {
 	        	lancesValidos.add(casa);
 	        }	else if(!casa.getPeca().getCor().equals(this.getCor())) {
 	        	capturasValidas.add(casa.getPeca());
@@ -49,7 +49,7 @@ public class Torre extends Peca {
 	    for (char c = (char) (colunaAtual + 1); c <= 'h'; c++) {
 	        Casa casa = Tabuleiro.getCasa(c, linhaAtual);
 	        casasAtacadas.add(casa);
-	        if (casa.getPeca() == null) {
+	        if (casa.getPeca() == null || (casa.getPeca() != null && casa.getPeca() instanceof Rei && !casa.getPeca().getCor().equals(this.getCor()))) {	//Se não há peça ou há um rei inimigo) {
 	        	lancesValidos.add(casa);
 	        }	else if(!casa.getPeca().getCor().equals(this.getCor())) {
 	        	capturasValidas.add(casa.getPeca());
@@ -64,7 +64,7 @@ public class Torre extends Peca {
 	    for (char c = (char) (colunaAtual - 1); c >= 'a'; c--) {
 	        Casa casa = Tabuleiro.getCasa(c, linhaAtual);
 	        casasAtacadas.add(casa);
-	        if (casa.getPeca() == null) {
+	        if (casa.getPeca() == null || (casa.getPeca() != null && casa.getPeca() instanceof Rei && !casa.getPeca().getCor().equals(this.getCor()))) {	//Se não há peça ou há um rei inimigo) {
 	        	lancesValidos.add(casa);
 	        }	else if(!casa.getPeca().getCor().equals(this.getCor())) {
 	        	capturasValidas.add(casa.getPeca());
