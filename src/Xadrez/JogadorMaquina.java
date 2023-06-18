@@ -9,7 +9,7 @@ public class JogadorMaquina extends Jogador {
 	}
 	
 	@Override
-	public void fazJogada(Peca peca, Casa casa) {
+	public boolean fazJogada(Peca peca, Casa casa) {
 		System.out.println("//////////////////////" + getJogo().verificaXeque() + "//////////////////");	
 		Peca pecaSelecionada;
 		Casa casaOrigem;
@@ -20,7 +20,7 @@ public class JogadorMaquina extends Jogador {
 		verificaLancesPossiveis();
 		
 		if(xeque.equals(getCor())) {
-			System.out.println("Lance aleatório xeque");
+			//System.out.println("Lance aleatório xeque");
 			
 			Random random = new Random();
 			int numeroAleatorio = random.nextInt(getLancesPossiveisXeque().size());
@@ -31,7 +31,7 @@ public class JogadorMaquina extends Jogador {
 			casaDestino = lanceAleatorio.getCasaDestino();
 			
 		}	else	{
-			System.out.println("Lance aleatório sem xeque");
+			//System.out.println("Lance aleatório sem xeque");
 			
 			//Escolhe um lance aleatório
 			Random random = new Random();
@@ -52,7 +52,8 @@ public class JogadorMaquina extends Jogador {
 		//Escreve o lance feito
 		String texto = (getCor().equals("branco")) ? Lance.escreveLance(pecaSelecionada, casaDestino, getJogo().getNumeroLance()) : Lance.escreveLance(pecaSelecionada, casaDestino);
 		Lance.escreveNoArquivo(texto);
-
+		
+		return true;
 	}
 
 }

@@ -154,24 +154,24 @@ public abstract class Jogador {
 		jogo.atualizaLancesECapturas();
 		ArrayList<Lance> lancesPossiveis = this.getLancesPossiveis();
 		ArrayList<Lance> lancesSemXeque = new ArrayList<Lance>();
-		System.out.println("lances possíveis: " + lancesPossiveis);
+		//System.out.println("lances possíveis: " + lancesPossiveis);
 	    for (Lance lance : lancesPossiveis) {
 	    	Casa origem = lance.getPecaMovida().getPosicao();
 	        // Realizar o lance temporariamente
-	    	System.out.println("Realizando lance temporário");
+	    	//System.out.println("Realizando lance temporário");
 	        jogo.getTabuleiro().mudaTabuleiroTemp(lance.getPecaMovida().getPosicao(), lance.getCasaDestino());
-	        Tabuleiro.imprimeTabuleiro();
+	        //Tabuleiro.imprimeTabuleiro();
 	        
 	        jogo.atualizaLancesECapturas();
 	        
 	        // Verificar se o jogador fica em xeque após o lance
 	        String xeque = jogo.verificaXeque();
-	        System.out.println("Verificando xeque: " + xeque);
+	        //System.out.println("Verificando xeque: " + xeque);
 	        
 	        // Desfazer o lance realizado
-	    	System.out.println("Desfazendo lance temporário. A origem é " + origem + "e o destino é " + lance.getCasaDestino());
+	    	//System.out.println("Desfazendo lance temporário. A origem é " + origem + "e o destino é " + lance.getCasaDestino());
 	        jogo.getTabuleiro().desfazerLance(origem, lance.getCasaDestino());
-	        Tabuleiro.imprimeTabuleiro();
+	        //Tabuleiro.imprimeTabuleiro();
 
 	        
 	        if (!xeque.equals(this.cor)) {
@@ -179,11 +179,11 @@ public abstract class Jogador {
 	            lancesSemXeque.add(lance);
 	        }
 	    }
-	    System.out.println("lances legais: " + lancesSemXeque);
+	    //System.out.println("lances legais: " + lancesSemXeque);
 	    return lancesSemXeque;
 	}
 
 	//Método que executa a jogada:
-	public abstract void fazJogada(Peca peca, Casa casa);
+	public abstract boolean fazJogada(Peca peca, Casa casa);
 
 }

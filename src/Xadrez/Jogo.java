@@ -13,6 +13,7 @@ public class Jogo {
 	private Jogador jogador2;
 	private int numeroLance;
 	private String turno;
+	private boolean lanceLegal;
 	
 	public Jogo(Jogador jogador1, Jogador jogador2, Tabuleiro tabuleiro) {
 		this.listaLances = "";
@@ -192,9 +193,9 @@ public class Jogo {
 	//Passar parte da implementação para JogadorHumano
 	public void fazLance(Peca pecaSelecionada, Casa casaDestino) {
 		if(pecaSelecionada.getCor().equals("branco")) {
-    		getJogadorBranco().fazJogada(pecaSelecionada, casaDestino);
+    		lanceLegal = getJogadorBranco().fazJogada(pecaSelecionada, casaDestino);
     	}	else	{
-    		getJogadorPreto().fazJogada(pecaSelecionada, casaDestino);
+    		lanceLegal = getJogadorPreto().fazJogada(pecaSelecionada, casaDestino);
     	}
 		finalizaTurno();
 	}
@@ -203,17 +204,19 @@ public class Jogo {
 	public void finalizaTurno() {
 		//System.out.println("finalizando turno");
 		numeroLance++;
-		String novoTurno = (turno.equals("branco")) ? "preto" : "branco";
-		setTurno(novoTurno);
-		
-		if(jogador2 instanceof JogadorMaquina) {
-			((JogadorMaquina)jogador2).fazJogada(null, null);
-			//Atualizando o numero de lances e turno:
-			numeroLance++;
-			String novoTurnoMaquina = (turno.equals("branco")) ? "preto" : "branco";
-			setTurno(novoTurnoMaquina);
+		if (lanceLegal) {
+			String novoTurno = (turno.equals("branco")) ? "preto" : "branco";
+			setTurno(novoTurno);
+			
+			if(jogador2 instanceof JogadorMaquina) {
+				((JogadorMaquina)jogador2).fazJogada(null, null);
+				//Atualizando o numero de lances e turno:
+				numeroLance++;
+				String novoTurnoMaquina = (turno.equals("branco")) ? "preto" : "branco";
+				setTurno(novoTurnoMaquina);
+			}
+			atualizaLancesECapturas();
 		}
-		atualizaLancesECapturas();
 	}
 
 	//Método que verifica se o jogo acabou:
@@ -298,8 +301,8 @@ public class Jogo {
 		Jogador jogadorPreto = (jogador1.getCor().equals("preto")) ? jogador1 : jogador2;
 		
 		if(turno.equals("preto")) {
-			System.out.println("casas atacadas pelo branco: " + jogadorBranco.getCasasAtacadas());
-			System.out.println("Posição rei preto " + reiPreto.getPosicao());
+			//System.out.println("casas atacadas pelo branco: " + jogadorBranco.getCasasAtacadas());
+			//System.out.println("Posição rei preto " + reiPreto.getPosicao());
 			
 			//Preto em xeque
 			for(int i = 0; i < jogadorBranco.getCasasAtacadas().size(); i++) {
@@ -309,8 +312,8 @@ public class Jogo {
 			}
 			//Branco em xeque
 		}	else	{
-			System.out.println("casas atacadas pelo preto: " + jogadorPreto.getCasasAtacadas());
-			System.out.println("Posição rei branco " + reiBranco.getPosicao());
+			//System.out.println("casas atacadas pelo preto: " + jogadorPreto.getCasasAtacadas());
+			//System.out.println("Posição rei branco " + reiBranco.getPosicao());
 
 			for(int i = 0; i < jogadorPreto.getCasasAtacadas().size(); i++) {
 				if(jogadorPreto.getCasasAtacadas().get(i).toString().equals(reiBranco.getPosicao().toString())) {

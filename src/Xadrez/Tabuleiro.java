@@ -154,38 +154,38 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
 	public void mudaTabuleiroTemp(Casa casaOrigem, Casa casaDestino) {
 		Peca peca = casaOrigem.getPeca();
 		pecaTemp = casaDestino.getPeca();
-		System.out.println("peça temp antes movimento: " + pecaTemp);
+		//System.out.println("peça temp antes movimento: " + pecaTemp);
 	    
 	    if (peca.getLancesPossiveis().contains(casaDestino)) {
 	    	//System.out.println("casa de destino válida");
 	        casaDestino.setPeca(peca);
-	    	System.out.println("casa de destino com a peça " + casaDestino.getPeca());
+	    	//System.out.println("casa de destino com a peça " + casaDestino.getPeca());
 	        casaOrigem.setPeca(null);
-	    	System.out.println("casa de origem vazia: " + casaOrigem.getPeca());
+	    	//System.out.println("casa de origem vazia: " + casaOrigem.getPeca());
 	    	
 	        peca.setPosicao(casaDestino);
 	    }
 	   // imprimeTabuleiro();
-		System.out.println("peça temp após movimento: " + pecaTemp);
+		//System.out.println("peça temp após movimento: " + pecaTemp);
 	}
 
 	public void desfazerLance(Casa casaOrigem, Casa casaDestino) {
-	    System.out.println("casa destino: " + casaDestino + casaDestino.getPeca());
+	    //System.out.println("casa destino: " + casaDestino + casaDestino.getPeca());
 		casaOrigem.setPeca(casaDestino.getPeca());
-	    System.out.println("casa origem: " + casaOrigem + casaOrigem.getPeca());
+	  //  System.out.println("casa origem: " + casaOrigem + casaOrigem.getPeca());
 
 		if(casaOrigem.getPeca() != null) {
 			casaOrigem.getPeca().setPosicao(casaOrigem);
 		}
 		
-	    System.out.println("arrumando casaDestino");
+	   // System.out.println("arrumando casaDestino");
 		casaDestino.setPeca(pecaTemp);
 		if(casaDestino.getPeca() != null) {
 			casaDestino.getPeca().setPosicao(casaDestino);
 		}
 		
-	    imprimeTabuleiro();
-	    System.out.println("desfeito");
+	    //imprimeTabuleiro();
+	    //System.out.println("desfeito");
 	}
 
 	//Método que imprime o tabuleiro graficamente:
@@ -284,7 +284,7 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
 	                    
 	                    //Executa o movimento:
 	                    if(pecaSelecionada.getLancesPossiveis().contains(casaDestino)){
-	                    	//System.out.println("tentativa de lance é possível");
+	                    	System.out.println("tentativa de lance é possível");
 	                    	jogo.fazLance(pecaSelecionada, casaDestino);
 		                }
 		                
