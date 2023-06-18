@@ -12,11 +12,11 @@ public class Rei extends Peca {
 		ArrayList<Casa> casasAtacadas = new ArrayList<Casa>();
 	    ArrayList<Peca> capturasValidas = new ArrayList<Peca>();
 	    Jogador oponente = (getCor().equals(getJogo().getJogador1().getCor())) ? getJogo().getJogador2() : getJogo().getJogador1();
-	    System.out.println("cor rei:" + this.getCor() + " // oponente: " + oponente.getCor());
+	    //System.out.println("cor rei:" + this.getCor() + " // oponente: " + oponente.getCor());
 	    
 	    char colunaAtual = getPosicao().getColuna();
 	    int linhaAtual = getPosicao().getLinha();
-		System.out.println("casa rei " + getCor() + " " + this.getPosicao());
+		//System.out.println("casa rei " + getCor() + " " + this.getPosicao());
 
 	    //Percorre as casas em volta do rei
 	    for(char c = (char)(colunaAtual - 1); c <= (char)(colunaAtual + 1); c++) {
@@ -35,11 +35,11 @@ public class Rei extends Peca {
 	    			//System.out.println("casa " + casa + " adicionada na lista de casas atacadas");
 	    			//System.out.println("casa " + casa + " inválida: " + casaInvalida(casa, oponente));
 	    			
-			        if (casa.getPeca() == null && !casaInvalida(casa, oponente)) {		//Casa sem peça e válida
-			        	System.out.println("casa livre: " + casa);
+			        if (casa.getPeca() == null && !casaInvalida(casa, oponente) && !casa.equals(this.getPosicao())) {		//Casa sem peça e válida
+			        	//System.out.println("casa livre: " + casa);
 			            lancesValidos.add(casa);
-			        } else if (casa.getPeca() != null && !(casa.getPeca().getCor().equals(this.getCor()))  && !casaInvalida(casa, oponente)) {		//Casa com peça adversária e válida
-			        	System.out.println("casa ocupada e válida: " + casa);
+			        } else if (casa.getPeca() != null && !(casa.getPeca().getCor().equals(this.getCor()))  && !casaInvalida(casa, oponente) && !casa.equals(this.getPosicao())) {		//Casa com peça adversária e válida
+			        	//System.out.println("casa ocupada e válida: " + casa);
 			            lancesValidos.add(casa);
 			        	capturasValidas.add(casa.getPeca());
 			        }
@@ -51,7 +51,7 @@ public class Rei extends Peca {
 	    this.setLancesPossiveis(lancesValidos);
 	    this.setCapturasPossiveis(capturasValidas);
 	    
-	    System.out.println("Lances válidos para o rei " + getCor() + " após atualização: " + getLancesPossiveis());
+	    // System.out.println("Lances válidos para o rei " + getCor() + " após atualização: " + getLancesPossiveis());
 	    return lancesValidos.size();
 	}
 	
@@ -60,7 +60,7 @@ public class Rei extends Peca {
 		for(int i = 0; i < casasInvalidas.size(); i++) {
 			//System.out.println(casasInvalidas.get(i) + " //// " + casa);
 			if(casasInvalidas.get(i).toString().equals(casa.toString())) {
-				System.out.println("casa inválida: " + casa);
+				//System.out.println("casa inválida: " + casa);
 				return true;
 			}
 		}

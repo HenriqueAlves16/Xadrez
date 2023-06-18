@@ -9,18 +9,39 @@ public class JogadorMaquina extends Jogador {
 	}
 	
 	@Override
-	public void fazJogada() {
-		//Atualiza os lances e capturas possíveis (?)
+	public void fazJogada(Peca peca, Casa casa) {
+		System.out.println("//////////////////////" + getJogo().verificaXeque() + "//////////////////");	
+		Peca pecaSelecionada;
+		Casa casaOrigem;
+		Casa casaDestino;
+		String xeque = getJogo().verificaXeque();
+		
+		//Atualiza os lances e capturas possíveis
 		verificaLancesPossiveis();
 		
-		//Escolhe um lance aleatório
-		Random random = new Random();
-		int numeroAleatorio = random.nextInt(getLancesPossiveis().size());
-		Lance lanceAleatorio = getLancesPossiveis().get(numeroAleatorio);
+		if(xeque.equals(getCor())) {
+			System.out.println("Lance aleatório xeque");
+			
+			Random random = new Random();
+			int numeroAleatorio = random.nextInt(getLancesPossiveisXeque().size());
+			Lance lanceAleatorio = getLancesPossiveisXeque().get(numeroAleatorio);
+			
+			pecaSelecionada = lanceAleatorio.getPecaMovida();
+			casaOrigem = pecaSelecionada.getPosicao();
+			casaDestino = lanceAleatorio.getCasaDestino();
+			
+		}	else	{
+			System.out.println("Lance aleatório sem xeque");
+			
+			//Escolhe um lance aleatório
+			Random random = new Random();
+			int numeroAleatorio = random.nextInt(getLancesPossiveis().size());
+			Lance lanceAleatorio = getLancesPossiveis().get(numeroAleatorio);
 
-		Peca pecaSelecionada = lanceAleatorio.getPecaMovida();
-		Casa casaOrigem = pecaSelecionada.getPosicao();
-		Casa casaDestino = lanceAleatorio.getCasaDestino();
+			pecaSelecionada = lanceAleatorio.getPecaMovida();
+			casaOrigem = pecaSelecionada.getPosicao();
+			casaDestino = lanceAleatorio.getCasaDestino();
+		}
 		
 		//Muda o tabuleiro fazendo o lance aleatório
 		getJogo().getTabuleiro().mudaTabuleiro(casaOrigem, casaDestino);
@@ -31,6 +52,7 @@ public class JogadorMaquina extends Jogador {
 		//Escreve o lance feito
 		String texto = (getCor().equals("branco")) ? Lance.escreveLance(pecaSelecionada, casaDestino, getJogo().getNumeroLance()) : Lance.escreveLance(pecaSelecionada, casaDestino);
 		Lance.escreveNoArquivo(texto);
+
 	}
 
 }

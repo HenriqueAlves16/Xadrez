@@ -2,6 +2,7 @@ package Xadrez;
 import java.io.FileWriter;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 
 
 
@@ -76,6 +77,16 @@ public class Jogo {
 
 	public void setTurno(String turno) {
 		this.turno = turno;
+	}
+	
+	public Jogador getJogadorBranco() {
+		Jogador jogadorBranco = (jogador1.getCor().equals("branco")) ? jogador1 : jogador2;
+		return jogadorBranco;
+	}
+	
+	public Jogador getJogadorPreto() {
+		Jogador jogadorPreto = (jogador1.getCor().equals("preto")) ? jogador1 : jogador2;
+		return jogadorPreto;
 	}
 	
 	//Associa o jogo ao tabuleiro e peças:
@@ -180,18 +191,13 @@ public class Jogo {
 	//Método que faz uma jogada a partir da peça selecionada
 	//Passar parte da implementação para JogadorHumano
 	public void fazLance(Peca pecaSelecionada, Casa casaDestino) {
-		//System.out.println("//////////////////" + verificaFim() + "//////////////////");
-		if(pecaSelecionada.getLancesPossiveis().contains(casaDestino)){
-			//System.out.println("chamada para mudar o tabuleiro");
-            tabuleiro.mudaTabuleiro(pecaSelecionada.getPosicao(), casaDestino);		
-        }
-		//System.out.println("chamada para atualizar as capturas");
-		atualizaLancesECapturas();
-		String texto = (turno.equals("branco")) ? Lance.escreveLance(pecaSelecionada, casaDestino, numeroLance) : Lance.escreveLance(pecaSelecionada, casaDestino);
-		Lance.escreveNoArquivo(texto);
+		if(pecaSelecionada.getCor().equals("branco")) {
+    		getJogadorBranco().fazJogada(pecaSelecionada, casaDestino);
+    	}	else	{
+    		getJogadorPreto().fazJogada(pecaSelecionada, casaDestino);
+    	}
 		finalizaTurno();
 	}
-	
 	
 	//Muda turno e faz o lance do computador, se esse for o caso
 	public void finalizaTurno() {
@@ -199,8 +205,11 @@ public class Jogo {
 		numeroLance++;
 		String novoTurno = (turno.equals("branco")) ? "preto" : "branco";
 		setTurno(novoTurno);
+		
 		if(jogador2 instanceof JogadorMaquina) {
-			((JogadorMaquina)jogador2).fazJogada();
+			((JogadorMaquina)jogador2).fazJogada(null, null);
+			//Atualizando o numero de lances e turno:
+			numeroLance++;
 			String novoTurnoMaquina = (turno.equals("branco")) ? "preto" : "branco";
 			setTurno(novoTurnoMaquina);
 		}
@@ -282,22 +291,35 @@ public class Jogo {
 	
 	//Método que verifica se o jogador de turno ativo está em xeque:
 	//Usar Enum:
-	public int verificaXeque() {
+	public String verificaXeque() {
 		Rei reiPreto = encontraRei("preto");
 		Rei reiBranco = encontraRei("branco");
 		Jogador jogadorBranco = (jogador1.getCor().equals("branco")) ? jogador1 : jogador2;
 		Jogador jogadorPreto = (jogador1.getCor().equals("preto")) ? jogador1 : jogador2;
 		
 		if(turno.equals("preto")) {
-			if(jogadorBranco.getCasasAtacadas().contains(reiPreto.getPosicao())) {
-				return 1;
+			System.out.println("casas atacadas pelo branco: " + jogadorBranco.getCasasAtacadas());
+			System.out.println("Posição rei preto " + reiPreto.getPosicao());
+			
+			//Preto em xeque
+			for(int i = 0; i < jogadorBranco.getCasasAtacadas().size(); i++) {
+				if(jogadorBranco.getCasasAtacadas().get(i).toString().equals(reiPreto.getPosicao().toString())) {
+					return "preto";
+				}
 			}
+			//Branco em xeque
 		}	else	{
-			if(jogadorPreto.getCasasAtacadas().contains(reiBranco.getPosicao())) {
-				return -1;
+			System.out.println("casas atacadas pelo preto: " + jogadorPreto.getCasasAtacadas());
+			System.out.println("Posição rei branco " + reiBranco.getPosicao());
+
+			for(int i = 0; i < jogadorPreto.getCasasAtacadas().size(); i++) {
+				if(jogadorPreto.getCasasAtacadas().get(i).toString().equals(reiBranco.getPosicao().toString())) {
+					return "branco";
+				}
 			}
 		}
-		return 0;
+		//Ninguém em xeque
+		return "";
 	}
 	
 	public Rei encontraRei(String cor) {
@@ -312,6 +334,7 @@ public class Jogo {
 		}
 		return null;
 	}
+	
 	
 	
 	

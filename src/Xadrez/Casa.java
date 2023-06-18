@@ -5,11 +5,18 @@ public class Casa {
     private int linha;
     private char coluna;
     private Peca peca;
+    private Peca pecaTemp;
 
     public Casa(char coluna, int linha, Peca peca) {
         this.linha = linha;
         this.coluna = coluna;
         this.peca = peca;
+    }
+    
+    public Casa(Casa casa) {
+    	this.linha = casa.getLinha();
+    	this.coluna = casa.getColuna();
+    	this.peca = casa.getPeca();
     }
     
     public int getLinha() {
@@ -26,9 +33,17 @@ public class Casa {
 
     public void setPeca(Peca peca) {
         this.peca = peca;
-    }
+    }   
     
-    @Override
+    public Peca getPecaTemp() {
+		return pecaTemp;
+	}
+
+	public void setPecaTemp(Peca pecaTemp) {
+		this.pecaTemp = pecaTemp;
+	}
+
+	@Override
     public String toString() {
     	return "" + coluna + linha;
     }

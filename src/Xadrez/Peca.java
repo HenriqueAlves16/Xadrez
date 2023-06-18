@@ -71,6 +71,7 @@ public abstract class Peca extends JPanel{
 	}
 
 	public ArrayList<Casa> getLancesPossiveis() {
+		lancesValidos();
 		return lancesPossiveis;
 	}
 

@@ -23,8 +23,9 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
 	private static final int TAMANHO_CASA = 75;
 	private int xReleased, yReleased, xPressed, yPressed, mouseX, mouseY;
 	private boolean dragging;
-	Peca pecaSelecionada;
-	Jogo jogo;
+	private Peca pecaSelecionada;
+	private Jogo jogo;
+	private Peca pecaTemp;
 	
 	//Inicializa o tabuleiro na configuração inicial
 	Tabuleiro(){
@@ -147,7 +148,44 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
 			casaOrigem.setPeca(null);
 			peca.setPosicao(casaDestino);
 		}
-		imprimeTabuleiro();
+		//imprimeTabuleiro();
+	}
+	
+	public void mudaTabuleiroTemp(Casa casaOrigem, Casa casaDestino) {
+		Peca peca = casaOrigem.getPeca();
+		pecaTemp = casaDestino.getPeca();
+		System.out.println("peça temp antes movimento: " + pecaTemp);
+	    
+	    if (peca.getLancesPossiveis().contains(casaDestino)) {
+	    	//System.out.println("casa de destino válida");
+	        casaDestino.setPeca(peca);
+	    	System.out.println("casa de destino com a peça " + casaDestino.getPeca());
+	        casaOrigem.setPeca(null);
+	    	System.out.println("casa de origem vazia: " + casaOrigem.getPeca());
+	    	
+	        peca.setPosicao(casaDestino);
+	    }
+	   // imprimeTabuleiro();
+		System.out.println("peça temp após movimento: " + pecaTemp);
+	}
+
+	public void desfazerLance(Casa casaOrigem, Casa casaDestino) {
+	    System.out.println("casa destino: " + casaDestino + casaDestino.getPeca());
+		casaOrigem.setPeca(casaDestino.getPeca());
+	    System.out.println("casa origem: " + casaOrigem + casaOrigem.getPeca());
+
+		if(casaOrigem.getPeca() != null) {
+			casaOrigem.getPeca().setPosicao(casaOrigem);
+		}
+		
+	    System.out.println("arrumando casaDestino");
+		casaDestino.setPeca(pecaTemp);
+		if(casaDestino.getPeca() != null) {
+			casaDestino.getPeca().setPosicao(casaDestino);
+		}
+		
+	    imprimeTabuleiro();
+	    System.out.println("desfeito");
 	}
 
 	//Método que imprime o tabuleiro graficamente:
@@ -222,50 +260,54 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
 	
 	//Evento em que o mouse é solto
 	@Override
-    public void mouseReleased(MouseEvent e) { 		//tratar caso de soltar fora do tabuleiro                  
-        if(e.getX() < 8 * TAMANHO_CASA && e.getY() < 8 * TAMANHO_CASA && pecaSelecionada.getCor().equals(jogo.getTurno())){             //Permite movimento apenas dentro do tabuleiro e na vez do jogador correto ()poderia melhorar criando uma exceção
-        	xReleased = e.getX();
-        	yReleased = e.getY();
-            if(e.getButton() == MouseEvent.BUTTON1){           				//Movimenta com o botão esquerdo
-            	//Define as casas selecionada e de destino
-            	int linhaPressionada = 7 - yPressed/TAMANHO_CASA;
-            	int colunaPressionada = xPressed/TAMANHO_CASA;
-            	Casa casaSelecionada = getCasa((char)('a' + colunaPressionada), linhaPressionada + 1);
-            			
-            	int linhaLiberada = 7 - yReleased/TAMANHO_CASA;            	
-            	int colunaLiberada = xReleased/TAMANHO_CASA;
-            	Casa casaDestino = getCasa((char)('a' + colunaLiberada), linhaLiberada + 1);
-            	            	
-            	//A casa de seleção pode não ter peça, por isso o try-catch
-            	try {
-	            	Peca pecaSelecionada = tabuleiro[linhaPressionada][colunaPressionada].getPeca();
-	            	
-	            	System.out.println(pecaSelecionada + "" + pecaSelecionada.getPosicao());
-                    System.out.println(pecaSelecionada.getLancesPossiveis());
-                    
-                    //Executa o movimento:
-                    if(pecaSelecionada.getLancesPossiveis().contains(casaDestino)){
-                    	System.out.println("tentativa de lance é possível");
-	                    jogo.fazLance(pecaSelecionada, casaDestino);
-	                }
-	                
-            	} catch(NullPointerException exp) {}
-            
-            }
-            dragging = false;	
-            repaint();
-            //imprimeTabuleiro();
-        }
+    public void mouseReleased(MouseEvent e) { 		//tratar caso de soltar fora do tabuleiro
+		//try {
+	        if(e.getX() < 8 * TAMANHO_CASA && e.getY() < 8 * TAMANHO_CASA && pecaSelecionada.getCor().equals(jogo.getTurno())){             //Permite movimento apenas dentro do tabuleiro e na vez do jogador correto ()poderia melhorar criando uma exceção
+	        	xReleased = e.getX();
+	        	yReleased = e.getY();
+	            if(e.getButton() == MouseEvent.BUTTON1){           				//Movimenta com o botão esquerdo
+	            	//Define as casas selecionada e de destino
+	            	int linhaPressionada = 7 - yPressed/TAMANHO_CASA;
+	            	int colunaPressionada = xPressed/TAMANHO_CASA;
+	            	Casa casaSelecionada = getCasa((char)('a' + colunaPressionada), linhaPressionada + 1);
+	            			
+	            	int linhaLiberada = 7 - yReleased/TAMANHO_CASA;            	
+	            	int colunaLiberada = xReleased/TAMANHO_CASA;
+	            	Casa casaDestino = getCasa((char)('a' + colunaLiberada), linhaLiberada + 1);
+	            	            	
+	            	//A casa de seleção pode não ter peça, por isso o try-catch
+	            	try {
+		            	Peca pecaSelecionada = tabuleiro[linhaPressionada][colunaPressionada].getPeca();
+		            	
+		            	System.out.println(pecaSelecionada + "" + pecaSelecionada.getPosicao());
+	                    System.out.println(pecaSelecionada.getLancesPossiveis());
+	                    
+	                    //Executa o movimento:
+	                    if(pecaSelecionada.getLancesPossiveis().contains(casaDestino)){
+	                    	//System.out.println("tentativa de lance é possível");
+	                    	jogo.fazLance(pecaSelecionada, casaDestino);
+		                }
+		                
+	            	} catch(NullPointerException exp) {}
+	            
+	            }
+	            dragging = false;	
+	            repaint();
+	            //imprimeTabuleiro();
+	        }
+		//} catch(NullPointerException t)	{}
     }
 	
     @Override
     public void mouseDragged(MouseEvent e) {
-    	if(pecaSelecionada.getCor().equals(jogo.getTurno())) {
-	    	mouseX = e.getX();
-	        mouseY = e.getY();
-	        dragging = true;
-	        repaint();
-    	}
+    	//try {
+	    	if(pecaSelecionada.getCor().equals(jogo.getTurno())) {
+		    	mouseX = e.getX();
+		        mouseY = e.getY();
+		        dragging = true;
+		        repaint();
+	    	}
+    	//} catch(NullPointerException t) {}
     }	
     
 	//Métodos que devem ser "implementados" devido à interface

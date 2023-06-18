@@ -7,6 +7,7 @@ import java.io.IOException;
 
 public class Lance {
 	private Peca pecaMovida;
+	private Casa casaOrigem;
 	private Casa casaDestino;
 	private int numeroLance;
 	private static File file = new File("Texto.txt");;
@@ -20,6 +21,12 @@ public class Lance {
 	public Lance(Peca pecaMovida, Casa casaDestino) {
 		this.pecaMovida = pecaMovida;
 		this.casaDestino = casaDestino;
+	}
+	
+	public Lance(Peca pecaMovida, Casa casaDestino, Casa casaOrigem) {
+		this.pecaMovida = pecaMovida;
+		this.casaDestino = casaDestino;
+		this.casaOrigem = casaOrigem;
 	}
 	
 	//getters e setters:
@@ -45,6 +52,14 @@ public class Lance {
 
 	public void setNumeroLance(int numeroLance) {
 		this.numeroLance = numeroLance;
+	}
+	
+	public Casa getCasaOrigem() {
+		return casaOrigem;
+	}
+
+	public void setCasaOrigem(Casa casaOrigem) {
+		this.casaOrigem = casaOrigem;
 	}
 
 	public static String escreveLance(Peca pecaBrancaMovida, Casa casaDestinoBranco, Peca pecaPretaMovida, Casa casaDestinoPreto, int numeroLance) {
@@ -88,8 +103,7 @@ public class Lance {
 
 	@Override
 	public String toString() {
-		return "Lance [pecaMovida=" + pecaMovida + ", casaDestino=" + casaDestino + ", numeroLance=" + numeroLance
-				+ "]";
+		return pecaMovida + " to " + casaDestino;
 	}
 	
 	
