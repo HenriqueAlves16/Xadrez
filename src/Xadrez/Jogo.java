@@ -1,6 +1,8 @@
 package Xadrez;
-import java.util.ArrayList;
-import javax.swing.JOptionPane;
+import java.io.FileWriter;
+import java.io.BufferedWriter;
+import java.io.IOException;
+
 
 
 public class Jogo {
@@ -108,23 +110,6 @@ public class Jogo {
 		}
 	}
 	
-	//Método que verifica se o jogador de turno ativo está em xeque:
-	public boolean verificaXeque() {
-		Jogador jogadorBranco = (jogador1.getCor().equals("branco")) ? jogador1 : jogador2;
-		Jogador jogadorPreto = (jogador1.getCor().equals("preto")) ? jogador1 : jogador2;
-		
-		if(turno.equals("branco")) {
-			for(Peca peca : jogadorPreto.getCapturasPossiveis()) {
-				if(peca instanceof Rei) return true;
-			}
-		}	else	{
-			for(Peca peca : jogadorBranco.getCapturasPossiveis()) {
-				if(peca instanceof Rei) return true;
-			}
-		}
-		return false;
-	}
-	
 	//Atualiza os lances possíveis para cada peça separadamente e para cada jogador
 	public void atualizaLancesECapturas() {
 		
@@ -195,18 +180,23 @@ public class Jogo {
 	//Método que faz uma jogada a partir da peça selecionada
 	//Passar parte da implementação para JogadorHumano
 	public void fazLance(Peca pecaSelecionada, Casa casaDestino) {
+		//System.out.println("//////////////////" + verificaFim() + "//////////////////");
 		if(pecaSelecionada.getLancesPossiveis().contains(casaDestino)){
-			System.out.println("chamada para mudar o tabuleiro");
+			//System.out.println("chamada para mudar o tabuleiro");
             tabuleiro.mudaTabuleiro(pecaSelecionada.getPosicao(), casaDestino);		
         }
-		System.out.println("chamada para atualizar as capturas");
+		//System.out.println("chamada para atualizar as capturas");
 		atualizaLancesECapturas();
+		String texto = (turno.equals("branco")) ? Lance.escreveLance(pecaSelecionada, casaDestino, numeroLance) : Lance.escreveLance(pecaSelecionada, casaDestino);
+		Lance.escreveNoArquivo(texto);
 		finalizaTurno();
 	}
 	
+	
 	//Muda turno e faz o lance do computador, se esse for o caso
 	public void finalizaTurno() {
-		System.out.println("finalizando turno");
+		//System.out.println("finalizando turno");
+		numeroLance++;
 		String novoTurno = (turno.equals("branco")) ? "preto" : "branco";
 		setTurno(novoTurno);
 		if(jogador2 instanceof JogadorMaquina) {
@@ -286,8 +276,27 @@ public class Jogo {
 			}	else if(cavalosBrancos == 0 && cavalosPretos == 0 && bisposBrancos <= 1 && bisposPretos <= 1) {
 				return 1;
 			}
-		}
+		}	
+		return 0;
+	}
+	
+	//Método que verifica se o jogador de turno ativo está em xeque:
+	//Usar Enum:
+	public int verificaXeque() {
+		Rei reiPreto = encontraRei("preto");
+		Rei reiBranco = encontraRei("branco");
+		Jogador jogadorBranco = (jogador1.getCor().equals("branco")) ? jogador1 : jogador2;
+		Jogador jogadorPreto = (jogador1.getCor().equals("preto")) ? jogador1 : jogador2;
 		
+		if(turno.equals("preto")) {
+			if(jogadorBranco.getCasasAtacadas().contains(reiPreto.getPosicao())) {
+				return 1;
+			}
+		}	else	{
+			if(jogadorPreto.getCasasAtacadas().contains(reiBranco.getPosicao())) {
+				return -1;
+			}
+		}
 		return 0;
 	}
 	

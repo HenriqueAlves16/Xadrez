@@ -20,12 +20,17 @@ public class JogadorMaquina extends Jogador {
 
 		Peca pecaSelecionada = lanceAleatorio.getPecaMovida();
 		Casa casaOrigem = pecaSelecionada.getPosicao();
-
+		Casa casaDestino = lanceAleatorio.getCasaDestino();
+		
 		//Muda o tabuleiro fazendo o lance aleatório
-		getJogo().getTabuleiro().mudaTabuleiro(casaOrigem, lanceAleatorio.getCasaDestino());
+		getJogo().getTabuleiro().mudaTabuleiro(casaOrigem, casaDestino);
 		
 		//Atualiza as listas de controle
 		getJogo().atualizaLancesECapturas();
+		
+		//Escreve o lance feito
+		String texto = (getCor().equals("branco")) ? Lance.escreveLance(pecaSelecionada, casaDestino, getJogo().getNumeroLance()) : Lance.escreveLance(pecaSelecionada, casaDestino);
+		Lance.escreveNoArquivo(texto);
 	}
 
 }

@@ -147,7 +147,7 @@ public abstract class Jogador {
 			}
 		}
 		setCasasAtacadas(listaCasas);
-		System.out.println("casas atacadas pelo jogador " + cor + " " + getCasasAtacadas());
+		//System.out.println("casas atacadas pelo jogador " + cor + " " + getCasasAtacadas());
 	}
 	
 	//Método que executa a jogada:
