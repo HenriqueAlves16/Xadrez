@@ -3,10 +3,25 @@ package Xadrez;
 import java.util.ArrayList;
 
 public class Torre extends Peca {
+	private boolean movido;
+	
+	//Construtor:
 	public Torre(String cor, Casa posicao, int x, int y, String path) {
 		super(cor, posicao, x, y, path);
+		this.movido = false;
 	}
 	
+	//Getters e setters:
+	public boolean getMovido() {
+		return movido;
+	}
+
+	public void setMovido(boolean movido) {
+		this.movido = movido;
+	}
+
+
+
 	public int lancesValidos() {
 	    ArrayList<Casa> lancesValidos = new ArrayList<Casa>();
 		ArrayList<Casa> casasAtacadas = new ArrayList<Casa>();

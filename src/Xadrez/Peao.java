@@ -86,24 +86,24 @@ public class Peao extends Peca implements MovableSpc{
 	//Método que verifica se o movimento especial en passant é possível:
 	public void movimentoEspecial(Lance ultimoLance) {
 		if(!ultimoLance.getPecaMovida().getCor().equals(this.getCor())) {
-			System.out.println("Ultimo lance: " + ultimoLance);
-			System.out.println(this.getCor() + "//" + ultimoLance.getPecaMovida().getCor());
+			//System.out.println("\n\nUltimo lance: " + ultimoLance);
+			//System.out.println(this.getCor() + "//" + ultimoLance.getPecaMovida().getCor());
 			ArrayList<Lance> enPassants = new ArrayList<Lance>();
 			
 			int delta = (this.getCor().equals("branco")) ? 1 : -1;
 			Casa casaDestino = Tabuleiro.getCasa(ultimoLance.getCasaDestino().getColuna(), ultimoLance.getCasaDestino().getLinha() + delta);
-			System.out.println("verificando enPassant para a casa " + casaDestino);
+			//System.out.println("verificando enPassant para a casa " + casaDestino);
 			
 			if (ultimoLance != null && ultimoLance.getPecaMovida() instanceof Peao) {
-				System.out.println("ultimo movido foi um peao " + ultimoLance.getPecaMovida().getCor());
+				//System.out.println("ultimo movido foi um peao " + ultimoLance.getPecaMovida().getCor());
 	            Peao ultimoPeaoMovido = (Peao) ultimoLance.getPecaMovida();
 	            if (Math.abs(ultimoLance.getCasaDestino().getLinha() - ultimoLance.getCasaOrigem().getLinha()) == 2) {		// O último movimento foi um avanço de duas casas com um peão adversário
-	                System.out.println("último movimento foi um avanço de duas casas com um peão adversário");
+	                //System.out.println("último movimento foi um avanço de duas casas com um peão adversário");
 	                if (this.getCor() != ultimoPeaoMovido.getCor() && Math.abs(this.getPosicao().getColuna() - 
 	                	ultimoPeaoMovido.getPosicao().getColuna()) == 1 && this.getPosicao().getLinha() ==
 	                	ultimoPeaoMovido.getPosicao().getLinha()){	
 	                    // En passant é possível
-	                	System.out.println("enPassant possível!!!!!!");
+	                	//System.out.println("enPassant possível!!!!!!");
 	                	enPassants.add(new Lance(this, casaDestino, this.getPosicao()));
 	                }
 	            }

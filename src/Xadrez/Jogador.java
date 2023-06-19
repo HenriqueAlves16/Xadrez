@@ -162,6 +162,7 @@ public abstract class Jogador {
 	
 	public void verificaLancesEspeciais() {
 		ArrayList<Lance> listaLancesEspeciais = new ArrayList<Lance>();
+		System.out.println("\nverificando Lances Especiais jogador " + getCor());
 		for(int l = 0; l < 8; l++) {					//Percorre o tabuleiro
 			for(char c = 'a'; c <= 'h'; c++) {
 				try {
@@ -177,7 +178,7 @@ public abstract class Jogador {
 			}
 		}
 		setLancesEspeciais(listaLancesEspeciais);
-		System.out.println("Lances especiais encontrados: " + listaLancesEspeciais);
+		System.out.println("Lances especiais encontrados jogador " + getCor() + ": " + listaLancesEspeciais + "\n");
 	}
 	
 	public ArrayList<Lance> getLancesPossiveisXeque() {

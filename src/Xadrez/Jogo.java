@@ -124,6 +124,8 @@ public class Jogo {
 		    			peca.lancesValidos();
 		    			if(peca instanceof Peao) {
 		    				((Peao)peca).movimentoEspecial(ultimoLance);
+		    			}	else if (peca instanceof Rei) {
+		    				((Rei)peca).movimentoEspecial(null);
 		    			}
 		    		}
 		    	} catch(NullPointerException e) {}
@@ -168,8 +170,8 @@ public class Jogo {
 	//Muda turno e faz o lance do computador, se esse for o caso
 	public void finalizaTurno() {
 		//System.out.println("finalizando turno");
-		numeroLance++;
 		if (ultimoLance != null) {
+			numeroLance++;
 			String novoTurno = (turno.equals("branco")) ? "preto" : "branco";
 			setTurno(novoTurno);
 			

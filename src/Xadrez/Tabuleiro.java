@@ -299,11 +299,28 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
 	                    System.out.println(pecaSelecionada.getLancesPossiveis());
 	                    
 	                    //Executa o movimento:
-	                    if(pecaSelecionada.getLancesPossiveis().contains(casaDestino)){
-	                    	//System.out.println("tentativa de lance é possível");
+	                    if(pecaSelecionada.getLancesPossiveis().contains(casaDestino)){ //É lance normal
+	                    	System.out.println("tentativa de lance é possível");
 	                    	jogo.fazLance(pecaSelecionada, casaDestino);
+	                    //É en passant
+		                }	else if(pecaSelecionada instanceof Peao) {		
+		                	ArrayList<Lance> lancesEspeciais = ((Peao)pecaSelecionada).getLancesEspeciais();
+		                	for(int i = 0; i < lancesEspeciais.size(); i++) {	//Percorre os lances especiais do peão
+		                		if(lancesEspeciais.get(i).getCasaDestino().toString().equals(casaDestino.toString())) {	//Lista de lances especiais contém a casa de destino
+		                			System.out.println("tentativa de enPassant");
+		                			jogo.fazLance(pecaSelecionada, casaDestino);
+		                		}
+		                	}
+		                //É roque
+		                }	else if(pecaSelecionada instanceof Rei) {
+		                	ArrayList<Lance> lancesEspeciais = ((Rei)pecaSelecionada).getLancesEspeciais();
+		                	for(int i = 0; i < lancesEspeciais.size(); i++) {	//Percorre os lances especiais do rei
+		                		if(lancesEspeciais.get(i).getCasaDestino().toString().equals(casaDestino.toString())) {	//Lista de lances especiais contém a casa de destino
+		                			System.out.println("tentativa de roque");
+		                			jogo.fazLance(pecaSelecionada, casaDestino);
+		                		}
+		                	}
 		                }
-		                
 	            	} catch(NullPointerException exp) {}
 	            
 	            }

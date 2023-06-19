@@ -13,43 +13,59 @@ public class JogadorHumano extends Jogador {
 	@Override
 	public Lance fazJogada(Peca pecaSelecionada, Casa casaDestino) {
 		System.out.println("xeque humano: " + getJogo().verificaXeque());
+		System.out.println("peca selecionada: " + pecaSelecionada + " casa de destino " + casaDestino);
 		String xeque = getJogo().verificaXeque();
-		boolean sucesso = false;
+		boolean sucesso = false, aux = true;
 		Casa origem = pecaSelecionada.getPosicao();
+		
 		
 		//Jogador em xeque:
 		if(xeque.equals(getCor())) {
-			System.out.println("Lance humano xeque");
+			System.out.println("////////Lance humano xeque//////////");
 			
 			//Verifica se é um lance possível
-			System.out.println(getLancesPossiveisXeque());
+			//System.out.println(getLancesPossiveisXeque());
 			for(int i = 0; i < getLancesPossiveisXeque().size(); i++) {
 				if(getLancesPossiveisXeque().get(i).getCasaDestino().equals(casaDestino)){
-					System.out.println("chamada para mudar o tabuleiro humano");
+					//System.out.println("chamada para mudar o tabuleiro humano");
 		            getJogo().getTabuleiro().mudaTabuleiro(pecaSelecionada.getPosicao(), casaDestino);
 		            sucesso = true;
+		            aux = false;
 		        }	else	{
-		        	System.out.println("lance humano ilegal");
+		        	//System.out.println("lance humano ilegal");
 		        }
 			}
 			if(!sucesso)	return null;
 			
 		}   else if(pecaSelecionada.getLancesPossiveis().contains(casaDestino))	{	//Não está em xeque e é um lance possível
-			System.out.println("Lance normal");
+			System.out.println("/////////Lance normal/////////");
 			//System.out.println("chamada para mudar o tabuleiro");
 	        getJogo().getTabuleiro().mudaTabuleiro(pecaSelecionada.getPosicao(), casaDestino);
-	        
-		}   else if(pecaSelecionada instanceof Peao)	{	//Não está em xeque e é um lance especial
-			System.out.println("Não está em xeque e é peão");
+	        aux = false;
+		}
+		
+		if(aux && pecaSelecionada instanceof Peao)	{	//Não está em xeque e é um lance especial de peão
+			System.out.println("//////////Lance especial de peão///////////");
 			ArrayList<Lance> lancesEspeciais = ((Peao)pecaSelecionada).getLancesEspeciais();
 			for (int i = 0; i < lancesEspeciais.size(); i++) {
-				System.out.println("Lance especial: " + lancesEspeciais.get(i));
-				if(lancesEspeciais.get(i).getPecaMovida().equals(pecaSelecionada) && lancesEspeciais.get(i).getCasaDestino().equals(casaDestino)) {
-					System.out.println("Lance válido!!! Mudando o tabuleiro:");
+				//System.out.println("Lance especial peao: " + lancesEspeciais.get(i));
+				if(lancesEspeciais.get(i).getPecaMovida().equals(pecaSelecionada) && lancesEspeciais.get(i).getCasaDestino().equals(casaDestino)) {			//Lance especial igual ao lance feito
+					//System.out.println("En passant válido!!! Mudando o tabuleiro:");
 					getJogo().getTabuleiro().mudaTabuleiroEspecial(lancesEspeciais.get(i));
 				}
 			}
-			
+		}
+		
+		if(aux && pecaSelecionada instanceof Rei) {
+			System.out.println("//////////Lance especial de rei///////////");
+			ArrayList<Lance> lancesEspeciais = ((Rei)pecaSelecionada).getLancesEspeciais();
+			for (int i = 0; i < lancesEspeciais.size(); i++) {
+				System.out.println("Lance especial rei: " + lancesEspeciais.get(i));
+				if(lancesEspeciais.get(i).getPecaMovida().equals(pecaSelecionada) && lancesEspeciais.get(i).getCasaDestino().equals(casaDestino)) {			//Lance especial igual ao lance feito
+					System.out.println("Roque válido!!! Mudando o tabuleiro:");
+					getJogo().getTabuleiro().mudaTabuleiroEspecial(lancesEspeciais.get(i));
+				}
+			}
 		}
 		
 		
