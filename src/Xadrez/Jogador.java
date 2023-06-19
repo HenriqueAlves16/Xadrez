@@ -6,6 +6,7 @@ public abstract class Jogador {
 	private ArrayList<Peca> capturasPossiveis;
 	private ArrayList<Casa> casasAtacadas;
 	private ArrayList<Lance> lancesPossiveis;
+	private ArrayList<Lance> lancesEspeciais;
 	private boolean emXeque;
 	private Jogo jogo;
 
@@ -66,6 +67,14 @@ public abstract class Jogador {
 	public void setLancesPossiveis(ArrayList<Lance> lancesPossiveis) {
 		this.lancesPossiveis = lancesPossiveis;
 	}
+	
+	public ArrayList<Lance> getLancesEspeciais() {
+		return lancesEspeciais;
+	}
+
+	public void setLancesEspeciais(ArrayList<Lance> lancesEspeciais) {
+		this.lancesEspeciais = lancesEspeciais;
+	}
 
 	//Método que verifica as peças atacadas pelo jogador:
 	public void verificaCapturasPossiveis(){
@@ -113,6 +122,7 @@ public abstract class Jogador {
 		setLancesPossiveis(listaLances);
 	}
 	
+	//Verificar se é necessário o if é peão
 	public void verificaCasasAtacadas() {
 		ArrayList<Casa> listaCasas = new ArrayList<Casa>();
 		
@@ -150,6 +160,26 @@ public abstract class Jogador {
 		//System.out.println("casas atacadas pelo jogador " + cor + " " + getCasasAtacadas());
 	}
 	
+	public void verificaLancesEspeciais() {
+		ArrayList<Lance> listaLancesEspeciais = new ArrayList<Lance>();
+		for(int l = 0; l < 8; l++) {					//Percorre o tabuleiro
+			for(char c = 'a'; c <= 'h'; c++) {
+				try {
+					Peca peca = Tabuleiro.getCasa(c, l + 1).getPeca(); 
+					if(peca instanceof Peao && peca.getCor().equals(this.getCor())) {
+						System.out.println("Lances especiais para o " + peca + ": " + ((Peao)peca).getLancesEspeciais());
+						for(int i = 0; i < ((Peao)peca).getLancesEspeciais().size(); i++) {				//Percorre cada possível lance 
+							Lance lanceEspecial = ((Peao)peca).getLancesEspeciais().get(i);
+							listaLancesEspeciais.add(lanceEspecial);
+						}
+					}
+				}	catch(NullPointerException e) {}
+			}
+		}
+		setLancesEspeciais(listaLancesEspeciais);
+		System.out.println("Lances especiais encontrados: " + listaLancesEspeciais);
+	}
+	
 	public ArrayList<Lance> getLancesPossiveisXeque() {
 		jogo.atualizaLancesECapturas();
 		ArrayList<Lance> lancesPossiveis = this.getLancesPossiveis();
@@ -183,7 +213,14 @@ public abstract class Jogador {
 	    return lancesSemXeque;
 	}
 
+	public void atualizacaoLances() {
+		this.verificaCapturasPossiveis();
+		this.verificaCasasAtacadas();
+		this.verificaLancesEspeciais();
+		this.verificaLancesPossiveis();
+	}
+	
 	//Método que executa a jogada:
-	public abstract boolean fazJogada(Peca peca, Casa casa);
+	public abstract Lance fazJogada(Peca peca, Casa casa);
 
 }

@@ -9,8 +9,8 @@ public class JogadorMaquina extends Jogador {
 	}
 	
 	@Override
-	public boolean fazJogada(Peca peca, Casa casa) {
-		System.out.println("//////////////////////" + getJogo().verificaXeque() + "//////////////////");	
+	public Lance fazJogada(Peca peca, Casa casa) {
+		System.out.println("xeque maquina::" + getJogo().verificaXeque());	
 		Peca pecaSelecionada;
 		Casa casaOrigem;
 		Casa casaDestino;
@@ -53,7 +53,8 @@ public class JogadorMaquina extends Jogador {
 		String texto = (getCor().equals("branco")) ? Lance.escreveLance(pecaSelecionada, casaDestino, getJogo().getNumeroLance()) : Lance.escreveLance(pecaSelecionada, casaDestino);
 		Lance.escreveNoArquivo(texto);
 		
-		return true;
+		System.out.println("MAQUINA: Peca selecionada: " + pecaSelecionada + "origem: " + casaOrigem + "casaDestino: " + casaDestino);
+		return new Lance(pecaSelecionada, casaDestino, casaOrigem);
 	}
 
 }

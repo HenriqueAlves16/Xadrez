@@ -13,7 +13,7 @@ public class Jogo {
 	private Jogador jogador2;
 	private int numeroLance;
 	private String turno;
-	private boolean lanceLegal;
+	private Lance ultimoLance;
 	
 	public Jogo(Jogador jogador1, Jogador jogador2, Tabuleiro tabuleiro) {
 		this.listaLances = "";
@@ -25,9 +25,9 @@ public class Jogo {
 		this.jogador1 = jogador1;
 		this.jogador2 = jogador2;
 		
-		System.out.println("associando coisas ao jogo");
+		//System.out.println("associando coisas ao jogo");
 		associacaoJogo();
-		System.out.println("Atualizando os lances e capturas");
+		//System.out.println("Atualizando os lances e capturas");
 		atualizaLancesECapturas();
 	}
 	
@@ -104,14 +104,6 @@ public class Jogo {
 		jogador2.setJogo(this);
 	}
 	
-	//Método que verifica se um lance é válido:
-	public boolean validaLance(Peca peca, Casa casaDestino) {
-		if(peca.getCor().equals(turno) && peca.getLancesPossiveis().contains(casaDestino)) {
-			return true;
-		}
-		return false;
-	}
-	
 	//Método que adiciona um lance na lista de lances:
 	public void adicionaLance(Peca peca, Casa casaDestino) {
 		if(peca.getCor().equals("branco")) {
@@ -122,6 +114,23 @@ public class Jogo {
 		}
 	}
 	
+	//Atualiza os lances válidos para cada peça de determinada cor:
+	public void atualizaLancesPeca(String cor) {
+		for (int l = 0; l < 8; l++) {
+		    for (int c = 0; c < 8; c++) {
+		    	try {
+		    		Peca peca = Tabuleiro.getTabuleiro()[l][c].getPeca();
+		    		if(peca.getCor().equals(cor)) {
+		    			peca.lancesValidos();
+		    			if(peca instanceof Peao) {
+		    				((Peao)peca).movimentoEspecial(ultimoLance);
+		    			}
+		    		}
+		    	} catch(NullPointerException e) {}
+		    }
+		}
+	}
+	
 	//Atualiza os lances possíveis para cada peça separadamente e para cada jogador
 	public void atualizaLancesECapturas() {
 		
@@ -129,73 +138,29 @@ public class Jogo {
 		Jogador jogadorPreto = (jogador1.getCor().equals("preto")) ? jogador1 : jogador2;
 		
 		if(turno.equals("branco")) {
-			for (int l = 0; l < 8; l++) {
-			    for (int c = 0; c < 8; c++) {
-			    	try {
-			    		Peca peca = Tabuleiro.getTabuleiro()[l][c].getPeca();
-			    		if(peca.getCor().equals("branco")) {
-			    			peca.lancesValidos();
-			    		}
-			    	} catch(NullPointerException e) {}
-			    }
-			}
+			atualizaLancesPeca("branco");
+			atualizaLancesPeca("preto");
 			
-			for (int l = 0; l < 8; l++) {
-			    for (int c = 0; c < 8; c++) {
-			    	try {
-			    		Peca peca = Tabuleiro.getTabuleiro()[l][c].getPeca();
-			    		if(peca.getCor().equals("preto")) {
-			    			peca.lancesValidos();
-			    		}
-			    	} catch(NullPointerException e) {}
-			    }
-			}
+			jogadorBranco.atualizacaoLances();
+			jogadorPreto.atualizacaoLances();
 			
-			jogadorBranco.verificaCapturasPossiveis();
-			jogadorBranco.verificaCasasAtacadas();
-			jogadorBranco.verificaLancesPossiveis();
-			jogadorPreto.verificaCapturasPossiveis();
-			jogadorPreto.verificaCasasAtacadas();
-			jogadorPreto.verificaLancesPossiveis();
 		}	else	{
-			for (int l = 0; l < 8; l++) {
-			    for (int c = 0; c < 8; c++) {
-			    	try {
-			    		Peca peca = Tabuleiro.getTabuleiro()[l][c].getPeca();
-			    		if(peca.getCor().equals("preto")) {
-			    			peca.lancesValidos();
-			    		}
-			    	} catch(NullPointerException e) {}
-			    }
-			}
-			
-			for (int l = 0; l < 8; l++) {
-			    for (int c = 0; c < 8; c++) {
-			    	try {
-			    		Peca peca = Tabuleiro.getTabuleiro()[l][c].getPeca();
-			    		if(peca.getCor().equals("branco")) {
-			    			peca.lancesValidos();
-			    		}
-			    	} catch(NullPointerException e) {}
-			    }
-			}
-			
-			jogadorPreto.verificaCapturasPossiveis();
-			jogadorPreto.verificaCasasAtacadas();
-			jogadorPreto.verificaLancesPossiveis();
-			jogadorBranco.verificaCapturasPossiveis();
-			jogadorBranco.verificaCasasAtacadas();
-			jogadorBranco.verificaLancesPossiveis();
+			atualizaLancesPeca("preto");
+			atualizaLancesPeca("branco");
+						
+			jogadorBranco.atualizacaoLances();
+			jogadorPreto.atualizacaoLances();
 		}
 	}
 	
 	//Método que faz uma jogada a partir da peça selecionada
-	//Passar parte da implementação para JogadorHumano
+	//Arrumar situação de cravada
+	//Rei as vezes some com xeque
 	public void fazLance(Peca pecaSelecionada, Casa casaDestino) {
 		if(pecaSelecionada.getCor().equals("branco")) {
-    		lanceLegal = getJogadorBranco().fazJogada(pecaSelecionada, casaDestino);
+    		ultimoLance = getJogadorBranco().fazJogada(pecaSelecionada, casaDestino);
     	}	else	{
-    		lanceLegal = getJogadorPreto().fazJogada(pecaSelecionada, casaDestino);
+    		ultimoLance = getJogadorPreto().fazJogada(pecaSelecionada, casaDestino);
     	}
 		finalizaTurno();
 	}
@@ -204,7 +169,7 @@ public class Jogo {
 	public void finalizaTurno() {
 		//System.out.println("finalizando turno");
 		numeroLance++;
-		if (lanceLegal) {
+		if (ultimoLance != null) {
 			String novoTurno = (turno.equals("branco")) ? "preto" : "branco";
 			setTurno(novoTurno);
 			
