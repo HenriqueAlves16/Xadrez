@@ -169,7 +169,7 @@ public class Jogo {
 	
 	//Muda turno e faz o lance do computador, se esse for o caso
 	public void finalizaTurno() {
-		//System.out.println("finalizando turno");
+		System.out.println("finalizando turno");
 		if (ultimoLance != null) {
 			numeroLance++;
 			String novoTurno = (turno.equals("branco")) ? "preto" : "branco";
@@ -183,6 +183,7 @@ public class Jogo {
 				setTurno(novoTurnoMaquina);
 			}
 			atualizaLancesECapturas();
+			System.out.println("turno finalizado");
 		}
 	}
 

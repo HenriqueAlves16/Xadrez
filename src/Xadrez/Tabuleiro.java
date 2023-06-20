@@ -2,20 +2,9 @@ package Xadrez;
 import java.util.ArrayList;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.Transferable;
-import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.dnd.DnDConstants;
-import java.awt.dnd.DropTarget;
-import java.awt.dnd.DropTargetDragEvent;
-import java.awt.dnd.DropTargetDropEvent;
-import java.awt.dnd.DropTargetEvent;
-import java.awt.dnd.DropTargetListener;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.io.IOException;
 
 
 public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionListener{
@@ -138,12 +127,13 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
 	public void mudaTabuleiro(Casa casaOrigem, Casa casaDestino) {
 		System.out.println("mudando tabuleiro");
 		Peca peca = casaOrigem.getPeca();
+		System.out.println("Origem: " + casaOrigem + " / " + "Destino: " + casaDestino + " / Peca: " + peca);
 		if(peca.getLancesPossiveis().contains(casaDestino)){
 			casaDestino.setPeca(peca);
 			casaOrigem.setPeca(null);
 			peca.setPosicao(casaDestino);
 		}
-		//imprimeTabuleiro();
+		imprimeTabuleiro();
 	}
 	
 	//Método que muda o tabuleiro temporariamente:
@@ -169,7 +159,7 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
 	public void desfazerLance(Casa casaOrigem, Casa casaDestino) {
 	    //System.out.println("casa destino: " + casaDestino + casaDestino.getPeca());
 		casaOrigem.setPeca(casaDestino.getPeca());
-	  //  System.out.println("casa origem: " + casaOrigem + casaOrigem.getPeca());
+	    System.out.println("casa origem: " + casaOrigem + casaOrigem.getPeca());
 
 		if(casaOrigem.getPeca() != null) {
 			casaOrigem.getPeca().setPosicao(casaOrigem);
@@ -183,23 +173,46 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
 		
 	    //imprimeTabuleiro();
 	    //System.out.println("desfeito");
+		System.out.println(casaOrigem.getPeca().getPosicao());
+		System.out.println(casaDestino.getPeca().getPosicao());
 	}
 	
 	//Método que muda o tabuleiro a partir de um lance especial:
 	public void mudaTabuleiroEspecial(Lance lanceEspecial) {
-		System.out.println("Tabuleiro antes da mudança:");
+		System.out.println("\nTabuleiro antes da mudança:");
 		imprimeTabuleiro();
 		Casa casaOrigem = lanceEspecial.getCasaOrigem();
 		Casa casaDestino = lanceEspecial.getCasaDestino();
 		System.out.println("casa de origem: " + casaOrigem + " casa Destino: " + casaDestino);
 		
-		if(lanceEspecial.getPecaMovida() instanceof Peao) {
+		if(lanceEspecial.getPecaMovida() instanceof Peao) {		//En Passant
 			Casa casaPeaoCapturado = getCasa(casaDestino.getColuna(), casaOrigem.getLinha());
 			System.out.println("Lance especial: enPassant");
 			casaOrigem.setPeca(null);
 			casaDestino.setPeca(lanceEspecial.getPecaMovida());
 			casaPeaoCapturado.setPeca(null);
 			lanceEspecial.getPecaMovida().setPosicao(casaDestino);
+		}	else if(lanceEspecial.getPecaMovida() instanceof Rei) {		//Roque
+			System.out.println("Lance especial: roque");
+			Peca rei = lanceEspecial.getPecaMovida();
+			
+			char colOrigemTorre = (casaDestino.getColuna() == 'g' || casaDestino.getColuna() == 'h')  ?  'h' : 'a';
+			char colDestinoTorre = (casaDestino.getColuna() == 'g' || casaDestino.getColuna() == 'h')  ?  'f' : 'd';
+			char colDestinoRei = (casaDestino.getColuna() == 'g' || casaDestino.getColuna() == 'h')  ?  'g' : 'c';
+			
+			Casa casaOrigemTorre = getCasa(colOrigemTorre, casaOrigem.getLinha());
+			Casa casaDestinoTorre = getCasa(colDestinoTorre, casaOrigem.getLinha());
+			Casa casaDestinoRei = getCasa(colDestinoRei, casaOrigem.getLinha());
+			
+			Torre torre = (Torre)casaOrigemTorre.getPeca();
+			
+			casaOrigem.setPeca(null);
+			casaDestinoRei.setPeca(rei);
+			casaDestinoTorre.setPeca(torre);
+			casaOrigemTorre.setPeca(null);
+			
+			torre.setPosicao(casaDestinoTorre);
+			rei.setPosicao(casaDestinoRei);
 		}
 		System.out.println("Tabuleiro após a mudança:");
 		imprimeTabuleiro();
@@ -285,7 +298,7 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
 	            	//Define as casas selecionada e de destino
 	            	int linhaPressionada = 7 - yPressed/TAMANHO_CASA;
 	            	int colunaPressionada = xPressed/TAMANHO_CASA;
-	            	Casa casaSelecionada = getCasa((char)('a' + colunaPressionada), linhaPressionada + 1);
+	            	//Casa casaSelecionada = getCasa((char)('a' + colunaPressionada), linhaPressionada + 1);
 	            			
 	            	int linhaLiberada = 7 - yReleased/TAMANHO_CASA;            	
 	            	int colunaLiberada = xReleased/TAMANHO_CASA;
@@ -314,17 +327,21 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
 		                //É roque
 		                }	else if(pecaSelecionada instanceof Rei) {
 		                	ArrayList<Lance> lancesEspeciais = ((Rei)pecaSelecionada).getLancesEspeciais();
-		                	for(int i = 0; i < lancesEspeciais.size(); i++) {	//Percorre os lances especiais do rei
-		                		if(lancesEspeciais.get(i).getCasaDestino().toString().equals(casaDestino.toString())) {	//Lista de lances especiais contém a casa de destino
-		                			System.out.println("tentativa de roque");
-		                			jogo.fazLance(pecaSelecionada, casaDestino);
-		                		}
-		                	}
+		                	try {
+			                	for(int i = 0; i < lancesEspeciais.size(); i++) {	//Percorre os lances especiais do rei
+			                		if(lancesEspeciais.get(i).getCasaDestino().toString().equals(casaDestino.toString())) {	//Lista de lances especiais contém a casa de destino
+			                			System.out.println("tentativa de roque");
+			                			jogo.fazLance(pecaSelecionada, casaDestino);
+			                			System.out.println("roque finalizado");
+			                		}
+			                	}
+		                	} catch(ArrayIndexOutOfBoundsException g) {}
 		                }
 	            	} catch(NullPointerException exp) {}
 	            
 	            }
-	            dragging = false;	
+	            dragging = false;
+    			System.out.println("reimprimindo");
 	            repaint();
 	            //imprimeTabuleiro();
 	        }

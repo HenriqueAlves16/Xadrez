@@ -69,7 +69,7 @@ public class JogadorHumano extends Jogador {
 		}
 		
 		
-		//System.out.println("chamada para atualizar as capturas");
+		System.out.println("chamada para atualizar as capturas");
 		//Atualiza lances e capturas
 		getJogo().atualizaLancesECapturas();
 		

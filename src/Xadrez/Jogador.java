@@ -166,11 +166,11 @@ public abstract class Jogador {
 		for(int l = 0; l < 8; l++) {					//Percorre o tabuleiro
 			for(char c = 'a'; c <= 'h'; c++) {
 				try {
-					Peca peca = Tabuleiro.getCasa(c, l + 1).getPeca(); 
-					if(peca instanceof Peao && peca.getCor().equals(this.getCor())) {
-						System.out.println("Lances especiais para o " + peca + ": " + ((Peao)peca).getLancesEspeciais());
-						for(int i = 0; i < ((Peao)peca).getLancesEspeciais().size(); i++) {				//Percorre cada possível lance 
-							Lance lanceEspecial = ((Peao)peca).getLancesEspeciais().get(i);
+					Peca peca = Tabuleiro.getCasa(c, l + 1).getPeca(); 	
+					if(peca instanceof MovableSpc && peca.getCor().equals(this.getCor())) {
+						System.out.println("Lances especiais para o " + peca + ": " + ((MovableSpc)peca).getLancesEspeciais());
+						for(int i = 0; i < ((MovableSpc)peca).getLancesEspeciais().size(); i++) {				//Percorre cada possível lance especial
+							Lance lanceEspecial = ((MovableSpc)peca).getLancesEspeciais().get(i);
 							listaLancesEspeciais.add(lanceEspecial);
 						}
 					}
