@@ -2,12 +2,14 @@ package Xadrez;
 
 import java.util.ArrayList;
 
+import javax.swing.ImageIcon;
+
 public class Torre extends Peca {
 	private boolean movido;
 	
 	//Construtor:
-	public Torre(String cor, Casa posicao, int x, int y, String path) {
-		super(cor, posicao, x, y, path);
+	public Torre(String cor, Casa posicao, String path) {
+		super(cor, posicao, path);
 		this.movido = false;
 	}
 	
@@ -98,13 +100,21 @@ public class Torre extends Peca {
 	    this.setCasasAtacadas(casasAtacadas);
 	    return lancesValidos.size();
 	}
-	
-	public String getImagePath() {
-		if(getCor().equals("branco")) {
+
+	public static String getImagePath(String cor) {
+		if(cor.equals("branco")) {
 			return "Imagens/w_rook_png_128px.png";
 		}	else	{
-			return "Imagens/b_rook_png_128px.png";
+			return "Imagens/b_rook_png_128px.png";		
 		}
+	}
+	
+	public static ImageIcon getResizedIcon(String cor) {
+		Torre torreBranca = new Torre("branco", null, getImagePath("branco"));
+		Torre torrePreta = new Torre("preto", null, getImagePath("preto"));
+		ImageIcon resizedIcon = (cor.equals("branco")) ? torreBranca.getResizedIcon() : torrePreta.getResizedIcon();
+		
+		return resizedIcon;
 	}
 
 	@Override

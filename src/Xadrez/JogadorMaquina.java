@@ -56,7 +56,7 @@ public class JogadorMaquina extends Jogador {
 				lanceEscolhido = (n == 0) ? lanceNormalAleatorio : lanceSpcAleatorio;
 			}
 			
-			System.out.println("////////////////////Lance Escolhido://///////////////// " + lanceEscolhido);
+			System.out.println("//////////Lance Escolhido://///////// " + lanceEscolhido);
 			
 			pecaSelecionada = lanceEscolhido.getPecaMovida();
 			casaOrigem = pecaSelecionada.getPosicao();

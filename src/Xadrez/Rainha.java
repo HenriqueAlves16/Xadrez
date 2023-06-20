@@ -2,9 +2,11 @@ package Xadrez;
 
 import java.util.ArrayList;
 
+import javax.swing.ImageIcon;
+
 public class Rainha extends Peca {
-	public Rainha(String cor, Casa posicao, int x, int y, String path) {
-		super(cor, posicao, x, y, path);
+	public Rainha(String cor, Casa posicao, String path) {
+		super(cor, posicao, path);
 	}
 	
 	public int lancesValidos(){
@@ -148,13 +150,21 @@ public class Rainha extends Peca {
 	    this.setCasasAtacadas(casasAtacadas);
 	    return lancesValidos.size();
 	}
-	
-	public String getImagePath() {
-		if(getCor().equals("branco")) {
+
+	public static String getImagePath(String cor) {
+		if(cor.equals("branco")) {
 			return "Imagens/w_queen_png_128px.png";
 		}	else	{
-			return "Imagens/b_queen_png_128px.png";
+			return "Imagens/b_queen_png_128px.png";		
 		}
+	}
+	
+	public static ImageIcon getResizedIcon(String cor) {
+		Rainha rainhaBranca = new Rainha("branco", null, getImagePath("branco"));
+		Rainha rainhaPreta = new Rainha("preto", null, getImagePath("preto"));
+		ImageIcon resizedIcon = (cor.equals("branco")) ? rainhaBranca.getResizedIcon() : rainhaPreta.getResizedIcon();
+		
+		return resizedIcon;
 	}
 	
 	@Override

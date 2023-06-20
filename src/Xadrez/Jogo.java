@@ -4,6 +4,8 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 
 
 public class Jogo {
@@ -124,6 +126,7 @@ public class Jogo {
 		    			peca.lancesValidos();
 		    			if(peca instanceof Peao) {
 		    				((Peao)peca).movimentoEspecial(ultimoLance);
+		    				//((Peao)peca).promocao();
 		    			}	else if (peca instanceof Rei) {
 		    				((Rei)peca).movimentoEspecial(null);
 		    			}
@@ -159,7 +162,7 @@ public class Jogo {
 	//Arrumar situação de cravada
 	//Rei as vezes some com xeque
 	public void fazLance(Peca pecaSelecionada, Casa casaDestino) {
-		if(pecaSelecionada.getCor().equals("branco")) {
+		if(turno.equals("branco")) {
     		ultimoLance = getJogadorBranco().fazJogada(pecaSelecionada, casaDestino);
     	}	else	{
     		ultimoLance = getJogadorPreto().fazJogada(pecaSelecionada, casaDestino);
@@ -174,19 +177,11 @@ public class Jogo {
 			numeroLance++;
 			String novoTurno = (turno.equals("branco")) ? "preto" : "branco";
 			setTurno(novoTurno);
-			
-			if(jogador2 instanceof JogadorMaquina) {
-				atualizaLancesECapturas();
-				((JogadorMaquina)jogador2).fazJogada(null, null);
-				//Atualizando o numero de lances e turno:
-				numeroLance++;
-				String novoTurnoMaquina = (turno.equals("branco")) ? "preto" : "branco";
-				setTurno(novoTurnoMaquina);
-			}
 			atualizaLancesECapturas();
 			System.out.println("turno finalizado");
 		}
 	}
+
 
 	//Método que verifica se o jogo acabou:
 	//Usar um enum:
@@ -198,22 +193,22 @@ public class Jogo {
 		Rei reiBranco = encontraRei("branco");
 		
 		//Xeque-Mate:
-		if(turno.equals("preto")) {
-			if(jogadorBranco.getCasasAtacadas().contains(reiPreto.getPosicao()) && reiPreto.getLancesPossiveis().size() == 0) {
+		if(turno.equals("preto") && verificaXeque().equals("preto")) {
+			if(jogadorPreto.getLancesPossiveisXeque().size() == 0) {
 				return 10;
 			}
-		}	else	{
-			if(jogadorPreto.getCasasAtacadas().contains(reiBranco.getPosicao()) && reiBranco.getLancesPossiveis().size() == 0) {
+		}	else if (turno.equals("branco") && verificaXeque().equals("branco"))	{
+			if(jogadorBranco.getLancesPossiveisXeque().size() == 0) {
 				return -10;
 			}
 		}
 		
 		//Afogamento:
 		if(turno.equals("branco"))	{
-			if(jogadorBranco.getLancesPossiveis().size() == 0) {
-				return 1;
+			if(jogadorBranco.getLancesPossiveis().size() == 0 && jogadorBranco.getLancesEspeciais().size() == 0 && jogadorBranco.getLancesPossiveisXeque().size() == 0) {
+				return -1;
 			}
-		}	else	{
+		}	else if(jogadorPreto.getLancesPossiveis().size() == 0 && jogadorPreto.getLancesEspeciais().size() == 0 && jogadorPreto.getLancesPossiveisXeque().size() == 0)	{
 			if(jogadorPreto.getLancesPossiveis().size() == 0) {
 				return -1;
 			}
@@ -260,6 +255,28 @@ public class Jogo {
 		}	
 		return 0;
 	}
+	
+	//Método que mostra uma mensagem de acordo com o resultado final do jogo
+	 public void verificaFimDoJogo() {
+	        // Verifique o resultado do jogo (branco ganhou, preto ganhou, empate)
+	        int resultado = verificaFim();
+
+	        // Exiba a mensagem adequada com base no resultado
+	        if (resultado == 10) {
+	            JOptionPane.showMessageDialog(null, "XEQUE MATE! O jogador branco venceu!");
+	            System.exit(0);
+	        } else if (resultado == -10) {
+	            JOptionPane.showMessageDialog(null, "XEQUE MATE! O jogador preto venceu!");
+	            System.exit(0);
+	        } else if (resultado == -1) {
+	            JOptionPane.showMessageDialog(null, "O jogo terminou em empate por afogamento!");
+	            System.exit(0);
+	        } else if (resultado == 1) {
+	            JOptionPane.showMessageDialog(null, "O jogo terminou em empate por material insuficiente!");
+	            System.exit(0);
+	        }	
+	    }
+	
 	
 	//Método que verifica se o jogador de turno ativo está em xeque:
 	//Usar Enum:

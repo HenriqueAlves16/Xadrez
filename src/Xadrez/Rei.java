@@ -7,8 +7,8 @@ public class Rei extends Peca implements MovableSpc{
 	private ArrayList<Lance> lancesEspeciais;
 	
 	//Construtor:
-	public Rei(String cor, Casa posicao, int x, int y, String path) {
-		super(cor, posicao, x, y, path);
+	public Rei(String cor, Casa posicao, String path) {
+		super(cor, posicao, path);
 		this.movido = false;
 		this.lancesEspeciais = new ArrayList<Lance>();
 	}

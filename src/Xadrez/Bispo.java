@@ -2,9 +2,11 @@ package Xadrez;
 
 import java.util.ArrayList;
 
+import javax.swing.ImageIcon;
+
 public class Bispo extends Peca {
-	public Bispo(String cor, Casa posicao, int x, int y, String path) {
-		super(cor, posicao, x, y, path);
+	public Bispo(String cor, Casa posicao, String path) {
+		super(cor, posicao, path);
 	}
 	
 	
@@ -87,15 +89,22 @@ public class Bispo extends Peca {
 	    this.setCasasAtacadas(casasAtacadas);
 	    return lancesValidos.size();
 	}
-	
-	public String getImagePath() {
-		if(getCor().equals("branco")) {
+
+	public static String getImagePath(String cor) {
+		if(cor.equals("branco")) {
 			return "Imagens/w_bishop_png_128px.png";
 		}	else	{
-			return "Imagens/b_bihsop_png_128px.png";
+			return "Imagens/b_bihsop_png_128px.png";		
 		}
 	}
-
+	
+	public static ImageIcon getResizedIcon(String cor) {
+		Bispo bispoBranco = new Bispo("branco", null, getImagePath("branco"));
+		Bispo bispoPreto = new Bispo("preto", null, getImagePath("preto"));
+		ImageIcon resizedIcon = (cor.equals("branco")) ? bispoBranco.getResizedIcon() : bispoPreto.getResizedIcon();
+		
+		return resizedIcon;
+	}
 	
 	@Override
 	public String toString() {

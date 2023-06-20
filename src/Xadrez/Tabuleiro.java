@@ -64,35 +64,35 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
 	//Método que inicializa um tabuleiro em sua configuração inicial:
 	public void inicializaTabuleiro(Casa[][] tabuleiro) {
 		//Torres:
-		tabuleiro[0][0].setPeca(new Torre("branco", tabuleiro[0][0], 0, 0, "Imagens/w_rook_png_128px.png"));
-		tabuleiro[0][7].setPeca(new Torre("branco", tabuleiro[0][7], 0, 0, "Imagens/w_rook_png_128px.png"));
-		tabuleiro[7][0].setPeca(new Torre("preto", tabuleiro[7][0], 0, 0, "Imagens/b_rook_png_128px.png"));
-		tabuleiro[7][7].setPeca(new Torre("preto", tabuleiro[7][7], 0, 0, "Imagens/b_rook_png_128px.png"));
+		tabuleiro[0][0].setPeca(new Torre("branco", tabuleiro[0][0], "Imagens/w_rook_png_128px.png"));
+		tabuleiro[0][7].setPeca(new Torre("branco", tabuleiro[0][7], "Imagens/w_rook_png_128px.png"));
+		tabuleiro[7][0].setPeca(new Torre("preto", tabuleiro[7][0], "Imagens/b_rook_png_128px.png"));
+		tabuleiro[7][7].setPeca(new Torre("preto", tabuleiro[7][7], "Imagens/b_rook_png_128px.png"));
 		
 		// Cavalos:
-	    tabuleiro[0][1].setPeca(new Cavalo("branco", tabuleiro[0][1], 0, 0, "Imagens/w_knight_png_128px.png"));
-	    tabuleiro[0][6].setPeca(new Cavalo("branco", tabuleiro[0][6], 0, 0, "Imagens/w_knight_png_128px.png"));
-	    tabuleiro[7][1].setPeca(new Cavalo("preto", tabuleiro[7][1], 0, 0, "Imagens/b_knight_png_128px.png"));
-	    tabuleiro[7][6].setPeca(new Cavalo("preto", tabuleiro[7][6], 0, 0, "Imagens/b_knight_png_128px.png"));
+	    tabuleiro[0][1].setPeca(new Cavalo("branco", tabuleiro[0][1], "Imagens/w_knight_png_128px.png"));
+	    tabuleiro[0][6].setPeca(new Cavalo("branco", tabuleiro[0][6], "Imagens/w_knight_png_128px.png"));
+	    tabuleiro[7][1].setPeca(new Cavalo("preto", tabuleiro[7][1], "Imagens/b_knight_png_128px.png"));
+	    tabuleiro[7][6].setPeca(new Cavalo("preto", tabuleiro[7][6], "Imagens/b_knight_png_128px.png"));
 
 	    // Bispos:
-	    tabuleiro[0][2].setPeca(new Bispo("branco", tabuleiro[0][2], 0, 0, "Imagens/w_bishop_png_128px.png"));
-	    tabuleiro[0][5].setPeca(new Bispo("branco", tabuleiro[0][5], 0, 0, "Imagens/w_bishop_png_128px.png"));
-	    tabuleiro[7][2].setPeca(new Bispo("preto", tabuleiro[7][2], 0, 0, "Imagens/b_bishop_png_128px.png"));
-	    tabuleiro[7][5].setPeca(new Bispo("preto", tabuleiro[7][5], 0, 0, "Imagens/b_bishop_png_128px.png"));
+	    tabuleiro[0][2].setPeca(new Bispo("branco", tabuleiro[0][2], "Imagens/w_bishop_png_128px.png"));
+	    tabuleiro[0][5].setPeca(new Bispo("branco", tabuleiro[0][5], "Imagens/w_bishop_png_128px.png"));
+	    tabuleiro[7][2].setPeca(new Bispo("preto", tabuleiro[7][2], "Imagens/b_bishop_png_128px.png"));
+	    tabuleiro[7][5].setPeca(new Bispo("preto", tabuleiro[7][5], "Imagens/b_bishop_png_128px.png"));
 
 	    // Rainhas:
-	    tabuleiro[0][3].setPeca(new Rainha("branco", tabuleiro[0][3], 0, 0, "Imagens/w_queen_png_128px.png"));
-	    tabuleiro[7][3].setPeca(new Rainha("preto", tabuleiro[7][3], 0, 0, "Imagens/b_queen_png_128px.png"));
+	    tabuleiro[0][3].setPeca(new Rainha("branco", tabuleiro[0][3], "Imagens/w_queen_png_128px.png"));
+	    tabuleiro[7][3].setPeca(new Rainha("preto", tabuleiro[7][3], "Imagens/b_queen_png_128px.png"));
 
 	    // Reis:
-	    tabuleiro[0][4].setPeca(new Rei("branco", tabuleiro[0][4], 0, 0, "Imagens/w_king_png_128px.png"));
-	    tabuleiro[7][4].setPeca(new Rei("preto", tabuleiro[7][4], 0, 0, "Imagens/b_king_png_128px.png"));
+	    tabuleiro[0][4].setPeca(new Rei("branco", tabuleiro[0][4], "Imagens/w_king_png_128px.png"));
+	    tabuleiro[7][4].setPeca(new Rei("preto", tabuleiro[7][4], "Imagens/b_king_png_128px.png"));
 	    
 	    //Peões:
 	    for(int i = 0; i < 8; i++) {
-	    	tabuleiro[1][i].setPeca(new Peao("branco", tabuleiro[1][i], 0, 0, "Imagens/w_pawn_png_128px.png"));
-	    	tabuleiro[6][7 - i].setPeca(new Peao("preto", tabuleiro[6][7 - i], 0, 0, "Imagens/b_pawn_png_128px.png"));
+	    	tabuleiro[1][i].setPeca(new Peao("branco", tabuleiro[1][i], "Imagens/w_pawn_png_128px.png"));
+	    	tabuleiro[6][7 - i].setPeca(new Peao("preto", tabuleiro[6][7 - i], "Imagens/b_pawn_png_128px.png"));
 	    }
 	}
 	
@@ -349,6 +349,13 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
 	        }
 		//} catch(NullPointerException t)	{}
 	    System.out.println("mouseReleased finalizado");
+        jogo.verificaFimDoJogo();
+        
+        if(jogo.getJogador2() instanceof JogadorMaquina) {
+        	jogo.fazLance(null, null);
+        	repaint();
+        	jogo.verificaFimDoJogo();
+        }
     }
 	
     @Override

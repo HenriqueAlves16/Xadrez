@@ -15,10 +15,7 @@ public abstract class Peca extends JPanel{
 	
 	//Mudando a escala:
 	private ImageIcon resizedIcon;
-	
-	private Point imageCorner;
-	private Point prevPt;
-	
+		
 	private final String cor;
 	private Casa posicao;
 	private boolean capturado;
@@ -31,7 +28,7 @@ public abstract class Peca extends JPanel{
 
 	
 	//Construtor:
-	public Peca(String cor, Casa posicao, int x, int y, String path) {
+	public Peca(String cor, Casa posicao, String path) {
 		this.cor = cor;
 		this.posicao = posicao;
 		this.capturado = false;
@@ -40,7 +37,6 @@ public abstract class Peca extends JPanel{
 		casasAtacadas = new ArrayList<Casa>();
 		
 		imagem = new ImageIcon(path);
-		imageCorner = new Point(x, y); //fazer com posicao ao invés de x,y
 
 		//Mudando a escala:
 		int newWidth = imagem.getIconWidth() / 2;
@@ -120,12 +116,10 @@ public abstract class Peca extends JPanel{
 	}
 	
 	public abstract int lancesValidos();
-	
-	public abstract String getImagePath();
-	
+		
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-        resizedIcon.paintIcon(this, g, (int) imageCorner.getX(), (int) imageCorner.getY());
+        resizedIcon.paintIcon(this, g, 0, 0);
 	}
 	
 

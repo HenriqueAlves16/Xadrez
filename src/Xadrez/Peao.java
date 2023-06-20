@@ -2,13 +2,18 @@ package Xadrez;
 
 import java.util.ArrayList;
 
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+
 public class Peao extends Peca implements MovableSpc{
 	private ArrayList<Casa> casasAtacadas;
 	private ArrayList<Lance> lancesEspeciais;
 	
 	//Construtor:
-	public Peao(String cor, Casa posicao, int x, int y, String path) {
-		super(cor, posicao, x, y, path);
+	public Peao(String cor, Casa posicao, String path) {
+		super(cor, posicao, path);
 		this.casasAtacadas = new ArrayList<Casa>();
 		this.lancesEspeciais = new ArrayList<Lance>();
 	}
@@ -110,6 +115,44 @@ public class Peao extends Peca implements MovableSpc{
 	        }
 			setLancesEspeciais(enPassants);
 		}
+	}
+	
+	public void promocao(Peca peao) {
+		if(peao.getCor().equals("branco") && peao.getPosicao().getLinha() == 8 || getCor().equals("preto") && getPosicao().getLinha() == 1) {
+			// Crie um painel para conter as imagens das peças de promoção
+            JPanel panel = new JPanel();
+
+            // Crie os botões de imagem para cada peça de promoção
+            ImageIcon cavaloIcon = Cavalo.getResizedIcon(peao.getCor());
+            JButton cavaloButton = new JButton(cavaloIcon);
+            cavaloButton.addActionListener(e -> promoverPeao(peao, "Cavalo"));
+
+            ImageIcon bispoIcon = Bispo.getResizedIcon(peao.getCor()); 
+            JButton bispoButton = new JButton(bispoIcon);
+            bispoButton.addActionListener(e -> promoverPeao(peao, "Bispo"));
+
+            ImageIcon torreIcon = Torre.getResizedIcon(peao.getCor()); 
+            JButton torreButton = new JButton(torreIcon);
+            torreButton.addActionListener(e -> promoverPeao(peao, "Torre"));
+
+            ImageIcon rainhaIcon = Rainha.getResizedIcon(peao.getCor());
+            JButton rainhaButton = new JButton(rainhaIcon);
+            rainhaButton.addActionListener(e -> promoverPeao(peao, "Rainha"));
+
+            // Adicione os botões de imagem ao painel
+            panel.add(cavaloButton);
+            panel.add(bispoButton);
+            panel.add(torreButton);
+            panel.add(rainhaButton);
+
+            // Exiba o diálogo personalizado
+            JOptionPane.showMessageDialog(null, panel, "Escolha uma peça para promover o peão", JOptionPane.PLAIN_MESSAGE);
+		}
+	}
+	
+	public void promoverPeao(Peca peao, String pecaEscolhida) {
+		Casa casaPromocao = Tabuleiro.getCasa(peao.getPosicao().getColuna(), peao.getPosicao().getLinha());
+		
 	}
 
 	public String getImagePath() {

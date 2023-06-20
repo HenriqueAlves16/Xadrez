@@ -2,9 +2,11 @@ package Xadrez;
 
 import java.util.ArrayList;
 
+import javax.swing.ImageIcon;
+
 public class Cavalo extends Peca {
-	public Cavalo(String cor, Casa posicao, int x, int y, String path) {
-		super(cor, posicao, x, y, path);
+	public Cavalo(String cor, Casa posicao, String path) {
+		super(cor, posicao, path);
 	}
 	
 	
@@ -41,12 +43,20 @@ public class Cavalo extends Peca {
 	    return lancesValidos.size();
 	}
 	
-	public String getImagePath() {
-		if(getCor().equals("branco")) {
+	public static String getImagePath(String cor) {
+		if(cor.equals("branco")) {
 			return "Imagens/w_knight_png_128px.png";
 		}	else	{
 			return "Imagens/b_knight_png_128px.png";
 		}
+	}
+	
+	public static ImageIcon getResizedIcon(String cor) {
+		Cavalo cavaloBranco = new Cavalo("branco", null, getImagePath("branco"));
+		Cavalo cavaloPreto = new Cavalo("preto", null, getImagePath("preto"));
+		ImageIcon resizedIcon = (cor.equals("branco")) ? cavaloBranco.getResizedIcon() : cavaloPreto.getResizedIcon();
+		
+		return resizedIcon;
 	}
 	
 	@Override
