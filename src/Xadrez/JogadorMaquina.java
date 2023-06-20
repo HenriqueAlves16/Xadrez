@@ -1,5 +1,6 @@
 package Xadrez;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class JogadorMaquina extends Jogador {
@@ -10,41 +11,64 @@ public class JogadorMaquina extends Jogador {
 	
 	@Override
 	public Lance fazJogada(Peca peca, Casa casa) {
-		System.out.println("xeque maquina::" + getJogo().verificaXeque());	
+		System.out.println("xeque maquina:" + getJogo().verificaXeque());
 		Peca pecaSelecionada;
 		Casa casaOrigem;
 		Casa casaDestino;
 		String xeque = getJogo().verificaXeque();
+		Lance lanceEscolhido;
+		Random random = new Random();
+		int n = 0;
 		
 		//Atualiza os lances e capturas possíveis
 		verificaLancesPossiveis();
 		
 		if(xeque.equals(getCor())) {
 			//System.out.println("Lance aleatório xeque");
-			
-			Random random = new Random();
+			ArrayList<Lance> lancesPossiveis = getLancesPossiveisXeque();
 			int numeroAleatorio = random.nextInt(getLancesPossiveisXeque().size());
-			Lance lanceAleatorio = getLancesPossiveisXeque().get(numeroAleatorio);
+			lanceEscolhido = lancesPossiveis.get(numeroAleatorio);
 			
-			pecaSelecionada = lanceAleatorio.getPecaMovida();
+			pecaSelecionada = lanceEscolhido.getPecaMovida();
 			casaOrigem = pecaSelecionada.getPosicao();
-			casaDestino = lanceAleatorio.getCasaDestino();
+			casaDestino = lanceEscolhido.getCasaDestino();
 			
 		}	else	{
-			//System.out.println("Lance aleatório sem xeque");
+			System.out.println("Lance aleatório sem xeque");
+			ArrayList<Lance> lancesEspeciais = getLancesEspeciais();
+			System.out.println("qtd lances normais possiveis: " + getLancesPossiveis().size());
+			System.out.println("qtd lances especiais possiveis: " + lancesEspeciais.size());
+			System.out.println("Lances especiais possíveis: " + lancesEspeciais);
 			
-			//Escolhe um lance aleatório
-			Random random = new Random();
-			int numeroAleatorio = random.nextInt(getLancesPossiveis().size());
-			Lance lanceAleatorio = getLancesPossiveis().get(numeroAleatorio);
+			//Escolhe um lance normal aleatório
+			int numeroAleatorioNormal = random.nextInt(getLancesPossiveis().size());
+			Lance lanceNormalAleatorio = getLancesPossiveis().get(numeroAleatorioNormal);
+			lanceEscolhido = lanceNormalAleatorio;
 
-			pecaSelecionada = lanceAleatorio.getPecaMovida();
+			//Escolhe um lance especial aleatório
+			if(lancesEspeciais.size() > 0) {
+				int numeroAleatorioSpc = random.nextInt(lancesEspeciais.size());
+				Lance lanceSpcAleatorio = getLancesEspeciais().get(numeroAleatorioSpc);
+				System.out.println("Lance Especial candidato: " + lanceSpcAleatorio);
+				
+				//Escolhe um lance normal ou especial:
+				n = random.nextInt(2);
+				lanceEscolhido = (n == 0) ? lanceNormalAleatorio : lanceSpcAleatorio;
+			}
+			
+			System.out.println("////////////////////Lance Escolhido://///////////////// " + lanceEscolhido);
+			
+			pecaSelecionada = lanceEscolhido.getPecaMovida();
 			casaOrigem = pecaSelecionada.getPosicao();
-			casaDestino = lanceAleatorio.getCasaDestino();
+			casaDestino = lanceEscolhido.getCasaDestino();
 		}
 		
 		//Muda o tabuleiro fazendo o lance aleatório
-		getJogo().getTabuleiro().mudaTabuleiro(casaOrigem, casaDestino);
+		if(n == 0) {
+			getJogo().getTabuleiro().mudaTabuleiro(casaOrigem, casaDestino);
+		}	else	{
+			getJogo().getTabuleiro().mudaTabuleiroEspecial(lanceEscolhido);
+		}
 		
 		//Atualiza as listas de controle
 		getJogo().atualizaLancesECapturas();

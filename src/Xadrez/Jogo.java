@@ -176,6 +176,7 @@ public class Jogo {
 			setTurno(novoTurno);
 			
 			if(jogador2 instanceof JogadorMaquina) {
+				atualizaLancesECapturas();
 				((JogadorMaquina)jogador2).fazJogada(null, null);
 				//Atualizando o numero de lances e turno:
 				numeroLance++;

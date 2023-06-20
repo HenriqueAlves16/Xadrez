@@ -24,16 +24,16 @@ public class JogadorHumano extends Jogador {
 			System.out.println("////////Lance humano xeque//////////");
 			ArrayList<Lance> lancesPossiveis = getLancesPossiveisXeque();
 			//Verifica se é um lance possível
-			System.out.println("Lances possíveis: " + getLancesPossiveisXeque());
+			//System.out.println("Lances possíveis: " + getLancesPossiveisXeque());
 			for(int i = 0; i < lancesPossiveis.size(); i++) {
-				System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" + i);
+				//System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" + i);
 				if(lancesPossiveis.get(i).getCasaDestino().equals(casaDestino)){
-					System.out.println("chamada para mudar o tabuleiro humano em xeque");
+					//System.out.println("chamada para mudar o tabuleiro humano em xeque");
 		            getJogo().getTabuleiro().mudaTabuleiro(pecaSelecionada.getPosicao(), casaDestino);
 		            sucesso = true;
 		            aux = false;
 		        }	else	{
-		        	System.out.println("lance humano ilegal");
+		        	//System.out.println("lance humano ilegal");
 		        }
 			}
 			if(!sucesso)	return null;

@@ -70,7 +70,7 @@ public class Main {
 		System.out.println("tabuleiro criado");
 		JogadorHumano jogador1 = new JogadorHumano("branco");
 		System.out.println("jogador1 criado");
-		JogadorHumano jogador2 = new JogadorHumano("preto");
+		JogadorMaquina jogador2 = new JogadorMaquina("preto");
 		System.out.println("jogador2 criado");
 
 		

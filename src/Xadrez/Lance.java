@@ -16,11 +16,13 @@ public class Lance {
 		this.pecaMovida = pecaMovida;
 		this.casaDestino = casaDestino;
 		this.numeroLance = numeroLance;
+		this.casaOrigem = pecaMovida.getPosicao();
 	}
 	
 	public Lance(Peca pecaMovida, Casa casaDestino) {
 		this.pecaMovida = pecaMovida;
 		this.casaDestino = casaDestino;
+		this.casaOrigem = pecaMovida.getPosicao();
 	}
 	
 	public Lance(Peca pecaMovida, Casa casaDestino, Casa casaOrigem) {
@@ -103,7 +105,7 @@ public class Lance {
 
 	@Override
 	public String toString() {
-		return pecaMovida + " to " + casaDestino;
+		return pecaMovida + " from " + casaOrigem + " to " + casaDestino;
 	}
 	
 	
