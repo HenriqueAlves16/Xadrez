@@ -162,13 +162,13 @@ public abstract class Jogador {
 	
 	public void verificaLancesEspeciais() {
 		ArrayList<Lance> listaLancesEspeciais = new ArrayList<Lance>();
-		System.out.println("\nverificando Lances Especiais jogador " + getCor());
+		//System.out.println("\nverificando Lances Especiais jogador " + getCor());
 		for(int l = 0; l < 8; l++) {					//Percorre o tabuleiro
 			for(char c = 'a'; c <= 'h'; c++) {
 				try {
 					Peca peca = Tabuleiro.getCasa(c, l + 1).getPeca(); 	
 					if(peca instanceof MovableSpc && peca.getCor().equals(this.getCor())) {
-						System.out.println("Lances especiais para o " + peca + ": " + ((MovableSpc)peca).getLancesEspeciais());
+						//System.out.println("Lances especiais para o " + peca + ": " + ((MovableSpc)peca).getLancesEspeciais());
 						for(int i = 0; i < ((MovableSpc)peca).getLancesEspeciais().size(); i++) {				//Percorre cada possível lance especial
 							Lance lanceEspecial = ((MovableSpc)peca).getLancesEspeciais().get(i);
 							listaLancesEspeciais.add(lanceEspecial);
@@ -185,11 +185,11 @@ public abstract class Jogador {
 		jogo.atualizaLancesECapturas();
 		ArrayList<Lance> lancesPossiveis = this.getLancesPossiveis();
 		ArrayList<Lance> lancesSemXeque = new ArrayList<Lance>();
-		//System.out.println("lances possíveis: " + lancesPossiveis);
+		System.out.println("lances possíveis: " + lancesPossiveis);
 	    for (Lance lance : lancesPossiveis) {
 	    	Casa origem = lance.getPecaMovida().getPosicao();
 	        // Realizar o lance temporariamente
-	    	//System.out.println("Realizando lance temporário");
+	    	System.out.println("Realizando lance temporário");
 	        jogo.getTabuleiro().mudaTabuleiroTemp(lance.getPecaMovida().getPosicao(), lance.getCasaDestino());
 	        //Tabuleiro.imprimeTabuleiro();
 	        
@@ -197,16 +197,16 @@ public abstract class Jogador {
 	        
 	        // Verificar se o jogador fica em xeque após o lance
 	        String xeque = jogo.verificaXeque();
-	        //System.out.println("Verificando xeque: " + xeque);
+	        System.out.println("Verificando xeque: " + xeque);
 	        
 	        // Desfazer o lance realizado
-	    	//System.out.println("Desfazendo lance temporário. A origem é " + origem + "e o destino é " + lance.getCasaDestino());
+	    	System.out.println("Desfazendo lance temporário. A origem é " + origem + " e o destino é " + lance.getCasaDestino());
 	        jogo.getTabuleiro().desfazerLance(origem, lance.getCasaDestino());
 	        //Tabuleiro.imprimeTabuleiro();
-
 	        
 	        if (!xeque.equals(this.cor)) {
 	            // O lance não deixa o jogador em xeque, adiciona à lista de lances sem xeque
+		    	System.out.println("adicionando " + lance + " à lista de lances sem xeque");
 	            lancesSemXeque.add(lance);
 	        }
 	    }

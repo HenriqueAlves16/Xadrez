@@ -22,17 +22,18 @@ public class JogadorHumano extends Jogador {
 		//Jogador em xeque:
 		if(xeque.equals(getCor())) {
 			System.out.println("////////Lance humano xeque//////////");
-			
+			ArrayList<Lance> lancesPossiveis = getLancesPossiveisXeque();
 			//Verifica se é um lance possível
-			//System.out.println(getLancesPossiveisXeque());
-			for(int i = 0; i < getLancesPossiveisXeque().size(); i++) {
-				if(getLancesPossiveisXeque().get(i).getCasaDestino().equals(casaDestino)){
-					//System.out.println("chamada para mudar o tabuleiro humano");
+			System.out.println("Lances possíveis: " + getLancesPossiveisXeque());
+			for(int i = 0; i < lancesPossiveis.size(); i++) {
+				System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" + i);
+				if(lancesPossiveis.get(i).getCasaDestino().equals(casaDestino)){
+					System.out.println("chamada para mudar o tabuleiro humano em xeque");
 		            getJogo().getTabuleiro().mudaTabuleiro(pecaSelecionada.getPosicao(), casaDestino);
 		            sucesso = true;
 		            aux = false;
 		        }	else	{
-		        	//System.out.println("lance humano ilegal");
+		        	System.out.println("lance humano ilegal");
 		        }
 			}
 			if(!sucesso)	return null;
@@ -60,9 +61,9 @@ public class JogadorHumano extends Jogador {
 			System.out.println("//////////Lance especial de rei///////////");
 			ArrayList<Lance> lancesEspeciais = ((Rei)pecaSelecionada).getLancesEspeciais();
 			for (int i = 0; i < lancesEspeciais.size(); i++) {
-				System.out.println("Lance especial rei: " + lancesEspeciais.get(i));
+				//System.out.println("Lance especial rei: " + lancesEspeciais.get(i));
 				if(lancesEspeciais.get(i).getPecaMovida().equals(pecaSelecionada) && lancesEspeciais.get(i).getCasaDestino().equals(casaDestino)) {			//Lance especial igual ao lance feito
-					System.out.println("Roque válido!!! Mudando o tabuleiro:");
+					//System.out.println("Roque válido!!! Mudando o tabuleiro:");
 					getJogo().getTabuleiro().mudaTabuleiroEspecial(lancesEspeciais.get(i));
 				}
 			}
@@ -77,7 +78,7 @@ public class JogadorHumano extends Jogador {
 		String texto = (getJogo().getTurno().equals("branco")) ? Lance.escreveLance(pecaSelecionada, casaDestino, getJogo().getNumeroLance()) : Lance.escreveLance(pecaSelecionada, casaDestino);
 		Lance.escreveNoArquivo(texto);
 		
-		System.out.println("HUMANO: Peca selecionada: " + pecaSelecionada + " origem: " + origem + " casaDestino: " + casaDestino);
+		System.out.println("HUMANO: Peca selecionada: " + pecaSelecionada + " origem: " + origem + " casaDestino: " + casaDestino + "poscao da Peca Selecionada após movimento" + pecaSelecionada.getPosicao());
 		return new Lance(pecaSelecionada, casaDestino, origem);
 	}
 
