@@ -7,7 +7,7 @@ import javax.swing.ImageIcon;
 public class Bispo extends Peca {
 	public Bispo(String cor, Casa posicao, String path) {
 		super(cor, posicao, path);
-		System.out.println("bispo " + getCor());
+		//System.out.println("bispo " + getCor());
 	}
 	
 	

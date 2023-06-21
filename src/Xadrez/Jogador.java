@@ -76,6 +76,21 @@ public abstract class Jogador {
 		this.lancesEspeciais = lancesEspeciais;
 	}
 
+	//Método que verifica se o lance pretendido vai deixar o jogador em xeque:
+	public boolean lanceMantemReiProtegido(Peca peca, Casa casaDestino) {
+		boolean reiProtegido; 
+		Casa casaOrigem = peca.getPosicao();
+		getJogo().getTabuleiro().mudaTabuleiroTemp(casaOrigem, casaDestino);
+		jogo.atualizaLancesECapturas();
+		reiProtegido = (getJogo().verificaXeque().equals(this.getCor())) ? false : true;
+		Tabuleiro.imprimeTabuleiro();
+		System.out.println("//////////////////////////////////////////////////////////////// " + getJogo().verificaXeque() + " ///////////////////////////");
+		System.out.println("//////////////////////////////////////////////////////////////// " + reiProtegido + " ///////////////////////////");
+		getJogo().getTabuleiro().desfazerLance(casaOrigem, casaDestino);
+		jogo.atualizaLancesECapturas();
+		return reiProtegido;
+	}
+	
 	//Método que verifica as peças atacadas pelo jogador:
 	public void verificaCapturasPossiveis(){
 		ArrayList<Peca> listaPecas = new ArrayList<Peca>();

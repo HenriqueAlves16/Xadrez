@@ -7,7 +7,7 @@ import javax.swing.ImageIcon;
 public class Cavalo extends Peca {
 	public Cavalo(String cor, Casa posicao, String path) {
 		super(cor, posicao, path);
-		System.out.println("cavalo " + getCor());
+		//System.out.println("cavalo " + getCor());
 	}
 	
 	

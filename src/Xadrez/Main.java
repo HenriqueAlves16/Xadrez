@@ -2,6 +2,7 @@ package Xadrez;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 public class Main {
 
@@ -66,22 +67,30 @@ public class Main {
 		frame.add(peaoBranco);
 		frame.add(peaoPreto);
 		*/
+		
+		Jogador jogador1;
+		Jogador jogador2;
+		int opcaoJogo = JOptionPane.showOptionDialog(null, "Escolha o modo de jogo", "Modo de jogo", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, new String[] {"Jogador vs Jogador", "Jogador vs Computador"}, null);
+		if (opcaoJogo == 0) {
+            // Modo Jogador vs Jogador
+            jogador1 = new JogadorHumano("branco");
+            jogador2 = new JogadorHumano("preto");
+        } else {
+            // Modo Jogador vs Computador
+            jogador1 = new JogadorHumano("branco");
+            jogador2 = new JogadorMaquina("preto");
+        }
 		Tabuleiro tabuleiro = new Tabuleiro();
-		System.out.println("tabuleiro criado");
-		JogadorHumano jogador1 = new JogadorHumano("branco");
-		System.out.println("jogador1 criado");
-		Jogador jogador2 = new JogadorMaquina("preto");
-		System.out.println("jogador2 criado");
-
+	
 		
 		JFrame f = new JFrame("Xadrez");        //Inicializa a janela
         f.add(tabuleiro);                                                              //Adiciona a interface (JPanel) no frame
         f.setSize(640, 640);                                                     
         f.setVisible(true);                                                      
-        f.setResizable(false);                                                   
+        f.setResizable(true);                                                   
         f.setLocationRelativeTo(null);                                           
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		System.out.println("jogo criado");
+		//System.out.println("jogo criado");
 		Jogo jogo = new Jogo(jogador1, jogador2, tabuleiro);
 
 	}

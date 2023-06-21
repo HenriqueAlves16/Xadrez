@@ -185,12 +185,10 @@ public class Jogo {
 
 	//Método que verifica se o jogo acabou:
 	//Usar um enum:
+	//arrumar material insuficiente
 	public int verificaFim() {
 		Jogador jogadorBranco = (jogador1.getCor().equals("branco")) ? jogador1 : jogador2;
 		Jogador jogadorPreto = (jogador1.getCor().equals("preto")) ? jogador1 : jogador2;
-		
-		Rei reiPreto = encontraRei("preto");
-		Rei reiBranco = encontraRei("branco");
 		
 		//Xeque-Mate:
 		if(turno.equals("preto") && verificaXeque().equals("preto")) {
@@ -257,26 +255,25 @@ public class Jogo {
 	}
 	
 	//Método que mostra uma mensagem de acordo com o resultado final do jogo
-	 public void verificaFimDoJogo() {
-	        // Verifique o resultado do jogo (branco ganhou, preto ganhou, empate)
-	        int resultado = verificaFim();
+	public void verificaFimDoJogo() {
+        // Verifique o resultado do jogo (branco ganhou, preto ganhou, empate)
+        int resultado = verificaFim();
 
-	        // Exiba a mensagem adequada com base no resultado
-	        if (resultado == 10) {
-	            JOptionPane.showMessageDialog(null, "XEQUE MATE! O jogador branco venceu!");
-	            System.exit(0);
-	        } else if (resultado == -10) {
-	            JOptionPane.showMessageDialog(null, "XEQUE MATE! O jogador preto venceu!");
-	            System.exit(0);
-	        } else if (resultado == -1) {
-	            JOptionPane.showMessageDialog(null, "O jogo terminou em empate por afogamento!");
-	            System.exit(0);
-	        } else if (resultado == 1) {
-	            JOptionPane.showMessageDialog(null, "O jogo terminou em empate por material insuficiente!");
-	            System.exit(0);
-	        }	
-	    }
-	
+        // Exiba a mensagem adequada com base no resultado
+        if (resultado == 10) {
+            JOptionPane.showMessageDialog(null, "XEQUE MATE! O jogador branco venceu!");
+            System.exit(0);
+        } else if (resultado == -10) {
+            JOptionPane.showMessageDialog(null, "XEQUE MATE! O jogador preto venceu!");
+            System.exit(0);
+        } else if (resultado == -1) {
+            JOptionPane.showMessageDialog(null, "O jogo terminou em empate por afogamento!");
+            System.exit(0);
+        } else if (resultado == 1) {
+            JOptionPane.showMessageDialog(null, "O jogo terminou em empate por material insuficiente!");
+            System.exit(0);
+        }	
+	}
 	
 	//Método que verifica se o jogador de turno ativo está em xeque:
 	//Usar Enum:
@@ -285,14 +282,16 @@ public class Jogo {
 		Rei reiBranco = encontraRei("branco");
 		Jogador jogadorBranco = (jogador1.getCor().equals("branco")) ? jogador1 : jogador2;
 		Jogador jogadorPreto = (jogador1.getCor().equals("preto")) ? jogador1 : jogador2;
+		ArrayList<Casa> casasAtacadasJogadorBranco = jogadorBranco.getCasasAtacadas();
+		ArrayList<Casa> casasAtacadasJogadorPreto = jogadorPreto.getCasasAtacadas();		
 		
 		if(turno.equals("preto")) {
 			//System.out.println("casas atacadas pelo branco: " + jogadorBranco.getCasasAtacadas());
 			//System.out.println("Posição rei preto " + reiPreto.getPosicao());
 			
 			//Preto em xeque
-			for(int i = 0; i < jogadorBranco.getCasasAtacadas().size(); i++) {
-				if(jogadorBranco.getCasasAtacadas().get(i).toString().equals(reiPreto.getPosicao().toString())) {
+			for(int i = 0; i < casasAtacadasJogadorBranco.size(); i++) {
+				if(casasAtacadasJogadorBranco.get(i).toString().equals(reiPreto.getPosicao().toString())) {
 					return "preto";
 				}
 			}
@@ -301,8 +300,8 @@ public class Jogo {
 			//System.out.println("casas atacadas pelo preto: " + jogadorPreto.getCasasAtacadas());
 			//System.out.println("Posição rei branco " + reiBranco.getPosicao());
 
-			for(int i = 0; i < jogadorPreto.getCasasAtacadas().size(); i++) {
-				if(jogadorPreto.getCasasAtacadas().get(i).toString().equals(reiBranco.getPosicao().toString())) {
+			for(int i = 0; i < casasAtacadasJogadorPreto.size(); i++) {
+				if(casasAtacadasJogadorPreto.get(i).toString().equals(reiBranco.getPosicao().toString())) {
 					return "branco";
 				}
 			}
