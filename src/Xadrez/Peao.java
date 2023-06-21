@@ -117,42 +117,36 @@ public class Peao extends Peca implements MovableSpc{
 		}
 	}
 	
-	public void promocao(Peca peao) {
-		if(peao.getCor().equals("branco") && peao.getPosicao().getLinha() == 8 || getCor().equals("preto") && getPosicao().getLinha() == 1) {
-			// Crie um painel para conter as imagens das peças de promoção
-            JPanel panel = new JPanel();
-
-            // Crie os botões de imagem para cada peça de promoção
-            ImageIcon cavaloIcon = Cavalo.getResizedIcon(peao.getCor());
-            JButton cavaloButton = new JButton(cavaloIcon);
-            cavaloButton.addActionListener(e -> promoverPeao(peao, "Cavalo"));
-
-            ImageIcon bispoIcon = Bispo.getResizedIcon(peao.getCor()); 
-            JButton bispoButton = new JButton(bispoIcon);
-            bispoButton.addActionListener(e -> promoverPeao(peao, "Bispo"));
-
-            ImageIcon torreIcon = Torre.getResizedIcon(peao.getCor()); 
-            JButton torreButton = new JButton(torreIcon);
-            torreButton.addActionListener(e -> promoverPeao(peao, "Torre"));
-
-            ImageIcon rainhaIcon = Rainha.getResizedIcon(peao.getCor());
-            JButton rainhaButton = new JButton(rainhaIcon);
-            rainhaButton.addActionListener(e -> promoverPeao(peao, "Rainha"));
-
-            // Adicione os botões de imagem ao painel
-            panel.add(cavaloButton);
-            panel.add(bispoButton);
-            panel.add(torreButton);
-            panel.add(rainhaButton);
-
-            // Exiba o diálogo personalizado
-            JOptionPane.showMessageDialog(null, panel, "Escolha uma peça para promover o peão", JOptionPane.PLAIN_MESSAGE);
+	public void promoverPeao(String pecaEscolhida) {
+		Casa casaPromocao = Tabuleiro.getCasa(this.getPosicao().getColuna(), this.getPosicao().getLinha());
+		String corPecaNova = this.getCor(); 
+		switch(pecaEscolhida) {
+			case "Rainha":
+				Rainha novaRainha = new Rainha(corPecaNova, casaPromocao, Rainha.getImagePath(corPecaNova));
+				casaPromocao.setPeca(novaRainha);
+				break;
+			case "Torre":
+				Torre novaTorre = new Torre(corPecaNova, casaPromocao, Torre.getImagePath(corPecaNova));
+				casaPromocao.setPeca(novaTorre);
+				break;
+			case "Bispo":
+				Bispo novoBispo = new Bispo(corPecaNova, casaPromocao, Bispo.getImagePath(corPecaNova));
+				casaPromocao.setPeca(novoBispo);
+				break;
+			case "Cavalo":
+				Cavalo novoCavalo = new Cavalo(corPecaNova, casaPromocao, Cavalo.getImagePath(corPecaNova));
+				casaPromocao.setPeca(novoCavalo);
+				break;
 		}
 	}
 	
-	public void promoverPeao(Peca peao, String pecaEscolhida) {
-		Casa casaPromocao = Tabuleiro.getCasa(peao.getPosicao().getColuna(), peao.getPosicao().getLinha());
-		
+	public void promocao() {
+		 if ((this.getCor().equals("branco") && this.getPosicao().getLinha() == 8) || (this.getCor().equals("preto") && this.getPosicao().getLinha() == 1)) {
+
+		        // Crie a caixa de diálogo personalizada
+		        PromocaoDialog dialog = new PromocaoDialog(this);
+		        dialog.setVisible(true);
+		    }
 	}
 
 	public String getImagePath() {

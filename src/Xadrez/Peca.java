@@ -41,6 +41,8 @@ public abstract class Peca extends JPanel{
 		//Mudando a escala:
 		int newWidth = imagem.getIconWidth() / 2;
 		int newHeight = imagem.getIconHeight() / 2;
+		System.out.println("caminho: " + path + "dimensoes: " + imagem.getIconWidth() + ", " + imagem.getIconHeight());
+		System.out.println(newWidth + "" + newHeight);
 		Image resizedImage = imagem.getImage().getScaledInstance(newWidth, newHeight, Image.SCALE_DEFAULT);
 		resizedIcon = new ImageIcon(resizedImage);
 	}

@@ -7,6 +7,7 @@ import javax.swing.ImageIcon;
 public class Rainha extends Peca {
 	public Rainha(String cor, Casa posicao, String path) {
 		super(cor, posicao, path);
+		System.out.println("rainha " + getCor());
 	}
 	
 	public int lancesValidos(){

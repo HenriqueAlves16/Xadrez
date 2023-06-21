@@ -7,6 +7,7 @@ import javax.swing.ImageIcon;
 public class Bispo extends Peca {
 	public Bispo(String cor, Casa posicao, String path) {
 		super(cor, posicao, path);
+		System.out.println("bispo " + getCor());
 	}
 	
 	
@@ -94,7 +95,7 @@ public class Bispo extends Peca {
 		if(cor.equals("branco")) {
 			return "Imagens/w_bishop_png_128px.png";
 		}	else	{
-			return "Imagens/b_bihsop_png_128px.png";		
+			return "Imagens/b_bishop_png_128px.png";		
 		}
 	}
 	

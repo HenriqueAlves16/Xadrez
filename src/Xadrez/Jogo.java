@@ -126,7 +126,7 @@ public class Jogo {
 		    			peca.lancesValidos();
 		    			if(peca instanceof Peao) {
 		    				((Peao)peca).movimentoEspecial(ultimoLance);
-		    				//((Peao)peca).promocao();
+		    				((Peao)peca).promocao();
 		    			}	else if (peca instanceof Rei) {
 		    				((Rei)peca).movimentoEspecial(null);
 		    			}
