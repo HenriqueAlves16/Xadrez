@@ -116,38 +116,6 @@ public class Peao extends Peca implements MovableSpc{
 			setLancesEspeciais(enPassants);
 		}
 	}
-	
-	public void promoverPeao(String pecaEscolhida) {
-		Casa casaPromocao = Tabuleiro.getCasa(this.getPosicao().getColuna(), this.getPosicao().getLinha());
-		String corPecaNova = this.getCor(); 
-		switch(pecaEscolhida) {
-			case "Rainha":
-				Rainha novaRainha = new Rainha(corPecaNova, casaPromocao, Rainha.getImagePath(corPecaNova));
-				casaPromocao.setPeca(novaRainha);
-				break;
-			case "Torre":
-				Torre novaTorre = new Torre(corPecaNova, casaPromocao, Torre.getImagePath(corPecaNova));
-				casaPromocao.setPeca(novaTorre);
-				break;
-			case "Bispo":
-				Bispo novoBispo = new Bispo(corPecaNova, casaPromocao, Bispo.getImagePath(corPecaNova));
-				casaPromocao.setPeca(novoBispo);
-				break;
-			case "Cavalo":
-				Cavalo novoCavalo = new Cavalo(corPecaNova, casaPromocao, Cavalo.getImagePath(corPecaNova));
-				casaPromocao.setPeca(novoCavalo);
-				break;
-		}
-	}
-	
-	public void promocao() {
-		 if ((this.getCor().equals("branco") && this.getPosicao().getLinha() == 8) || (this.getCor().equals("preto") && this.getPosicao().getLinha() == 1)) {
-
-		        // Crie a caixa de diálogo personalizada
-		        PromocaoDialog dialog = new PromocaoDialog(this);
-		        dialog.setVisible(true);
-		    }
-	}
 
 	public String getImagePath() {
 		if(getCor().equals("branco")) {

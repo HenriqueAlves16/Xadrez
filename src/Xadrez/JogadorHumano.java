@@ -31,9 +31,9 @@ public class JogadorHumano extends Jogador {
 					//System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" + i);
 					if(lancesPossiveis.get(i).getCasaDestino().equals(casaDestino)){
 						//System.out.println("chamada para mudar o tabuleiro humano em xeque");
-			            getJogo().getTabuleiro().mudaTabuleiro(pecaSelecionada.getPosicao(), casaDestino);
-			            sucesso = true;
+						sucesso = true;
 			            aux = false;
+			            getJogo().getTabuleiro().mudaTabuleiro(pecaSelecionada.getPosicao(), casaDestino);
 			        }	else	{
 			        	//System.out.println("lance humano ilegal");
 			        }
@@ -44,6 +44,9 @@ public class JogadorHumano extends Jogador {
 				System.out.println("/////////Lance normal/////////");
 				//System.out.println("chamada para mudar o tabuleiro");
 		        getJogo().getTabuleiro().mudaTabuleiro(pecaSelecionada.getPosicao(), casaDestino);
+		        if((pecaSelecionada.getPosicao().getLinha() == 8 || pecaSelecionada.getPosicao().getLinha() == 1) && pecaSelecionada instanceof Peao) {
+					promocao((Peao)pecaSelecionada);
+				}
 		        aux = false;
 			}
 			
@@ -71,19 +74,28 @@ public class JogadorHumano extends Jogador {
 				}
 			}
 			
-			
 			System.out.println("chamada para atualizar as capturas");
+			Tabuleiro.imprimeTabuleiro();
+			System.out.println("/");
 			//Atualiza lances e capturas
 			getJogo().atualizaLancesECapturas();
-			
+			Tabuleiro.imprimeTabuleiro();
 			//Escreve texto
 			String texto = (getJogo().getTurno().equals("branco")) ? Lance.escreveLance(pecaSelecionada, casaDestino, getJogo().getNumeroLance()) : Lance.escreveLance(pecaSelecionada, casaDestino);
 			Lance.escreveNoArquivo(texto);
 			
-			System.out.println("HUMANO: Peca selecionada: " + pecaSelecionada + " origem: " + origem + " casaDestino: " + casaDestino + "poscao da Peca Selecionada após movimento" + pecaSelecionada.getPosicao());
+			//System.out.println("HUMANO: Peca selecionada: " + pecaSelecionada + " origem: " + origem + " casaDestino: " + casaDestino + "poscao da Peca Selecionada após movimento" + pecaSelecionada.getPosicao());
 			return new Lance(pecaSelecionada, casaDestino, origem);
 		}
 		return null;
+	}
+	
+	public void promocao(Peao peao) {
+		if ((peao.getCor().equals("branco") && peao.getPosicao().getLinha() == 8) || (peao.getCor().equals("preto") && peao.getPosicao().getLinha() == 1)) {
+		        // Crie a caixa de diálogo personalizada
+		        PromocaoDialog dialog = new PromocaoDialog(peao, this);
+		        dialog.setVisible(true);
+		}
 	}
 
 }

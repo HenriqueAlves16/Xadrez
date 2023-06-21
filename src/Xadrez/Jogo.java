@@ -82,6 +82,15 @@ public class Jogo {
 		this.turno = turno;
 	}
 	
+	public Lance getUltimoLance() {
+		return ultimoLance;
+	}
+
+	public void setUltimoLance(Lance ultimoLance) {
+		this.ultimoLance = ultimoLance;
+	}
+
+	
 	public Jogador getJogadorBranco() {
 		Jogador jogadorBranco = (jogador1.getCor().equals("branco")) ? jogador1 : jogador2;
 		return jogadorBranco;
@@ -90,6 +99,11 @@ public class Jogo {
 	public Jogador getJogadorPreto() {
 		Jogador jogadorPreto = (jogador1.getCor().equals("preto")) ? jogador1 : jogador2;
 		return jogadorPreto;
+	}
+	
+	public Jogador getJogadorAtivo() {
+		Jogador jogadorAtivo = (turno.equals("branco")) ? getJogadorBranco() : getJogadorPreto();
+		return jogadorAtivo;
 	}
 	
 	//Associa o jogo ao tabuleiro e peças:
@@ -126,7 +140,6 @@ public class Jogo {
 		    			peca.lancesValidos();
 		    			if(peca instanceof Peao) {
 		    				((Peao)peca).movimentoEspecial(ultimoLance);
-		    				((Peao)peca).promocao();
 		    			}	else if (peca instanceof Rei) {
 		    				((Rei)peca).movimentoEspecial(null);
 		    			}
@@ -162,11 +175,13 @@ public class Jogo {
 	//Arrumar situação de cravada
 	//Rei as vezes some com xeque
 	public void fazLance(Peca pecaSelecionada, Casa casaDestino) {
+		System.out.println(turno);
 		if(turno.equals("branco")) {
-    		ultimoLance = getJogadorBranco().fazJogada(pecaSelecionada, casaDestino);
+    		setUltimoLance(getJogadorBranco().fazJogada(pecaSelecionada, casaDestino));
     	}	else	{
-    		ultimoLance = getJogadorPreto().fazJogada(pecaSelecionada, casaDestino);
+    		setUltimoLance(getJogadorPreto().fazJogada(pecaSelecionada, casaDestino));
     	}
+		System.out.println("ultimo lance: " + ultimoLance);
 		finalizaTurno();
 	}
 	
@@ -175,13 +190,14 @@ public class Jogo {
 		System.out.println("finalizando turno");
 		if (ultimoLance != null) {
 			numeroLance++;
+			System.out.println("MUDANDO O TURNO! ANTES: " + turno);
 			String novoTurno = (turno.equals("branco")) ? "preto" : "branco";
 			setTurno(novoTurno);
+			System.out.println("DEPOIS: " + turno);
 			atualizaLancesECapturas();
 			System.out.println("turno finalizado");
 		}
 	}
-
 
 	//Método que verifica se o jogo acabou:
 	//Usar um enum:

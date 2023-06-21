@@ -11,13 +11,15 @@ import javax.swing.JDialog;
 public class PromocaoDialog extends JDialog implements ActionListener{
 	
     private Peao peao;
-
-    public PromocaoDialog(Peao peao) {
+    private JogadorHumano jogador;
+    
+    public PromocaoDialog(Peao peao, JogadorHumano jogador) {
         setTitle("Escolha a peça de promoção");
         setModal(true);
         setLayout(new GridLayout(1, 4));
 
         this.peao = peao;
+        this.jogador = jogador;
 
         // Crie os botões de imagem para cada peça de promoção
         ImageIcon cavaloIcon = Cavalo.getResizedIcon(peao.getCor());
@@ -55,7 +57,7 @@ public class PromocaoDialog extends JDialog implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         JButton button = (JButton) e.getSource();
         String pecaEscolhida = button.getToolTipText();
-        peao.promoverPeao(pecaEscolhida);
+        jogador.promoverPeao(peao, pecaEscolhida);
 
         // Feche a caixa de diálogo
         dispose();

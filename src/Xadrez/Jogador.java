@@ -83,9 +83,9 @@ public abstract class Jogador {
 		getJogo().getTabuleiro().mudaTabuleiroTemp(casaOrigem, casaDestino);
 		jogo.atualizaLancesECapturas();
 		reiProtegido = (getJogo().verificaXeque().equals(this.getCor())) ? false : true;
-		Tabuleiro.imprimeTabuleiro();
-		System.out.println("//////////////////////////////////////////////////////////////// " + getJogo().verificaXeque() + " ///////////////////////////");
-		System.out.println("//////////////////////////////////////////////////////////////// " + reiProtegido + " ///////////////////////////");
+		//Tabuleiro.imprimeTabuleiro();
+		//System.out.println("//////////////////////////////////////////////////////////////// " + getJogo().verificaXeque() + " ///////////////////////////");
+		//System.out.println("//////////////////////////////////////////////////////////////// " + reiProtegido + " ///////////////////////////");
 		getJogo().getTabuleiro().desfazerLance(casaOrigem, casaDestino);
 		jogo.atualizaLancesECapturas();
 		return reiProtegido;
@@ -193,7 +193,7 @@ public abstract class Jogador {
 			}
 		}
 		setLancesEspeciais(listaLancesEspeciais);
-		System.out.println("Lances especiais encontrados jogador " + getCor() + ": " + listaLancesEspeciais + "\n");
+		//System.out.println("Lances especiais encontrados jogador " + getCor() + ": " + listaLancesEspeciais + "\n");
 	}
 	
 	public ArrayList<Lance> getLancesPossiveisXeque() {
@@ -236,7 +236,37 @@ public abstract class Jogador {
 		this.verificaLancesPossiveis();
 	}
 	
+	//Método que substitui um peão por uma peça escolhida durante a promoção
+	public void promoverPeao(Peao peao, String pecaEscolhida) {
+		Casa casaPromocao = Tabuleiro.getCasa(peao.getPosicao().getColuna(), peao.getPosicao().getLinha());
+		System.out.println("////////////////////////////////////////////////////////////////////////// posicao peao: " + peao.getPosicao().getLinha() + " posicao casa promocao: " + casaPromocao);
+		Tabuleiro.imprimeTabuleiro();
+		String corPecaNova = peao.getCor(); 
+		switch(pecaEscolhida) {
+			case "Rainha":
+				Rainha novaRainha = new Rainha(corPecaNova, casaPromocao, Rainha.getImagePath(corPecaNova));
+				casaPromocao.setPeca(novaRainha);
+				//Tabuleiro.imprimeTabuleiro();
+				break;
+			case "Torre":
+				Torre novaTorre = new Torre(corPecaNova, casaPromocao, Torre.getImagePath(corPecaNova));
+				casaPromocao.setPeca(novaTorre);
+				break;
+			case "Bispo":
+				Bispo novoBispo = new Bispo(corPecaNova, casaPromocao, Bispo.getImagePath(corPecaNova));
+				casaPromocao.setPeca(novoBispo);
+				break;
+			case "Cavalo":
+				Cavalo novoCavalo = new Cavalo(corPecaNova, casaPromocao, Cavalo.getImagePath(corPecaNova));
+				casaPromocao.setPeca(novoCavalo);
+				break;
+		}
+	}
+	
 	//Método que executa a jogada:
 	public abstract Lance fazJogada(Peca peca, Casa casa);
+	
+	//Método que implementa a lógica de promoção de um peão:
+	public abstract void promocao(Peao peao);
 
 }
