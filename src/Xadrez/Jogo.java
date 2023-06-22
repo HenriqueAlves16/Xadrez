@@ -187,7 +187,7 @@ public class Jogo {
 	
 	//Muda turno e faz o lance do computador, se esse for o caso
 	public void finalizaTurno() {
-		System.out.println("finalizando turno");
+		System.out.println("finalizando turno. Ultimo lance: " + ultimoLance);
 		if (ultimoLance != null) {
 			numeroLance++;
 			System.out.println("MUDANDO O TURNO! ANTES: " + turno);
@@ -201,10 +201,11 @@ public class Jogo {
 
 	//Método que verifica se o jogo acabou:
 	//Usar um enum:
-	//arrumar material insuficiente
+	//Arrumar rei sumindo quando há xeque por tras (?)
 	public int verificaFim() {
-		Jogador jogadorBranco = (jogador1.getCor().equals("branco")) ? jogador1 : jogador2;
-		Jogador jogadorPreto = (jogador1.getCor().equals("preto")) ? jogador1 : jogador2;
+		Jogador jogadorBranco = getJogadorBranco();
+		Jogador jogadorPreto = getJogadorPreto();
+		Jogador jogadorAtivo = getJogadorAtivo();
 		
 		//Xeque-Mate:
 		if(turno.equals("preto") && verificaXeque().equals("preto")) {
@@ -239,15 +240,17 @@ public class Jogo {
 		for (int l = 0; l < 8; l++) {
 		    for (int c = 0; c < 8; c++) {
 		        try {
-		            if (Tabuleiro.getTabuleiro()[l][c].getPeca() instanceof Cavalo && Tabuleiro.getTabuleiro()[l][c].getPeca().getCor().equals("branco")) {
+		        	Peca peca = Tabuleiro.getTabuleiro()[l][c].getPeca();
+		            if (peca instanceof Cavalo && peca.getCor().equals("branco")) {
 		                cavalosBrancos++;
-		            } else if (Tabuleiro.getTabuleiro()[l][c].getPeca() instanceof Cavalo && Tabuleiro.getTabuleiro()[l][c].getPeca().getCor().equals("preto")) {
+		            } else if (peca instanceof Cavalo && peca.getCor().equals("preto")) {
 		                cavalosPretos++;
-		            } else if (Tabuleiro.getTabuleiro()[l][c].getPeca() instanceof Bispo && Tabuleiro.getTabuleiro()[l][c].getPeca().getCor().equals("branco")) {
+		            } else if (peca instanceof Bispo && peca.getCor().equals("branco")) {
 		                bisposBrancos++;
-		            } else if (Tabuleiro.getTabuleiro()[l][c].getPeca() instanceof Bispo && Tabuleiro.getTabuleiro()[l][c].getPeca().getCor().equals("preto")) {
+		            } else if (peca instanceof Bispo && peca.getCor().equals("preto")) {
 		                bisposPretos++;
-		            } else if (!(Tabuleiro.getTabuleiro()[l][c].getPeca() instanceof Rei)) {
+		            } else if (!(peca instanceof Rei)) {
+		            	System.out.println(peca.getPosicao());
 		                outrasPecas = true; //Define a variável de controle como true para interromper o loop
 		                break;
 		            }
@@ -258,8 +261,9 @@ public class Jogo {
 		        break; // Interrompe o loop externo
 		    }
 		}
-
-		//Casos possíveis de empate:
+		//System.out.println("MATERIAL INSUFICIENTE - OUTRAS PEÇAS: " + outrasPecas);
+		//System.out.println("WN: " + cavalosBrancos + " BN: " + cavalosPretos + " WB: " + bisposBrancos + " BB: " + bisposPretos);
+		//Casos possíveis de empate por material insuficiente:
 		if(!outrasPecas) {
 			if(cavalosBrancos <= 2 && cavalosPretos <= 2 && bisposBrancos == 0 && bisposPretos == 0) {
 				return 1;

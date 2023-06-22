@@ -181,7 +181,7 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
 	
 	//Método que muda o tabuleiro a partir de um lance especial:
 	public void mudaTabuleiroEspecial(Lance lanceEspecial) {
-		//System.out.println("\nTabuleiro antes da mudança:");
+		System.out.println("\nTabuleiro antes da mudança especial:");
 		imprimeTabuleiro();
 		Casa casaOrigem = lanceEspecial.getCasaOrigem();
 		Casa casaDestino = lanceEspecial.getCasaDestino();
@@ -216,8 +216,8 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
 			torre.setPosicao(casaDestinoTorre);
 			rei.setPosicao(casaDestinoRei);
 		}
-		//System.out.println("Tabuleiro após a mudança:");
-		//imprimeTabuleiro();
+		System.out.println("Tabuleiro após a mudança especial:");
+		imprimeTabuleiro();
 	}
 
 	//Método que imprime o tabuleiro graficamente:
