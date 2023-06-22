@@ -14,7 +14,7 @@ public class Rei extends Peca implements MovableSpc{
 	}
 	
 	//Getters e setters:
-	public boolean isMovido() {
+	public boolean getMovido() {
 		return movido;
 	}
 

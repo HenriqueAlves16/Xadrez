@@ -188,6 +188,14 @@ public class Jogo {
 	//Muda turno e faz o lance do computador, se esse for o caso
 	public void finalizaTurno() {
 		System.out.println("finalizando turno. Ultimo lance: " + ultimoLance);
+		if(ultimoLance.getPecaMovida() instanceof Rei) {
+			System.out.println("MOVIDO: " + ((Rei)ultimoLance.getPecaMovida()).getMovido());
+			((Rei)ultimoLance.getPecaMovida()).setMovido(true);
+		} else if(ultimoLance.getPecaMovida() instanceof Torre) {
+			System.out.println("MOVIDO: " + ((Torre)ultimoLance.getPecaMovida()).getMovido());
+			((Torre)ultimoLance.getPecaMovida()).setMovido(true);
+		}
+		
 		if (ultimoLance != null) {
 			numeroLance++;
 			System.out.println("MUDANDO O TURNO! ANTES: " + turno);

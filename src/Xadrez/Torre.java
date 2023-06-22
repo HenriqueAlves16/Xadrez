@@ -23,8 +23,6 @@ public class Torre extends Peca {
 		this.movido = movido;
 	}
 
-
-
 	public int lancesValidos() {
 	    ArrayList<Casa> lancesValidos = new ArrayList<Casa>();
 		ArrayList<Casa> casasAtacadas = new ArrayList<Casa>();
