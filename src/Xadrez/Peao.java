@@ -116,6 +116,17 @@ public class Peao extends Peca implements MovableSpc{
 			setLancesEspeciais(enPassants);
 		}
 	}
+	
+	public ArrayList<Casa> casasValidas() {
+		ArrayList<Casa> casasValidas = new ArrayList<Casa>();
+		Jogador jogadorCorrespondente = ("branco".equals(getCor())) ? getJogo().getJogadorBranco() : getJogo().getJogadorPreto();
+		for(Casa casa : getLancesPossiveis()) {
+			if(jogadorCorrespondente.lanceMantemReiProtegido(this, casa)) {
+				casasValidas.add(casa);
+			}
+		}
+		return casasValidas;
+	}
 
 	public String getImagePath() {
 		if(getCor().equals("branco")) {

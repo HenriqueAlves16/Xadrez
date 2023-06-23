@@ -13,6 +13,7 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
 	private int xReleased, yReleased, xPressed, yPressed, mouseX, mouseY;
 	private boolean dragging;
 	private Peca pecaSelecionada;
+	private Peca pecaClicada;
 	private Casa casaSelecionada;
 	private Jogo jogo;
 	private Peca pecaTemp;
@@ -68,6 +69,14 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
 
 	public void setCasaSelecionada(Casa casaSelecionada) {
 		this.casaSelecionada = casaSelecionada;
+	}
+
+	public Peca getPecaClicada() {
+		return pecaClicada;
+	}
+
+	public void setPecaClicada(Peca pecaClicada) {
+		this.pecaClicada = pecaClicada;
 	}
 
 	//Método que inicializa um tabuleiro em sua configuração inicial:
@@ -235,26 +244,53 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
         super.paintComponent(g);                      
         setSize(640,640);
 
-        //Percorre tabuleiro
+        if(casaSelecionada != null) {
+        	casaDegrade(g, (casaSelecionada.getColuna() - 'a') * TAMANHO_CASA, (8 - casaSelecionada.getLinha()) * TAMANHO_CASA);
+        }
+        if(pecaClicada != null) {
+        	desenhaLancesPossiveis(pecaClicada, g);
+        }
+        desenhaCasas(g);
+        desenhaPecas(g);
+        setPecaClicada(null);
+        
+        //Caso da peça estar sendo arrastada
+        if(dragging) {	
+        	Image imagem;
+            try {
+            	imagem = pecaSelecionada.getResizedIcon().getImage();
+            	pecaSelecionada.setVisible(false);
+            	g.drawImage(imagem, mouseX - imagem.getWidth(pecaSelecionada) / 2, mouseY - imagem.getHeight(pecaSelecionada) / 2, this);	//posiciona o centro da peça no mouse
+            }	catch(NullPointerException e)	{}
+        }   
+	}
+	
+	//Método que desenha as casas no tabuleiro:
+	public void desenhaCasas(Graphics g) {
+		//Percorre tabuleiro
         for (int linha = 0; linha < 8; linha++){
         	for(char col = 0; col < 8; col++) {
-	            setVisible(true);                                                                  
+        		Casa casaAtual = getCasa((char)('a' + col), linha + 1);
+	            setVisible(true);                                                              
 	            //Pinta as casas
-	            if(casaSelecionada != null && casaSelecionada.equals(getCasa((char)('a' + col), linha + 1))) {
-	            	g.setColor(Color.YELLOW);
-		            g.fillRect(col * TAMANHO_CASA, linha * TAMANHO_CASA, TAMANHO_CASA, TAMANHO_CASA);               
-	            }   else if((linha + col) % 2 == 1) {
-		            g.setColor(Color.GRAY);                                     
-		            g.fillRect(col * TAMANHO_CASA, linha * TAMANHO_CASA, TAMANHO_CASA, TAMANHO_CASA);               
+	            if(casaSelecionada != null && casaSelecionada.equals(casaAtual)) {
+
+	            }   else if(pecaSelecionada != null && pecaSelecionada.casasValidas().contains(casaAtual))	{
+	            	
+        		}	else if((linha + col) % 2 == 1) {
+		            g.setColor(Color.WHITE);                                     
+		            g.fillRect(col * TAMANHO_CASA, (7 - linha) * TAMANHO_CASA, TAMANHO_CASA, TAMANHO_CASA);               
 	            }	else	{
-	            	g.setColor(Color.WHITE);                                          
-		            g.fillRect(col * TAMANHO_CASA, linha * TAMANHO_CASA, TAMANHO_CASA, TAMANHO_CASA);                       
+	            	g.setColor(Color.GRAY);                                          
+		            g.fillRect(col * TAMANHO_CASA, (7 - linha) * TAMANHO_CASA, TAMANHO_CASA, TAMANHO_CASA);                       
 	            }
         	}
         }
-    
-        //Desenha as imagens. Loops separados para as peças não serem sobrepostas pelas casas
-        for (int linha = 0; linha < 8; linha++){
+	}
+	
+	//Método que desenha as peças em suas posições
+	public void desenhaPecas(Graphics g) {
+		for (int linha = 0; linha < 8; linha++) {
         	for(char col = 0; col < 8; col++) {
 	            try {
 	        		Peca peca = getCasa((char)(col + 'a'), linha + 1).getPeca();
@@ -274,17 +310,69 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
 	            } catch(NullPointerException e)	{}   
         	}
         }
-        
-        //Caso da peça estar sendo arrastada
-        if(dragging) {	
-        	Image imagem;
-            try {
-            	imagem = pecaSelecionada.getResizedIcon().getImage();
-            	pecaSelecionada.setVisible(false);
-            	g.drawImage(imagem, mouseX - imagem.getWidth(pecaSelecionada) / 2, mouseY - imagem.getHeight(pecaSelecionada) / 2, this);	//posiciona o centro da peça no mouse
-            }	catch(NullPointerException e)	{}
-        }
 	}
+	
+	//Método que desenha as casas atacadas por uma peça selecionada
+	public void desenhaLancesPossiveis(Peca peca, Graphics g) {
+		ArrayList<Casa> casasValidas = peca.casasValidas();
+		System.out.println("casas validas: " + casasValidas);
+		for(int i = 0; i < casasValidas.size(); i++) {
+			Casa casa = casasValidas.get(i);
+		    int y = (8 - casa.getLinha()) * TAMANHO_CASA;
+		    int x = (casa.getColuna() - 'a') * TAMANHO_CASA;
+			desenhaCasaDegrade(x, y, new Color(80, 144, 255), Color.white, g);
+		}
+	}
+	
+	public void desenhaCasaDegrade(int x, int y, Color corBorda, Color corCentro, Graphics g) {
+
+		int centroX = x + TAMANHO_CASA / 2;
+	    int centroY = y + TAMANHO_CASA / 2;
+
+	    double diagonal = Math.sqrt(2) * TAMANHO_CASA;  // Calcula a diagonal do quadrado
+	    int raioMaximo = (int) (diagonal / 2);  // Define o raio limite
+
+	    for (int raio = raioMaximo; raio > 0; raio--) {
+	    	int Dr = (corCentro.getRed() - corBorda.getRed()) / (raioMaximo);
+	    	int Dg = (corCentro.getGreen() - corBorda.getGreen()) / (raioMaximo);
+	    	int Db = (corCentro.getBlue() - corBorda.getBlue()) / (raioMaximo);
+	    	
+	        int red = (int) (corCentro.getRed() - Dr * raio);
+	        int green = (int) (corCentro.getGreen() - Dg * raio);
+	        int blue = (int) (corCentro.getBlue() - Db * raio);
+	        Color currentColor = new Color(red, green, blue);
+
+	        g.setColor(currentColor);
+	        g.clipRect(x, y, TAMANHO_CASA, TAMANHO_CASA);
+	        g.fillOval(centroX - raio, centroY - raio, raio * 2, raio * 2);
+	        g.setClip(null);
+	    }
+	}
+	
+	//Método que pinta a casa selecionada com um degradê branco e preto
+	public void casaDegrade(Graphics g, int x, int y) {
+	    int centerX = x + TAMANHO_CASA / 2;
+	    int centerY = y + TAMANHO_CASA / 2;
+
+	    double diagonal = Math.sqrt(2) * TAMANHO_CASA;  // Calcula a diagonal do quadrado
+	    int radiusLimit = (int) (diagonal / 2);  // Define o raio limite
+
+	    for (int radius = radiusLimit; radius > 0; radius -= 1) {
+	        float blendFactor = (float) radius / radiusLimit;
+	        int red = (int) (255 * (1 - blendFactor));
+	        int green = (int) (255 * (1 - blendFactor));
+	        int blue = (int) (255 * (1 - blendFactor));
+	        Color currentColor = new Color(red, green, blue);
+
+	        g.setColor(currentColor);
+	        g.clipRect(x, y, TAMANHO_CASA, TAMANHO_CASA);
+	        g.fillOval(centerX - radius, centerY - radius, radius * 2, radius * 2);
+	        g.setClip(null);
+	    }
+	}
+	
+
+    
 	
 	//Evento em que o mouse é pressionado
 	@Override
@@ -393,7 +481,7 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
     public void mouseMoved(MouseEvent e) {    	
 	    int x = e.getX();
 	    int y = e.getY();
-	    int linha = y / TAMANHO_CASA;
+	    int linha = 7 - y / TAMANHO_CASA;
 	    int coluna = x / TAMANHO_CASA;
 	    
 	    //Verifique se as coordenadas do mouse estão dentro do tabuleiro
@@ -406,6 +494,20 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
     } 
 
     @Override
-    public void mouseClicked(MouseEvent e) { }
+    public void mouseClicked(MouseEvent e) {
+    	System.out.println("Clique");
+    	int x = e.getX();
+	    int y = e.getY();
+	    int linha = 8 - y / TAMANHO_CASA;
+	    char coluna = (char)((x / TAMANHO_CASA) + 'a');
+	    if(pecaClicada == getCasa(coluna, linha).getPeca()) {
+	    	setPecaClicada(null);
+	    }	else {
+		    pecaClicada = getCasa(coluna, linha).getPeca();
+	    }
+	    System.out.println("casa clicada: " + getCasa(coluna, linha));
+	    System.out.println("peca Clicada: " + pecaClicada + ", posicao: " + pecaClicada.getPosicao());
+	    repaint();
+    }
 
 }

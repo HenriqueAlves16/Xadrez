@@ -98,6 +98,17 @@ public class Torre extends Peca {
 	    this.setCasasAtacadas(casasAtacadas);
 	    return lancesValidos.size();
 	}
+	
+	public ArrayList<Casa> casasValidas() {
+		ArrayList<Casa> casasValidas = new ArrayList<Casa>();
+		Jogador jogadorCorrespondente = ("branco".equals(getCor())) ? getJogo().getJogadorBranco() : getJogo().getJogadorPreto();
+		for(Casa casa : getLancesPossiveis()) {
+			if(jogadorCorrespondente.lanceMantemReiProtegido(this, casa)) {
+				casasValidas.add(casa);
+			}
+		}
+		return casasValidas;
+	}
 
 	public static String getImagePath(String cor) {
 		if(cor.equals("branco")) {

@@ -7,9 +7,23 @@ import javax.swing.ImageIcon;
 public class Bispo extends Peca {
 	public Bispo(String cor, Casa posicao, String path) {
 		super(cor, posicao, path);
-		//System.out.println("bispo " + getCor());
 	}
 	
+	public static String getImagePath(String cor) {
+		if(cor.equals("branco")) {
+			return "Imagens/w_bishop_png_128px.png";
+		}	else	{
+			return "Imagens/b_bishop_png_128px.png";		
+		}
+	}
+	
+	public static ImageIcon getResizedIcon(String cor) {
+		Bispo bispoBranco = new Bispo("branco", null, getImagePath("branco"));
+		Bispo bispoPreto = new Bispo("preto", null, getImagePath("preto"));
+		ImageIcon resizedIcon = (cor.equals("branco")) ? bispoBranco.getResizedIcon() : bispoPreto.getResizedIcon();
+		
+		return resizedIcon;
+	}
 	
 	public int lancesValidos() {
 	    ArrayList<Casa> lancesValidos = new ArrayList<Casa>();
@@ -91,20 +105,15 @@ public class Bispo extends Peca {
 	    return lancesValidos.size();
 	}
 
-	public static String getImagePath(String cor) {
-		if(cor.equals("branco")) {
-			return "Imagens/w_bishop_png_128px.png";
-		}	else	{
-			return "Imagens/b_bishop_png_128px.png";		
+	public ArrayList<Casa> casasValidas() {
+		ArrayList<Casa> casasValidas = new ArrayList<Casa>();
+		Jogador jogadorCorrespondente = ("branco".equals(getCor())) ? getJogo().getJogadorBranco() : getJogo().getJogadorPreto();
+		for(Casa casa : getLancesPossiveis()) {
+			if(jogadorCorrespondente.lanceMantemReiProtegido(this, casa)) {
+				casasValidas.add(casa);
+			}
 		}
-	}
-	
-	public static ImageIcon getResizedIcon(String cor) {
-		Bispo bispoBranco = new Bispo("branco", null, getImagePath("branco"));
-		Bispo bispoPreto = new Bispo("preto", null, getImagePath("preto"));
-		ImageIcon resizedIcon = (cor.equals("branco")) ? bispoBranco.getResizedIcon() : bispoPreto.getResizedIcon();
-		
-		return resizedIcon;
+		return casasValidas;
 	}
 	
 	@Override

@@ -118,6 +118,8 @@ public abstract class Peca extends JPanel{
 	}
 	
 	public abstract int lancesValidos();
+	
+	public abstract ArrayList<Casa> casasValidas();
 		
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
