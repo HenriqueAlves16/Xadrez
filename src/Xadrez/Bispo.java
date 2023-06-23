@@ -25,7 +25,7 @@ public class Bispo extends Peca {
 		return resizedIcon;
 	}
 	
-	public int lancesValidos() {
+	public int casasBase() {
 	    ArrayList<Casa> lancesValidos = new ArrayList<Casa>();
 	    ArrayList<Peca> capturasValidas = new ArrayList<Peca>();
 		ArrayList<Casa> casasAtacadas = new ArrayList<Casa>();
@@ -99,22 +99,12 @@ public class Bispo extends Peca {
 	    }
 	   
 	    
-	    this.setLancesPossiveis(lancesValidos);
+	    this.setCasasBase(lancesValidos);
 	    this.setCapturasPossiveis(capturasValidas);
 	    this.setCasasAtacadas(casasAtacadas);
 	    return lancesValidos.size();
 	}
 
-	public ArrayList<Casa> casasValidas() {
-		ArrayList<Casa> casasValidas = new ArrayList<Casa>();
-		Jogador jogadorCorrespondente = ("branco".equals(getCor())) ? getJogo().getJogadorBranco() : getJogo().getJogadorPreto();
-		for(Casa casa : getLancesPossiveis()) {
-			if(jogadorCorrespondente.lanceMantemReiProtegido(this, casa)) {
-				casasValidas.add(casa);
-			}
-		}
-		return casasValidas;
-	}
 	
 	@Override
 	public String toString() {

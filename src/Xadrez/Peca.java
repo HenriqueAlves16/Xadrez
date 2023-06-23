@@ -19,7 +19,8 @@ public abstract class Peca extends JPanel{
 	private final String cor;
 	private Casa posicao;
 	private boolean capturado;
-	private ArrayList<Casa> lancesPossiveis;
+	private ArrayList<Casa> casasBase;
+	private ArrayList<Casa> casasValidas;
 	private ArrayList<Casa> casasAtacadas;
 	
 
@@ -32,7 +33,7 @@ public abstract class Peca extends JPanel{
 		this.cor = cor;
 		this.posicao = posicao;
 		this.capturado = false;
-		lancesPossiveis = new ArrayList<Casa>();
+		casasBase = new ArrayList<Casa>();
 		capturasPossiveis = new ArrayList<Peca>();
 		casasAtacadas = new ArrayList<Casa>();
 		
@@ -68,13 +69,13 @@ public abstract class Peca extends JPanel{
 		this.capturado = capturado;
 	}
 
-	public ArrayList<Casa> getLancesPossiveis() {
-		lancesValidos();
-		return lancesPossiveis;
+	public ArrayList<Casa> getCasasBase() {
+		casasBase();
+		return casasBase;
 	}
 
-	public void setLancesPossiveis(ArrayList<Casa> lancesPossiveis) {
-		this.lancesPossiveis = lancesPossiveis;
+	public void setCasasBase(ArrayList<Casa> casasBase) {
+		this.casasBase = casasBase;
 	}
 
 	public ArrayList<Peca> getCapturasPossiveis() {
@@ -108,6 +109,15 @@ public abstract class Peca extends JPanel{
 	public void setJogo(Jogo jogo) {
 		this.jogo = jogo;
 	}
+	
+	public ArrayList<Casa> getCasasValidas() {
+		return casasValidas;
+	}
+
+	public void setCasasValidas(ArrayList<Casa> casasValidas) {
+		this.casasValidas = casasValidas;
+	}
+
 	//toString():
 	@Override
 	public String toString() {
@@ -117,10 +127,23 @@ public abstract class Peca extends JPanel{
 		return "B";
 	}
 	
-	public abstract int lancesValidos();
-	
-	public abstract ArrayList<Casa> casasValidas();
+	public ArrayList<Casa> casasValidas() {
+		ArrayList<Casa> casasValidas = new ArrayList<Casa>();
+		ArrayList<Casa> casasBase = getCasasBase();
+		Jogador jogadorCorrespondente = ("branco".equals(getCor())) ? getJogo().getJogadorBranco() : getJogo().getJogadorPreto();
 		
+		for(int i = 0; i < casasBase.size(); i++) {
+			Casa casaBase = casasBase.get(i);
+			if(jogadorCorrespondente.lanceMantemReiProtegido(this, casaBase)) {
+				casasValidas.add(casaBase);
+			}
+		}
+		setCasasValidas(casasValidas);
+		return casasValidas;
+	}
+	
+	public abstract int casasBase();
+			
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
         resizedIcon.paintIcon(this, g, 0, 0);

@@ -126,8 +126,9 @@ public abstract class Jogador {
 					//Se a peça é da cor do jogador, vamos adicionar todas os lances possíveis da peça para o jogador
 					if(corPeca.equals(this.cor)) {
 						//System.out.println("Lances validos para o " + peca + ": " + peca.getLancesPossiveis());
-						for(int i = 0; i < peca.getLancesPossiveis().size(); i++) {				//Percorre cada possível lance 
-							Casa casaDestinoPossivel = peca.getLancesPossiveis().get(i);
+						ArrayList<Casa> casasBase = peca.getCasasBase();
+						for(int i = 0; i < casasBase.size(); i++) {				//Percorre cada possível lance 
+							Casa casaDestinoPossivel = casasBase.get(i);
 							listaLances.add(new Lance(peca, casaDestinoPossivel));
 						}
 					}
@@ -200,11 +201,11 @@ public abstract class Jogador {
 		jogo.atualizaLancesECapturas();
 		ArrayList<Lance> lancesPossiveis = this.getLancesPossiveis();
 		ArrayList<Lance> lancesSemXeque = new ArrayList<Lance>();
-		System.out.println("lances possíveis: " + lancesPossiveis);
+		//System.out.println("lances possíveis: " + lancesPossiveis);
 	    for (Lance lance : lancesPossiveis) {
 	    	Casa origem = lance.getPecaMovida().getPosicao();
 	        // Realizar o lance temporariamente
-	    	System.out.println("Realizando lance temporário");
+	    	//System.out.println("Realizando lance temporário");
 	        jogo.getTabuleiro().mudaTabuleiroTemp(lance.getPecaMovida().getPosicao(), lance.getCasaDestino());
 	        //Tabuleiro.imprimeTabuleiro();
 	        
@@ -212,16 +213,16 @@ public abstract class Jogador {
 	        
 	        // Verificar se o jogador fica em xeque após o lance
 	        String xeque = jogo.verificaXeque();
-	        System.out.println("Verificando xeque: " + xeque);
+	        //System.out.println("Verificando xeque: " + xeque);
 	        
 	        // Desfazer o lance realizado
-	    	System.out.println("Desfazendo lance temporário. A origem é " + origem + " e o destino é " + lance.getCasaDestino());
+	    	//System.out.println("Desfazendo lance temporário. A origem é " + origem + " e o destino é " + lance.getCasaDestino());
 	        jogo.getTabuleiro().desfazerLance(origem, lance.getCasaDestino());
 	        //Tabuleiro.imprimeTabuleiro();
 	        
 	        if (!xeque.equals(this.cor)) {
 	            // O lance não deixa o jogador em xeque, adiciona à lista de lances sem xeque
-		    	System.out.println("adicionando " + lance + " à lista de lances sem xeque");
+		    	//System.out.println("adicionando " + lance + " à lista de lances sem xeque");
 	            lancesSemXeque.add(lance);
 	        }
 	    }
@@ -239,7 +240,7 @@ public abstract class Jogador {
 	//Método que substitui um peão por uma peça escolhida durante a promoção
 	public void promoverPeao(Peao peao, String pecaEscolhida) {
 		Casa casaPromocao = Tabuleiro.getCasa(peao.getPosicao().getColuna(), peao.getPosicao().getLinha());
-		System.out.println("////////////////////////////////////////////////////////////////////////// posicao peao: " + peao.getPosicao().getLinha() + " posicao casa promocao: " + casaPromocao);
+		//System.out.println("////////////////////////////////////////////////////////////////////////// posicao peao: " + peao.getPosicao().getLinha() + " posicao casa promocao: " + casaPromocao);
 		Tabuleiro.imprimeTabuleiro();
 		String corPecaNova = peao.getCor(); 
 		switch(pecaEscolhida) {

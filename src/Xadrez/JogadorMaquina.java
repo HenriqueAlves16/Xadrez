@@ -11,7 +11,7 @@ public class JogadorMaquina extends Jogador {
 	
 	@Override
 	public Lance fazJogada(Peca peca, Casa casa) {
-		System.out.println("xeque maquina:" + getJogo().verificaXeque());
+		//System.out.println("xeque maquina:" + getJogo().verificaXeque());
 		Peca pecaSelecionada;
 		Casa casaOrigem;
 		Casa casaDestino;
@@ -49,14 +49,14 @@ public class JogadorMaquina extends Jogador {
 			if(lancesEspeciais.size() > 0) {
 				int numeroAleatorioSpc = random.nextInt(lancesEspeciais.size());
 				Lance lanceSpcAleatorio = getLancesEspeciais().get(numeroAleatorioSpc);
-				System.out.println("Lance Especial candidato: " + lanceSpcAleatorio);
+				//System.out.println("Lance Especial candidato: " + lanceSpcAleatorio);
 				
 				//Escolhe um lance normal ou especial:
 				n = random.nextInt(2);
 				lanceEscolhido = (n == 0) ? lanceNormalAleatorio : lanceSpcAleatorio;
 			}
 			
-			System.out.println("//////////Lance Escolhido://///////// " + lanceEscolhido);
+			//System.out.println("//////////Lance Escolhido://///////// " + lanceEscolhido);
 			
 			pecaSelecionada = lanceEscolhido.getPecaMovida();
 			casaOrigem = pecaSelecionada.getPosicao();

@@ -30,7 +30,7 @@ public class Rei extends Peca implements MovableSpc{
 		this.lancesEspeciais = lancesEspeciais;
 	}
 	
-	public int lancesValidos() {
+	public int casasBase() {
 		ArrayList<Casa> lancesValidos = new ArrayList<Casa>();
 		ArrayList<Casa> casasAtacadas = new ArrayList<Casa>();
 	    ArrayList<Peca> capturasValidas = new ArrayList<Peca>();
@@ -71,24 +71,13 @@ public class Rei extends Peca implements MovableSpc{
 	    }
 	   
 	    this.setCasasAtacadas(casasAtacadas);
-	    this.setLancesPossiveis(lancesValidos);
+	    this.setCasasBase(lancesValidos);
 	    this.setCapturasPossiveis(capturasValidas);
 	    
 	    // System.out.println("Lances válidos para o rei " + getCor() + " após atualização: " + getLancesPossiveis());
 	    return lancesValidos.size();
 	}
 
-	public ArrayList<Casa> casasValidas() {
-		ArrayList<Casa> casasValidas = new ArrayList<Casa>();
-		Jogador jogadorCorrespondente = ("branco".equals(getCor())) ? getJogo().getJogadorBranco() : getJogo().getJogadorPreto();
-		for(Casa casa : getLancesPossiveis()) {
-			if(jogadorCorrespondente.lanceMantemReiProtegido(this, casa)) {
-				casasValidas.add(casa);
-			}
-		}
-		return casasValidas;
-	}
-	
 	public boolean casaInvalida(Casa casa, Jogador oponente) {
 		ArrayList<Casa> casasInvalidas = oponente.getCasasAtacadas();
 		for(int i = 0; i < casasInvalidas.size(); i++) {

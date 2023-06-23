@@ -138,7 +138,7 @@ public class Jogo {
 		    	try {
 		    		Peca peca = Tabuleiro.getTabuleiro()[l][c].getPeca();
 		    		if(peca.getCor().equals(cor)) {
-		    			peca.lancesValidos();
+		    			peca.casasBase();
 		    			if(peca instanceof Peao) {
 		    				((Peao)peca).movimentoEspecial(ultimoLance);
 		    			}	else if (peca instanceof Rei) {
@@ -176,35 +176,38 @@ public class Jogo {
 	//Arrumar situação de cravada
 	//Rei as vezes some com xeque
 	public void fazLance(Peca pecaSelecionada, Casa casaDestino) {
-		System.out.println(turno);
+		//System.out.println(turno);
 		if(turno.equals("branco")) {
     		setUltimoLance(getJogadorBranco().fazJogada(pecaSelecionada, casaDestino));
     	}	else	{
     		setUltimoLance(getJogadorPreto().fazJogada(pecaSelecionada, casaDestino));
     	}
-		System.out.println("ultimo lance: " + ultimoLance);
+		//System.out.println("ultimo lance: " + ultimoLance);
+		System.out.println("////////////// ACABOU O FAZLANCE " + getTabuleiro().test);
 		finalizaTurno();
 	}
 	
 	//Muda turno e faz o lance do computador, se esse for o caso
 	public void finalizaTurno() {
-		System.out.println("finalizando turno. Ultimo lance: " + ultimoLance);
+		//System.out.println("finalizando turno. Ultimo lance: " + ultimoLance);
 		if(ultimoLance.getPecaMovida() instanceof Rei) {
-			System.out.println("MOVIDO: " + ((Rei)ultimoLance.getPecaMovida()).getMovido());
+			//System.out.println("MOVIDO: " + ((Rei)ultimoLance.getPecaMovida()).getMovido());
 			((Rei)ultimoLance.getPecaMovida()).setMovido(true);
 		} else if(ultimoLance.getPecaMovida() instanceof Torre) {
-			System.out.println("MOVIDO: " + ((Torre)ultimoLance.getPecaMovida()).getMovido());
+			//System.out.println("MOVIDO: " + ((Torre)ultimoLance.getPecaMovida()).getMovido());
 			((Torre)ultimoLance.getPecaMovida()).setMovido(true);
 		}
-		
+		System.out.println("////////////// NAO EH LANCE ESPECIAL " + getTabuleiro().test);
+
 		if (ultimoLance != null) {
 			numeroLance++;
-			System.out.println("MUDANDO O TURNO! ANTES: " + turno);
+			//System.out.println("MUDANDO O TURNO! ANTES: " + turno);
 			String novoTurno = (turno.equals("branco")) ? "preto" : "branco";
 			setTurno(novoTurno);
-			System.out.println("DEPOIS: " + turno);
+			//System.out.println("DEPOIS: " + turno);
 			atualizaLancesECapturas();
-			System.out.println("turno finalizado");
+			System.out.println("////////////// ATUALIZOU LANCES E CAPTURAS " + getTabuleiro().test);
+			//System.out.println("turno finalizado");
 		}
 	}
 
@@ -214,7 +217,6 @@ public class Jogo {
 	public int verificaFim() {
 		Jogador jogadorBranco = getJogadorBranco();
 		Jogador jogadorPreto = getJogadorPreto();
-		Jogador jogadorAtivo = getJogadorAtivo();
 		
 		//Xeque-Mate:
 		if(turno.equals("preto") && verificaXeque().equals("preto")) {
@@ -259,7 +261,7 @@ public class Jogo {
 		            } else if (peca instanceof Bispo && peca.getCor().equals("preto")) {
 		                bisposPretos++;
 		            } else if (!(peca instanceof Rei)) {
-		            	System.out.println(peca.getPosicao());
+		            	//System.out.println(peca.getPosicao());
 		                outrasPecas = true; //Define a variável de controle como true para interromper o loop
 		                break;
 		            }

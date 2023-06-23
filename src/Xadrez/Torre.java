@@ -23,7 +23,7 @@ public class Torre extends Peca {
 		this.movido = movido;
 	}
 
-	public int lancesValidos() {
+	public int casasBase() {
 	    ArrayList<Casa> lancesValidos = new ArrayList<Casa>();
 		ArrayList<Casa> casasAtacadas = new ArrayList<Casa>();
 	    ArrayList<Peca> capturasValidas = new ArrayList<Peca>();
@@ -93,23 +93,12 @@ public class Torre extends Peca {
 	        }
 	    }
 	    
-	    this.setLancesPossiveis(lancesValidos);
+	    this.setCasasBase(lancesValidos);
 	    this.setCapturasPossiveis(capturasValidas);
 	    this.setCasasAtacadas(casasAtacadas);
 	    return lancesValidos.size();
 	}
 	
-	public ArrayList<Casa> casasValidas() {
-		ArrayList<Casa> casasValidas = new ArrayList<Casa>();
-		Jogador jogadorCorrespondente = ("branco".equals(getCor())) ? getJogo().getJogadorBranco() : getJogo().getJogadorPreto();
-		for(Casa casa : getLancesPossiveis()) {
-			if(jogadorCorrespondente.lanceMantemReiProtegido(this, casa)) {
-				casasValidas.add(casa);
-			}
-		}
-		return casasValidas;
-	}
-
 	public static String getImagePath(String cor) {
 		if(cor.equals("branco")) {
 			return "Imagens/w_rook_png_128px.png";

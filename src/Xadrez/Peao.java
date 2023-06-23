@@ -35,7 +35,7 @@ public class Peao extends Peca implements MovableSpc{
 		this.lancesEspeciais = lancesEspeciais;
 	}
 	
-	public int lancesValidos() {
+	public int casasBase() {
 	    ArrayList<Casa> lancesValidos = new ArrayList<Casa>();
 	    ArrayList<Casa> casasAtacadas = new ArrayList<Casa>();
 	    ArrayList<Peca> capturasValidas = new ArrayList<Peca>();
@@ -82,7 +82,7 @@ public class Peao extends Peca implements MovableSpc{
 		    }
 		} catch(IndexOutOfBoundsException e) {}
 	    
-	    this.setLancesPossiveis(lancesValidos);
+	    this.setCasasBase(lancesValidos);
 	    this.setCasasAtacadas(casasAtacadas);
 	    this.setCapturasPossiveis(capturasValidas);
 	    return lancesValidos.size();
@@ -115,17 +115,6 @@ public class Peao extends Peca implements MovableSpc{
 	        }
 			setLancesEspeciais(enPassants);
 		}
-	}
-	
-	public ArrayList<Casa> casasValidas() {
-		ArrayList<Casa> casasValidas = new ArrayList<Casa>();
-		Jogador jogadorCorrespondente = ("branco".equals(getCor())) ? getJogo().getJogadorBranco() : getJogo().getJogadorPreto();
-		for(Casa casa : getLancesPossiveis()) {
-			if(jogadorCorrespondente.lanceMantemReiProtegido(this, casa)) {
-				casasValidas.add(casa);
-			}
-		}
-		return casasValidas;
 	}
 
 	public String getImagePath() {
