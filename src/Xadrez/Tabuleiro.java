@@ -254,7 +254,6 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
         	desenhaLancesPossiveis(pecaClicada, g);
         }
         desenhaPecas(g);
-        setPecaClicada(null);
         desenhaPecaArrastada(g);      
 	}
 	
@@ -316,20 +315,24 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
 	
 	//Método que desenha as casas atacadas por uma peça selecionada
 	public void desenhaLancesPossiveis(Peca peca, Graphics g) {
-		System.out.println("////////////// DESENHANDO LANCES POSSIVEIS" + test);
+		//System.out.println("////////////// DESENHANDO LANCES POSSIVEIS" + test);
 		ArrayList<Casa> casasValidas = peca.casasValidas();
-		System.out.println("////////////// CASAS VALIDAS OBTIDAS " + test);
+		//System.out.println("////////////// CASAS VALIDAS OBTIDAS " + test);
 
 		//System.out.println("casas validas: " + casasValidas);
 		for(int i = 0; i < casasValidas.size(); i++) {
-			System.out.println("////////////// NOVA ITERAÇÃO " + i + ":" + test);
+			//System.out.println("////////////// NOVA ITERAÇÃO " + i + ":" + test);
 			Casa casa = casasValidas.get(i);
-			System.out.println("////////////// GUARDEI NOVA CASA VALIDA " + test);
+			//System.out.println("////////////// GUARDEI NOVA CASA VALIDA " + test);
 		    int y = (8 - casa.getLinha()) * TAMANHO_CASA;
 		    int x = (casa.getColuna() - 'a') * TAMANHO_CASA;
-			desenhaCasaDegrade(x, y, new Color(80, 144, 255), Color.white, g);
+		    if(casa.getPeca() == null) {
+		    	desenhaCasaDegrade(x, y, new Color(80, 144, 255), Color.white, g);
+		    }	else	{
+		    	desenhaCasaDegrade(x, y, new Color(255, 80, 80), Color.white, g);
+		    }
 		}
-		System.out.println("////////////// ACABEI O DESENHO!!!!! " + test);
+		//System.out.println("////////////// ACABEI O DESENHO!!!!! " + test);
 	}
 	
 	public void desenhaCasaDegrade(int x, int y, Color corBorda, Color corCentro, Graphics g) {
@@ -399,7 +402,7 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
 	@Override
     public void mouseReleased(MouseEvent e) { 
 		//tratar caso de soltar fora do tabuleiro
-		//try {
+		try {
 	        if(e.getX() < 8 * TAMANHO_CASA && e.getY() < 8 * TAMANHO_CASA && pecaSelecionada.getCor().equals(jogo.getTurno())){             //Permite movimento apenas dentro do tabuleiro e na vez do jogador correto ()poderia melhorar criando uma exceção
 	        	xReleased = e.getX();
 	        	yReleased = e.getY();
@@ -454,17 +457,9 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
 	            repaint();
 	            //imprimeTabuleiro();
 	        }
-		//} catch(NullPointerException t)	{}
+		} catch(NullPointerException t)	{}
 	    //System.out.println("mouseReleased finalizado");
         jogo.verificaFimDoJogo();
-        
-        if(jogo.getJogador2() instanceof JogadorMaquina) {
-        	do {
-	        	jogo.fazLance(null, null);
-	        	repaint();
-	        	jogo.verificaFimDoJogo();
-        	} while(jogo.getUltimoLance() == null);
-        }
     }
 	
     @Override
@@ -512,14 +507,46 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
 	    int y = e.getY();
 	    int linha = 8 - y / TAMANHO_CASA;
 	    char coluna = (char)((x / TAMANHO_CASA) + 'a');
-	    if(pecaClicada == getCasa(coluna, linha).getPeca()) {
-	    	setPecaClicada(null);
-	    }	else {
-		    pecaClicada = getCasa(coluna, linha).getPeca();
-	    }
+	    
 	    //System.out.println("casa clicada: " + getCasa(coluna, linha));
 	    //System.out.println("peca Clicada: " + pecaClicada + ", posicao: " + pecaClicada.getPosicao());
-	    repaint();
+	    
+	    if(e.getButton() == MouseEvent.BUTTON1 && pecaClicada != null){           				//Movimenta com o botão esquerdo
+        	Casa casaDestino = getCasa(coluna, linha);	
+        	Peca pecaSelecionada = pecaClicada;
+        	                
+            //Executa o movimento:
+            if(pecaSelecionada.getCasasBase().contains(casaDestino)){ //É lance normal
+            	jogo.fazLance(pecaSelecionada, casaDestino);
+            //É en passant
+            }	else if(pecaSelecionada instanceof Peao) {		
+            	ArrayList<Lance> lancesEspeciais = ((Peao)pecaSelecionada).getLancesEspeciais();
+            	for(int i = 0; i < lancesEspeciais.size(); i++) {	//Percorre os lances especiais do peão
+            		if(lancesEspeciais.get(i).getCasaDestino().toString().equals(casaDestino.toString())) {	//Lista de lances especiais contém a casa de destino
+            			jogo.fazLance(pecaSelecionada, casaDestino);
+            		}
+            	}
+            //É roque
+            }	else if(pecaSelecionada instanceof Rei) {
+            	ArrayList<Lance> lancesEspeciais = ((Rei)pecaSelecionada).getLancesEspeciais();
+            	try {
+                	for(int i = 0; i < lancesEspeciais.size(); i++) {	//Percorre os lances especiais do rei
+                		if(lancesEspeciais.get(i).getCasaDestino().toString().equals(casaDestino.toString())) {	//Lista de lances especiais contém a casa de destino
+                			jogo.fazLance(pecaSelecionada, casaDestino);
+                		}
+                	}
+            	} catch(ArrayIndexOutOfBoundsException g) {}
+            }
+        
+        }	else if(pecaClicada == getCasa(coluna, linha).getPeca()) {
+	    	setPecaClicada(null);
+	    }	else   {
+		    pecaClicada = getCasa(coluna, linha).getPeca();
+	    }
+	    
+        dragging = false;
+		//System.out.println("reimprimindo");
+        repaint();
     }
 
 }

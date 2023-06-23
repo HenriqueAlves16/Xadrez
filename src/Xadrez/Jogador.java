@@ -246,19 +246,23 @@ public abstract class Jogador {
 		switch(pecaEscolhida) {
 			case "Rainha":
 				Rainha novaRainha = new Rainha(corPecaNova, casaPromocao, Rainha.getImagePath(corPecaNova));
+				novaRainha.setJogo(jogo);
 				casaPromocao.setPeca(novaRainha);
 				//Tabuleiro.imprimeTabuleiro();
 				break;
 			case "Torre":
 				Torre novaTorre = new Torre(corPecaNova, casaPromocao, Torre.getImagePath(corPecaNova));
+				novaTorre.setJogo(jogo);
 				casaPromocao.setPeca(novaTorre);
 				break;
 			case "Bispo":
 				Bispo novoBispo = new Bispo(corPecaNova, casaPromocao, Bispo.getImagePath(corPecaNova));
+				novoBispo.setJogo(jogo);
 				casaPromocao.setPeca(novoBispo);
 				break;
 			case "Cavalo":
 				Cavalo novoCavalo = new Cavalo(corPecaNova, casaPromocao, Cavalo.getImagePath(corPecaNova));
+				novoCavalo.setJogo(jogo);
 				casaPromocao.setPeca(novoCavalo);
 				break;
 		}

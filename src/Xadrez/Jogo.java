@@ -183,12 +183,13 @@ public class Jogo {
     		setUltimoLance(getJogadorPreto().fazJogada(pecaSelecionada, casaDestino));
     	}
 		//System.out.println("ultimo lance: " + ultimoLance);
-		System.out.println("////////////// ACABOU O FAZLANCE " + getTabuleiro().test);
+		//System.out.println("////////////// ACABOU O FAZLANCE " + getTabuleiro().test);
 		finalizaTurno();
 	}
 	
 	//Muda turno e faz o lance do computador, se esse for o caso
 	public void finalizaTurno() {
+		tabuleiro.setPecaClicada(null);
 		//System.out.println("finalizando turno. Ultimo lance: " + ultimoLance);
 		if(ultimoLance.getPecaMovida() instanceof Rei) {
 			//System.out.println("MOVIDO: " + ((Rei)ultimoLance.getPecaMovida()).getMovido());
@@ -197,7 +198,7 @@ public class Jogo {
 			//System.out.println("MOVIDO: " + ((Torre)ultimoLance.getPecaMovida()).getMovido());
 			((Torre)ultimoLance.getPecaMovida()).setMovido(true);
 		}
-		System.out.println("////////////// NAO EH LANCE ESPECIAL " + getTabuleiro().test);
+		//System.out.println("////////////// NAO EH LANCE ESPECIAL " + getTabuleiro().test);
 
 		if (ultimoLance != null) {
 			numeroLance++;
@@ -206,7 +207,16 @@ public class Jogo {
 			setTurno(novoTurno);
 			//System.out.println("DEPOIS: " + turno);
 			atualizaLancesECapturas();
-			System.out.println("////////////// ATUALIZOU LANCES E CAPTURAS " + getTabuleiro().test);
+			
+			if(getJogador2() instanceof JogadorMaquina && turno.equals(jogador2.getCor())) {
+	        	do {
+		        	jogador2.fazJogada(null, null);
+		        	tabuleiro.repaint();
+		        	verificaFimDoJogo();
+	        	} while(getUltimoLance() == null);
+	        	finalizaTurno();
+	        }
+			//System.out.println("////////////// ATUALIZOU LANCES E CAPTURAS " + getTabuleiro().test);
 			//System.out.println("turno finalizado");
 		}
 	}
