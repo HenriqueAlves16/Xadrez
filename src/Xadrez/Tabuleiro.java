@@ -13,6 +13,7 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
 	private int xReleased, yReleased, xPressed, yPressed, mouseX, mouseY;
 	private boolean dragging;
 	private Peca pecaSelecionada;
+	private Casa casaSelecionada;
 	private Jogo jogo;
 	private Peca pecaTemp;
 	
@@ -61,6 +62,14 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
 		return tabuleiro[linha - 1][coluna - 'a'];
 	}
 	
+	public Casa getCasaSelecionada() {
+		return casaSelecionada;
+	}
+
+	public void setCasaSelecionada(Casa casaSelecionada) {
+		this.casaSelecionada = casaSelecionada;
+	}
+
 	//Método que inicializa um tabuleiro em sua configuração inicial:
 	public void inicializaTabuleiro(Casa[][] tabuleiro) {
 		//Torres:
@@ -224,15 +233,17 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
 	@Override
     public void paintComponent(Graphics g){
         super.paintComponent(g);                      
+        setSize(640,640);
 
         //Percorre tabuleiro
         for (int linha = 0; linha < 8; linha++){
         	for(char col = 0; col < 8; col++) {
-	            setVisible(true);                                                      
-	            setSize(640,640);
-	            
+	            setVisible(true);                                                                  
 	            //Pinta as casas
-	            if((linha + col) % 2 == 1) {
+	            if(casaSelecionada != null && casaSelecionada.equals(getCasa((char)('a' + col), linha + 1))) {
+	            	g.setColor(Color.YELLOW);
+		            g.fillRect(col * TAMANHO_CASA, linha * TAMANHO_CASA, TAMANHO_CASA, TAMANHO_CASA);               
+	            }   else if((linha + col) % 2 == 1) {
 		            g.setColor(Color.GRAY);                                     
 		            g.fillRect(col * TAMANHO_CASA, linha * TAMANHO_CASA, TAMANHO_CASA, TAMANHO_CASA);               
 	            }	else	{
@@ -372,7 +383,6 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
     	//} catch(NullPointerException t) {}
     }	
     
-	//Métodos que devem ser "implementados" devido à interface
     @Override
     public void mouseEntered(MouseEvent e) { }
 
@@ -380,7 +390,20 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
     public void mouseExited(MouseEvent e) { }
 
     @Override
-    public void mouseMoved(MouseEvent e) { }
+    public void mouseMoved(MouseEvent e) {    	
+	    int x = e.getX();
+	    int y = e.getY();
+	    int linha = y / TAMANHO_CASA;
+	    int coluna = x / TAMANHO_CASA;
+	    
+	    //Verifique se as coordenadas do mouse estão dentro do tabuleiro
+	    if (linha >= 0 && linha < 8 && coluna >= 0 && coluna < 8) {
+	        //Atualize a aparência da casa correspondente
+	        Casa casaSelecionada = tabuleiro[linha][coluna];
+	        setCasaSelecionada(casaSelecionada);
+	        repaint();
+	    }
+    } 
 
     @Override
     public void mouseClicked(MouseEvent e) { }

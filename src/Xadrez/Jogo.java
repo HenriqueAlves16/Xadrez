@@ -1,6 +1,7 @@
 package Xadrez;
 import java.io.FileWriter;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -289,19 +290,43 @@ public class Jogo {
 
         // Exiba a mensagem adequada com base no resultado
         if (resultado == 10) {
-            JOptionPane.showMessageDialog(null, "XEQUE MATE! O jogador branco venceu!");
-            System.exit(0);
+            int opcao = JOptionPane.showOptionDialog(null, "XEQUE MATE! O jogador branco venceu!", "Fim de Jogo", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"Jogar Novamente", "Sair"}, null);
+            verificaOpcaoFimDeJogo(opcao);
         } else if (resultado == -10) {
-            JOptionPane.showMessageDialog(null, "XEQUE MATE! O jogador preto venceu!");
-            System.exit(0);
+        	int opcao = JOptionPane.showOptionDialog(null, "XEQUE MATE! O jogador preto venceu!", "Fim de Jogo", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"Jogar Novamente", "Sair"}, null);
+            verificaOpcaoFimDeJogo(opcao);
         } else if (resultado == -1) {
-            JOptionPane.showMessageDialog(null, "O jogo terminou em empate por afogamento!");
-            System.exit(0);
+        	int opcao = JOptionPane.showOptionDialog(null, "O jogo terminou em empate por afogamento!", "Fim de Jogo", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"Jogar Novamente", "Sair"}, null);
+            verificaOpcaoFimDeJogo(opcao);
         } else if (resultado == 1) {
-            JOptionPane.showMessageDialog(null, "O jogo terminou em empate por material insuficiente!");
-            System.exit(0);
-        }	
+        	int opcao = JOptionPane.showOptionDialog(null, "O jogo terminou em empate por material insuficiente", "Fim de Jogo", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"Jogar Novamente", "Sair"}, null);
+            verificaOpcaoFimDeJogo(opcao);
+        }
 	}
+	
+	public static void verificaOpcaoFimDeJogo(int opcao) {        
+        // Verifica a opção escolhida
+        if (opcao == JOptionPane.YES_OPTION) {
+            reiniciarPrograma();
+        } else if (opcao == JOptionPane.NO_OPTION) {
+            System.exit(0);
+        }
+    }
+    
+    public static void reiniciarPrograma() {
+        // Reinicia o programa
+        String comando = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
+        String caminhoPrograma = Main.class.getCanonicalName();
+        try {
+            ProcessBuilder pb = new ProcessBuilder(comando, "-cp", System.getProperty("java.class.path"), caminhoPrograma);
+            pb.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+        // Encerra o programa atual
+        System.exit(0);
+    }
 	
 	//Método que verifica se o jogador de turno ativo está em xeque:
 	//Usar Enum:
