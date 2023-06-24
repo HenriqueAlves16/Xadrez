@@ -32,6 +32,10 @@ public class Jogo {
 		associacaoJogo();
 		//System.out.println("Atualizando os lances e capturas");
 		atualizaLancesECapturas();
+		
+		if(jogador2 instanceof JogadorMaquina && jogador2.getCor().equals("branco")) {
+			fazLance(null, null);
+		}
 	}
 	
 	//getters e setters:
@@ -119,6 +123,7 @@ public class Jogo {
 		}
 		jogador1.setJogo(this);
 		jogador2.setJogo(this);
+		tabuleiro.setOrientacao(jogador1.getCor());
 	}
 	
 	//Método que adiciona um lance na lista de lances:
@@ -214,6 +219,8 @@ public class Jogo {
 			
 			if(getJogador2() instanceof JogadorMaquina && turno.equals(jogador2.getCor())) {
 	        	do {
+	        		atualizaLancesECapturas();
+	            	verificaFimDoJogo();
 		        	setUltimoLance(jogador2.fazJogada(null, null));
 		        	tabuleiro.repaint();
 	        	} while(getUltimoLance() == null);
