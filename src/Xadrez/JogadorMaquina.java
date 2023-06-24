@@ -11,7 +11,7 @@ public class JogadorMaquina extends Jogador {
 	
 	@Override
 	public Lance fazJogada(Peca peca, Casa casa) {
-		//System.out.println("xeque maquina:" + getJogo().verificaXeque());
+		System.out.println("xeque maquina:" + getJogo().verificaXeque());
 		Peca pecaSelecionada;
 		Casa casaOrigem;
 		Casa casaDestino;

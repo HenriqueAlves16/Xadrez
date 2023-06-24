@@ -176,13 +176,13 @@ public class Jogo {
 	//Arrumar situação de cravada
 	//Rei as vezes some com xeque
 	public boolean fazLance(Peca pecaSelecionada, Casa casaDestino) {
-		//System.out.println(turno);
+		System.out.println("entrou em fazLance. Turno: " + turno);
 		if(turno.equals("branco")) {
     		setUltimoLance(getJogadorBranco().fazJogada(pecaSelecionada, casaDestino));
     	}	else	{
     		setUltimoLance(getJogadorPreto().fazJogada(pecaSelecionada, casaDestino));
     	}
-		//System.out.println("ultimo lance: " + ultimoLance);
+		System.out.println("///////////////ultimo lance: " + ultimoLance);
 		//System.out.println("////////////// ACABOU O FAZLANCE " + getTabuleiro().test);
 		finalizaTurno();
 		return (ultimoLance != null) ? true : false;
@@ -192,27 +192,29 @@ public class Jogo {
 	public void finalizaTurno() {
 		tabuleiro.setPecaClicada(null);
 		//System.out.println("finalizando turno. Ultimo lance: " + ultimoLance);
-		if(ultimoLance.getPecaMovida() instanceof Rei) {
-			//System.out.println("MOVIDO: " + ((Rei)ultimoLance.getPecaMovida()).getMovido());
-			((Rei)ultimoLance.getPecaMovida()).setMovido(true);
-		} else if(ultimoLance.getPecaMovida() instanceof Torre) {
-			//System.out.println("MOVIDO: " + ((Torre)ultimoLance.getPecaMovida()).getMovido());
-			((Torre)ultimoLance.getPecaMovida()).setMovido(true);
-		}
-		//System.out.println("////////////// NAO EH LANCE ESPECIAL " + getTabuleiro().test);
-
+		try {
+			if(ultimoLance.getPecaMovida() instanceof Rei) {
+				//System.out.println("MOVIDO: " + ((Rei)ultimoLance.getPecaMovida()).getMovido());
+				((Rei)ultimoLance.getPecaMovida()).setMovido(true);
+			} else if(ultimoLance.getPecaMovida() instanceof Torre) {
+				//System.out.println("MOVIDO: " + ((Torre)ultimoLance.getPecaMovida()).getMovido());
+				((Torre)ultimoLance.getPecaMovida()).setMovido(true);
+			}
+		}	catch(NullPointerException e) {}
+		//System.out.println("////////////// NAO EH LANCE roque " + getTabuleiro().test);
+		
 		if (ultimoLance != null) {
 			numeroLance++;
 			System.out.println("MUDANDO O TURNO! ANTES: " + turno);
 			String novoTurno = (turno.equals("branco")) ? "preto" : "branco";
 			setTurno(novoTurno);
-			//System.out.println("DEPOIS: " + turno);
+			System.out.println("DEPOIS: " + turno);
 			atualizaLancesECapturas();
         	verificaFimDoJogo();
 			
 			if(getJogador2() instanceof JogadorMaquina && turno.equals(jogador2.getCor())) {
 	        	do {
-		        	jogador2.fazJogada(null, null);
+		        	setUltimoLance(jogador2.fazJogada(null, null));
 		        	tabuleiro.repaint();
 	        	} while(getUltimoLance() == null);
 	        	finalizaTurno();
