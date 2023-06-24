@@ -152,7 +152,7 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
 			casaOrigem.setPeca(null);
 			peca.setPosicao(casaDestino);
 		}
-		imprimeTabuleiro();
+    	repaint();
 	}
 	
 	//Método que muda o tabuleiro temporariamente:
@@ -332,6 +332,16 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
 		    	desenhaCasaDegrade(x, y, new Color(255, 80, 80), Color.white, g);
 		    }
 		}
+		
+		if(peca instanceof MovableSpc) {
+			ArrayList<Lance> lancesEspeciais = ((MovableSpc)peca).getLancesEspeciais();
+			for(int i = 0; i < lancesEspeciais.size(); i++) {
+				Casa casa = lancesEspeciais.get(i).getCasaDestino();
+				int y = (8 - casa.getLinha()) * TAMANHO_CASA;
+			    int x = (casa.getColuna() - 'a') * TAMANHO_CASA;
+			    desenhaCasaDegrade(x, y, new Color(148, 114, 228), Color.white, g);
+			}
+		}
 		//System.out.println("////////////// ACABEI O DESENHO!!!!! " + test);
 	}
 	
@@ -381,10 +391,7 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
 	        g.setClip(null);
 	    }
 	}
-	
 
-    
-	
 	//Evento em que o mouse é pressionado
 	@Override
     public void mousePressed(MouseEvent e) {
@@ -507,6 +514,7 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
 	    int y = e.getY();
 	    int linha = 8 - y / TAMANHO_CASA;
 	    char coluna = (char)((x / TAMANHO_CASA) + 'a');
+    	boolean fezLance = false;
 	    
 	    //System.out.println("casa clicada: " + getCasa(coluna, linha));
 	    //System.out.println("peca Clicada: " + pecaClicada + ", posicao: " + pecaClicada.getPosicao());
@@ -517,13 +525,13 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
         	                
             //Executa o movimento:
             if(pecaSelecionada.getCasasBase().contains(casaDestino)){ //É lance normal
-            	jogo.fazLance(pecaSelecionada, casaDestino);
+            	fezLance = jogo.fazLance(pecaSelecionada, casaDestino);
             //É en passant
             }	else if(pecaSelecionada instanceof Peao) {		
             	ArrayList<Lance> lancesEspeciais = ((Peao)pecaSelecionada).getLancesEspeciais();
             	for(int i = 0; i < lancesEspeciais.size(); i++) {	//Percorre os lances especiais do peão
             		if(lancesEspeciais.get(i).getCasaDestino().toString().equals(casaDestino.toString())) {	//Lista de lances especiais contém a casa de destino
-            			jogo.fazLance(pecaSelecionada, casaDestino);
+            			fezLance = jogo.fazLance(pecaSelecionada, casaDestino);
             		}
             	}
             //É roque
@@ -532,13 +540,15 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
             	try {
                 	for(int i = 0; i < lancesEspeciais.size(); i++) {	//Percorre os lances especiais do rei
                 		if(lancesEspeciais.get(i).getCasaDestino().toString().equals(casaDestino.toString())) {	//Lista de lances especiais contém a casa de destino
-                			jogo.fazLance(pecaSelecionada, casaDestino);
+                			fezLance = jogo.fazLance(pecaSelecionada, casaDestino);
                 		}
                 	}
             	} catch(ArrayIndexOutOfBoundsException g) {}
             }
-        
-        }	else if(pecaClicada == getCasa(coluna, linha).getPeca()) {
+            jogo.verificaFimDoJogo();
+        }
+	    System.out.println("fez lance: " + fezLance);
+	    if(fezLance || pecaClicada == getCasa(coluna, linha).getPeca()) {
 	    	setPecaClicada(null);
 	    }	else   {
 		    pecaClicada = getCasa(coluna, linha).getPeca();

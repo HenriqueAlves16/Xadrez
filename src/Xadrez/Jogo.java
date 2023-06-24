@@ -175,7 +175,7 @@ public class Jogo {
 	//Método que faz uma jogada a partir da peça selecionada
 	//Arrumar situação de cravada
 	//Rei as vezes some com xeque
-	public void fazLance(Peca pecaSelecionada, Casa casaDestino) {
+	public boolean fazLance(Peca pecaSelecionada, Casa casaDestino) {
 		//System.out.println(turno);
 		if(turno.equals("branco")) {
     		setUltimoLance(getJogadorBranco().fazJogada(pecaSelecionada, casaDestino));
@@ -185,6 +185,7 @@ public class Jogo {
 		//System.out.println("ultimo lance: " + ultimoLance);
 		//System.out.println("////////////// ACABOU O FAZLANCE " + getTabuleiro().test);
 		finalizaTurno();
+		return (ultimoLance != null) ? true : false;
 	}
 	
 	//Muda turno e faz o lance do computador, se esse for o caso
@@ -202,17 +203,17 @@ public class Jogo {
 
 		if (ultimoLance != null) {
 			numeroLance++;
-			//System.out.println("MUDANDO O TURNO! ANTES: " + turno);
+			System.out.println("MUDANDO O TURNO! ANTES: " + turno);
 			String novoTurno = (turno.equals("branco")) ? "preto" : "branco";
 			setTurno(novoTurno);
 			//System.out.println("DEPOIS: " + turno);
 			atualizaLancesECapturas();
+        	verificaFimDoJogo();
 			
 			if(getJogador2() instanceof JogadorMaquina && turno.equals(jogador2.getCor())) {
 	        	do {
 		        	jogador2.fazJogada(null, null);
 		        	tabuleiro.repaint();
-		        	verificaFimDoJogo();
 	        	} while(getUltimoLance() == null);
 	        	finalizaTurno();
 	        }
