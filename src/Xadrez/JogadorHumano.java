@@ -130,9 +130,10 @@ public class JogadorHumano extends Jogador {
 	
 	public void promocao(Peao peao) {
 		if ((peao.getCor().equals("branco") && peao.getPosicao().getLinha() == 8) || (peao.getCor().equals("preto") && peao.getPosicao().getLinha() == 1)) {
-		        // Crie a caixa de diálogo personalizada
-		        PromocaoDialog dialog = new PromocaoDialog(peao, this);
-		        dialog.setVisible(true);
+			getJogo().getTabuleiro().repaint();
+	        // Crie a caixa de diálogo personalizada
+	        PromocaoDialog dialog = new PromocaoDialog(peao, this);
+	        dialog.setVisible(true);
 		}
 	}
 

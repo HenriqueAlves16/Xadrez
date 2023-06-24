@@ -89,6 +89,7 @@ public class JogadorMaquina extends Jogador {
 	
 	public void promocao(Peao peao) {
 		if ((peao.getCor().equals("branco") && peao.getPosicao().getLinha() == 8) || (peao.getCor().equals("preto") && peao.getPosicao().getLinha() == 1)) {
+			getJogo().getTabuleiro().repaint();
 			Random random = new Random();
 			int prob = random.nextInt(100);	//Numero aleatório que define para qual peça a promoção ocorrerá
 			if(prob < 2) {

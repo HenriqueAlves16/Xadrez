@@ -19,6 +19,7 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
 	private Peca pecaTemp;
 	public int test = 0;
 	
+	
 	//Inicializa o tabuleiro na configuração inicial
 	Tabuleiro(){
 		this.addMouseListener(this);                
@@ -244,7 +245,7 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
     public void paintComponent(Graphics g){
 		System.out.println("repaint: " + des++);
         super.paintComponent(g);                
-        setSize(640,640);
+        setSize(600,600);
         
         desenhaCasas(g);
         desenhaUltimoLance(g);
@@ -256,7 +257,12 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
         }
         acusaXeque(g);
         desenhaPecas(g);
-        desenhaPecaArrastada(g);      
+        if(mouseX < 600 && mouseY < 600 && mouseX > 0 && mouseY > 0) {
+        	desenhaPecaArrastada(g);
+        }	else	{
+        	dragging = false;
+        	desenhaPecas(g);
+        }
 	}
 	
 	//Método que pinta a casa do rei se ele está em xeque
@@ -318,7 +324,7 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
             	imagem = pecaSelecionada.getResizedIcon().getImage();
             	pecaSelecionada.setVisible(false);
             	g.drawImage(imagem, mouseX - imagem.getWidth(pecaSelecionada) / 2, mouseY - imagem.getHeight(pecaSelecionada) / 2, this);	//posiciona o centro da peça no mouse
-            }	catch(NullPointerException e)	{}
+            }	catch(NenhumaPecaSelecionadaException e)	{}
         }
 	}
 	
@@ -487,21 +493,26 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
 	            repaint();
 	            //imprimeTabuleiro();
 	        }
-		} catch(NullPointerException t)	{}
+		} catch(NullPointerException t)	{
+			
+		} catch(ArrayIndexOutOfBoundsException exc2) {}
 	    //System.out.println("mouseReleased finalizado");
         jogo.verificaFimDoJogo();
     }
 	
     @Override
     public void mouseDragged(MouseEvent e) {
-    	//try {
+    	try {
+    		if(pecaSelecionada == null) {
+    			throw new NenhumaPecaSelecionadaException();
+    		}
 	    	if(pecaSelecionada.getCor().equals(jogo.getTurno())) {
 		    	mouseX = e.getX();
 		        mouseY = e.getY();
 		        dragging = true;
 		        repaint();
 	    	}
-    	//} catch(NullPointerException t) {}
+    	} catch(NenhumaPecaSelecionadaException exc) {}
     }	
     
     @Override
@@ -520,15 +531,17 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
 	    int y = e.getY();
 	    int linha = 7 - y / TAMANHO_CASA;
 	    int coluna = x / TAMANHO_CASA;
-        Casa casaMouse = tabuleiro[linha][coluna];
-	    
-	    //Verifique se as coordenadas do mouse estão dentro do tabuleiro
-	    if (!casaMouse.equals(getCasaSelecionada()) && linha >= 0 && linha < 8 && coluna >= 0 && coluna < 8) {
-	        //Atualize a aparência da casa correspondente
-	        setCasaSelecionada(casaMouse);
-	        repaint();
-	    }
-    } 
+	    try {
+	        Casa casaMouse = tabuleiro[linha][coluna];
+		    
+		    //Verifique se as coordenadas do mouse estão dentro do tabuleiro
+		    if (!casaMouse.equals(getCasaSelecionada()) && linha >= 0 && linha < 8 && coluna >= 0 && coluna < 8) {
+		        //Atualize a aparência da casa correspondente
+		        setCasaSelecionada(casaMouse);
+		        repaint();
+		    }
+	    }	catch(IndexOutOfBoundsException exc) {}
+    }
 
     @Override
     public void mouseClicked(MouseEvent e) {
@@ -585,7 +598,14 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
     	if(fezLance || pecaClicada == casaClicada.getPeca()) {
 	    	setPecaClicada(null);
 	    }	else   {
-		    pecaClicada = casaClicada.getPeca();
+	    	try {
+	    		pecaClicada = casaClicada.getPeca();
+	    		if(!pecaClicada.getCor().equals(jogo.getTurno())) {
+	    			throw new PecaOponenteSelecionadaException();
+	    		}
+	    	}	catch(PecaOponenteSelecionadaException exc) {
+	    		setPecaClicada(null);
+	    	}
 	    }
 	    	
 		System.out.println("fez lance: " + fezLance);
