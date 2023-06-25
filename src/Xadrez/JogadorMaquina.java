@@ -12,6 +12,7 @@ public class JogadorMaquina extends Jogador {
 	@Override
 	public Lance fazJogada(Peca peca, Casa casa) {
 		System.out.println("xeque maquina:" + getJogo().verificaXeque());
+		Tabuleiro.imprimeTabuleiro();
 		Peca pecaSelecionada;
 		Casa casaOrigem;
 		Casa casaDestino;
@@ -81,10 +82,13 @@ public class JogadorMaquina extends Jogador {
 			String texto = (getCor().equals("branco")) ? Lance.escreveLance(pecaSelecionada, casaDestino, getJogo().getNumeroLance()) : Lance.escreveLance(pecaSelecionada, casaDestino);
 			Lance.escreveNoArquivo(texto);
 			
+			System.out.println("lance máquina ok");
+			Tabuleiro.imprimeTabuleiro();
 			//System.out.println("MAQUINA: Peca selecionada: " + pecaSelecionada + "origem: " + casaOrigem + "casaDestino: " + casaDestino);
 			return new Lance(pecaSelecionada, casaDestino, casaOrigem);
 		}
-		return null;
+		System.out.println("chamada recursiva");
+		return fazJogada(null, null);
 	}
 	
 	public void promocao(Peao peao) {

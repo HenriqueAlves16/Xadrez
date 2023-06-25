@@ -162,30 +162,34 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
 			casaOrigem.setPeca(null);
 			peca.setPosicao(casaDestino);
 		}
-    	repaint();
+    	//repaint();
 	}
 	
 	//Método que muda o tabuleiro temporariamente:
-	public void mudaTabuleiroTemp(Casa casaOrigem, Casa casaDestino) {
+	public boolean mudaTabuleiroTemp(Casa casaOrigem, Casa casaDestino) {
 		Peca peca = casaOrigem.getPeca();
 		pecaTemp = casaDestino.getPeca();
-		//System.out.println("peça temp antes movimento: " + pecaTemp);
-	    
+		System.out.println("peça temp antes movimento: " + pecaTemp);
+		System.out.println("peca: " + peca);
+	    System.out.println("casasBase: " + peca.getCasasBase());
 	    if (peca.getCasasBase().contains(casaDestino)) {
-	    	//System.out.println("casa de destino válida");
+	    	System.out.println("casa de destino válida");
 	        casaDestino.setPeca(peca);
-	    	//System.out.println("casa de destino com a peça " + casaDestino.getPeca());
+	    	System.out.println("casa de destino com a peça " + casaDestino.getPeca());
 	        casaOrigem.setPeca(null);
-	    	//System.out.println("casa de origem vazia: " + casaOrigem.getPeca());
+	    	System.out.println("casa de origem vazia: " + casaOrigem.getPeca());
 	    	
 	        peca.setPosicao(casaDestino);
+	        return true;
 	    }
 	   // imprimeTabuleiro();
-		//System.out.println("peça temp após movimento: " + pecaTemp);
+		System.out.println("peça temp após movimento: " + pecaTemp);
+		return false;
 	}
 
 	//Método que volta o tabuleiro ao estado anterior após uma mudança temporária:
 	public void desfazerLance(Casa casaOrigem, Casa casaDestino) {
+	    System.out.println("desfazendo. Casa Origem: " + casaOrigem + " peça na casaOrigem: " + casaOrigem.getPeca() + " casaDestino: " + casaDestino + " peca na casaDestino " + casaDestino.getPeca() + " " + test++);
 	    //System.out.println("casa destino: " + casaDestino + casaDestino.getPeca());
 		casaOrigem.setPeca(casaDestino.getPeca());
 	    //System.out.println("casa origem: " + casaOrigem + casaOrigem.getPeca());
@@ -201,11 +205,7 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
 		}
 		
 	    //imprimeTabuleiro();
-	    System.out.println("desfeito " + casaOrigem.getPeca() + test++);
-	    try {
-			//System.out.println("posicao peca casa origem" + casaOrigem.getPeca().getPosicao());
-			//System.out.println("posicao peca casa destino" + casaDestino.getPeca().getPosicao());
-	    } catch(NullPointerException e) {}
+	    System.out.println("desfeito. Casa Origem: " + casaOrigem + " peça na casaOrigem: " + casaOrigem.getPeca() + " casaDestino: " + casaDestino + " peca na casaDestino " + casaDestino.getPeca() + " " + test++);
 	}
 	
 	//Método que muda o tabuleiro a partir de um lance especial:
@@ -260,7 +260,7 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
         desenhaUltimoLance(g);
         if(casaSelecionada != null) {
         	int x = (orientacao.equals("branco")) ? ((casaSelecionada.getColuna() - 'a') * TAMANHO_CASA) : ((7 - (casaSelecionada.getColuna() - 'a')) * TAMANHO_CASA);
-        	int y = (orientacao.equals("branco")) ? (8 - casaSelecionada.getLinha()) : ((casaSelecionada.getLinha() - 1) * TAMANHO_CASA);
+        	int y = (orientacao.equals("branco")) ? ((8 - casaSelecionada.getLinha()) * TAMANHO_CASA) : ((casaSelecionada.getLinha() - 1) * TAMANHO_CASA);
         	desenhaCasaDegrade(x, y, Color.black, Color.white, g);
         }
         if(pecaClicada != null) {
@@ -625,7 +625,7 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
 	    		}
 	    	}	catch(PecaOponenteSelecionadaException exc) {
 	    		setPecaClicada(null);
-	    	}
+	    	}	catch(NullPointerException exc2) {}
 	    }
 	    	
 		System.out.println("fez lance: " + fezLance);

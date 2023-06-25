@@ -53,8 +53,9 @@ public class Rei extends Peca implements MovableSpc{
 	    			Casa casa = Tabuleiro.getCasa(c, l);
 		    		//System.out.println("rei " + getCor() + " iterando na casa " + casa);
 		    		
-	    			casasAtacadas.add(casa);
-	    			
+	    			//if(!casa.equals(getPosicao())) {
+	    				casasAtacadas.add(casa);
+	    			//}
 	    			//System.out.println("casa " + casa + " adicionada na lista de casas atacadas");
 	    			//System.out.println("casa " + casa + " inválida: " + casaInvalida(casa, oponente));
 	    			
@@ -80,6 +81,7 @@ public class Rei extends Peca implements MovableSpc{
 
 	public boolean casaInvalida(Casa casa, Jogador oponente) {
 		ArrayList<Casa> casasInvalidas = oponente.getCasasAtacadas();
+		System.out.println("casas inválidas para o " + this.toString() + ": " + casasInvalidas);
 		for(int i = 0; i < casasInvalidas.size(); i++) {
 			//System.out.println(casasInvalidas.get(i) + " //// " + casa);
 			if(casasInvalidas.get(i).toString().equals(casa.toString())) {
