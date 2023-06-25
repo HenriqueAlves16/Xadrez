@@ -159,8 +159,8 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
 			casaDestino.setPeca(peca);
 			casaOrigem.setPeca(null);
 			peca.setPosicao(casaDestino);
+			repaint();
 		}
-    	//repaint();
 	}
 	
 	//Método que muda o tabuleiro temporariamente:

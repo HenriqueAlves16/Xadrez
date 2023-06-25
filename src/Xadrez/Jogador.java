@@ -80,11 +80,13 @@ public abstract class Jogador {
 	public boolean lanceMantemReiProtegido(Peca peca, Casa casaDestino) {
 		boolean reiProtegido; 
 		Casa casaOrigem = peca.getPosicao();
-		getJogo().getTabuleiro().mudaTabuleiroTemp(casaOrigem, casaDestino);
-		jogo.atualizaLancesECapturas();
-		reiProtegido = (getJogo().verificaXeque().equals(this.getCor())) ? false : true;
-		getJogo().getTabuleiro().desfazerLance(casaOrigem, casaDestino);
-		jogo.atualizaLancesECapturas();
+		
+		getJogo().getTabuleiro().mudaTabuleiroTemp(casaOrigem, casaDestino);		//Muda o tabuleiro temporariamente
+		jogo.atualizaLancesECapturas();		//Atualiza os lances e capturas de cada peça no estado temporário
+		reiProtegido = (getJogo().verificaXeque().equals(this.getCor())) ? false : true;		//verifica se o rei está em xeque ou protegido
+		getJogo().getTabuleiro().desfazerLance(casaOrigem, casaDestino);	//Desfaz o lance temporário
+		jogo.atualizaLancesECapturas();		//Atualiza os lances e capturas no estado original
+		
 		return reiProtegido;
 	}
 	
