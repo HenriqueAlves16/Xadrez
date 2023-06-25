@@ -1,30 +1,22 @@
 package Xadrez;
 
 import java.util.ArrayList;
-
 import javax.swing.ImageIcon;
 
 public class Bispo extends Peca {
+	private static final long serialVersionUID = 1L;
+
+	//Construtor:
 	public Bispo(String cor, Casa posicao, String path) {
 		super(cor, posicao, path);
 	}
 	
-	public static String getImagePath(String cor) {
-		if(cor.equals("branco")) {
-			return "Imagens/w_bishop_png_128px.png";
-		}	else	{
-			return "Imagens/b_bishop_png_128px.png";		
-		}
+	//toString():
+	@Override
+	public String toString() {
+		return super.toString() + "B";
 	}
-	
-	public static ImageIcon getResizedIcon(String cor) {
-		Bispo bispoBranco = new Bispo("branco", null, getImagePath("branco"));
-		Bispo bispoPreto = new Bispo("preto", null, getImagePath("preto"));
-		ImageIcon resizedIcon = (cor.equals("branco")) ? bispoBranco.getResizedIcon() : bispoPreto.getResizedIcon();
-		
-		return resizedIcon;
-	}
-	
+
 	public int casasBase() {
 	    ArrayList<Casa> lancesValidos = new ArrayList<Casa>();
 	    ArrayList<Peca> capturasValidas = new ArrayList<Peca>();
@@ -104,11 +96,20 @@ public class Bispo extends Peca {
 	    this.setCasasAtacadas(casasAtacadas);
 	    return lancesValidos.size();
 	}
-
 	
-	@Override
-	public String toString() {
-		return super.toString() + "B";
+	public static String getImagePath(String cor) {
+		if(cor.equals("branco")) {
+			return "Imagens/w_bishop_png_128px.png";
+		}	else	{
+			return "Imagens/b_bishop_png_128px.png";		
+		}
 	}
-
+	
+	public static ImageIcon getResizedIcon(String cor) {
+		Bispo bispoBranco = new Bispo("branco", null, getImagePath("branco"));
+		Bispo bispoPreto = new Bispo("preto", null, getImagePath("preto"));
+		ImageIcon resizedIcon = (cor.equals("branco")) ? bispoBranco.getResizedIcon() : bispoPreto.getResizedIcon();
+		
+		return resizedIcon;
+	}
 }

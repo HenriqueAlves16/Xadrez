@@ -10,7 +10,7 @@ public class Lance {
 	private Casa casaOrigem;
 	private Casa casaDestino;
 	private int numeroLance;
-	private static File file = new File("Texto.txt");;
+	private static final File FILE = new File("Texto.txt");;
 	
 	public Lance(Peca pecaMovida, Casa casaDestino, int numeroLance) {
 		this.pecaMovida = pecaMovida;
@@ -63,17 +63,13 @@ public class Lance {
 	public void setCasaOrigem(Casa casaOrigem) {
 		this.casaOrigem = casaOrigem;
 	}
-
-	public static String escreveLance(Peca pecaBrancaMovida, Casa casaDestinoBranco, Peca pecaPretaMovida, Casa casaDestinoPreto, int numeroLance) {
-		String lance = "";
-		lance += numeroLance + ". ";
-		lance += pecaBrancaMovida.toString() + casaDestinoBranco.toString() + " ";
-		lance += pecaPretaMovida.toString() + casaDestinoPreto.toString() + " ";
-		
-		//1. e4 c5 2. Nf3 Nc6 3. g3 g6 4. Bg2 Bg7 5. d3 d6 6. O-O Nf6 7. c3 Bg4 8. h3 Bd7 9. Be3 Qc8 10. Kh2 h5
-		return lance;
-	}
 	
+	//toString():
+	@Override
+	public String toString() {
+		return pecaMovida + " from " + casaOrigem + " to " + casaDestino;
+	}
+
 	public static String escreveLance(Peca pecaBrancaMovida, Casa casaDestinoBranco, int numeroLance) {
 		String lance = "";
 		lance += numeroLance + ". ";
@@ -86,13 +82,12 @@ public class Lance {
 		String lance = "";
 		lance += pecaPretaMovida.toString() + casaDestinoPreto.toString() + " ";
 		
-		//1. e4 c5 2. Nf3 Nc6 3. g3 g6 4. Bg2 Bg7 5. d3 d6 6. O-O Nf6 7. c3 Bg4 8. h3 Bd7 9. Be3 Qc8 10. Kh2 h5
 		return lance;
 	}
 	
 	public static void escreveNoArquivo(String texto) {
 	    try {
-	        FileWriter fileWriter = new FileWriter(file, true); // O segundo parâmetro 'true' indica que será feita uma escrita em modo de acréscimo
+	        FileWriter fileWriter = new FileWriter(FILE, true); // O segundo parâmetro 'true' indica que será feita uma escrita em modo de acréscimo
 	        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 	        bufferedWriter.write(texto);
 	        bufferedWriter.close();
@@ -100,14 +95,5 @@ public class Lance {
 	    } catch (IOException e) {
 	        System.out.println("Erro ao escrever no arquivo: " + e.getMessage());
 	    }
-	}
-
-
-	@Override
-	public String toString() {
-		return pecaMovida + " from " + casaOrigem + " to " + casaDestino;
-	}
-	
-	
-	
+	}	
 }

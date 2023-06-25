@@ -1,30 +1,23 @@
 package Xadrez;
-import java.io.FileWriter;
-import java.io.BufferedWriter;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-
 import javax.swing.JOptionPane;
 
-
-
 public class Jogo {
-	private String listaLances;
 	private Tabuleiro tabuleiro;
-	private Jogador jogador1;
-	private Jogador jogador2;
+	private Jogador jogador1, jogador2;
 	private int numeroLance;
 	private String turno;
 	private Lance ultimoLance;
-	
+	private String listaLances;
+
 	public Jogo(Jogador jogador1, Jogador jogador2, Tabuleiro tabuleiro) {
 		this.listaLances = "";
 		this.numeroLance = 1;
 		this.turno = "branco";
-		
 		this.tabuleiro = tabuleiro;	
-		
 		this.jogador1 = jogador1;
 		this.jogador2 = jogador2;
 		
@@ -109,6 +102,12 @@ public class Jogo {
 		return jogadorAtivo;
 	}
 	
+	//toString
+	@Override
+	public String toString() {
+		return jogador1.getClass() + " vs " + jogador2.getClass();
+	}
+
 	//Associa o jogo ao tabuleiro e peças:
 	public void associacaoJogo() {
 		tabuleiro.setJogo(this);
@@ -135,7 +134,7 @@ public class Jogo {
 	}
 	
 	//Atualiza os lances válidos para cada peça de determinada cor:
-	public void atualizaLancesPeca(String cor) {
+	private void atualizaLancesPeca(String cor) {
 		for (int l = 0; l < 8; l++) {
 		    for (int c = 0; c < 8; c++) {
 		    	try {
@@ -176,8 +175,6 @@ public class Jogo {
 	}
 	
 	//Método que faz uma jogada a partir da peça selecionada
-	//Arrumar situação de cravada
-	//Rei as vezes some com xeque
 	public boolean fazLance(Peca pecaSelecionada, Casa casaDestino) {
 		if(turno.equals("branco")) {
     		setUltimoLance(getJogadorBranco().fazJogada(pecaSelecionada, casaDestino));
@@ -204,12 +201,12 @@ public class Jogo {
 			String novoTurno = (turno.equals("branco")) ? "preto" : "branco";
 			setTurno(novoTurno);
 			atualizaLancesECapturas();
-        	verificaFimDoJogo();
+        	finalizaJogo();
 			
 			if(getJogador2() instanceof JogadorMaquina && turno.equals(jogador2.getCor())) {
 	        	do {
 	        		atualizaLancesECapturas();
-	            	verificaFimDoJogo();
+	            	finalizaJogo();
 		        	setUltimoLance(jogador2.fazJogada(null, null));
 		        	tabuleiro.repaint();
 	        	} while(getUltimoLance() == null);
@@ -290,50 +287,30 @@ public class Jogo {
 	}
 	
 	//Método que mostra uma mensagem de acordo com o resultado final do jogo
-	public void verificaFimDoJogo() {
-        // Verifique o resultado do jogo (branco ganhou, preto ganhou, empate)
+	public void finalizaJogo() {
+        //Verifica o resultado do jogo (branco ganhou, preto ganhou, empate)
         int resultado = verificaFim();
+        int opcao = -1;
 
-        // Exiba a mensagem adequada com base no resultado
+        //Exibe a mensagem adequada com base no resultado
         if (resultado == 10) {
-            int opcao = JOptionPane.showOptionDialog(null, "XEQUE MATE! O jogador branco venceu!", "Fim de Jogo", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"Jogar Novamente", "Sair"}, null);
-            verificaOpcaoFimDeJogo(opcao);
+            opcao = JOptionPane.showOptionDialog(null, "XEQUE MATE! O jogador branco venceu!", "Fim de Jogo", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"Jogar Novamente", "Sair"}, null);
         } else if (resultado == -10) {
-        	int opcao = JOptionPane.showOptionDialog(null, "XEQUE MATE! O jogador preto venceu!", "Fim de Jogo", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"Jogar Novamente", "Sair"}, null);
-            verificaOpcaoFimDeJogo(opcao);
+        	opcao = JOptionPane.showOptionDialog(null, "XEQUE MATE! O jogador preto venceu!", "Fim de Jogo", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"Jogar Novamente", "Sair"}, null);
         } else if (resultado == -1) {
-        	int opcao = JOptionPane.showOptionDialog(null, "O jogo terminou em empate por afogamento!", "Fim de Jogo", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"Jogar Novamente", "Sair"}, null);
-            verificaOpcaoFimDeJogo(opcao);
+        	opcao = JOptionPane.showOptionDialog(null, "O jogo terminou em empate por afogamento!", "Fim de Jogo", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"Jogar Novamente", "Sair"}, null);
         } else if (resultado == 1) {
-        	int opcao = JOptionPane.showOptionDialog(null, "O jogo terminou em empate por material insuficiente", "Fim de Jogo", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"Jogar Novamente", "Sair"}, null);
-            verificaOpcaoFimDeJogo(opcao);
+        	opcao = JOptionPane.showOptionDialog(null, "O jogo terminou em empate por material insuficiente", "Fim de Jogo", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"Jogar Novamente", "Sair"}, null);
         }
-	}
-	
-	public static void verificaOpcaoFimDeJogo(int opcao) {        
-        // Verifica a opção escolhida
+        
+        //Verifica a opção escolhida
         if (opcao == JOptionPane.YES_OPTION) {
             reiniciarPrograma();
         } else if (opcao == JOptionPane.NO_OPTION) {
             System.exit(0);
         }
-    }
-    
-    public static void reiniciarPrograma() {
-        // Reinicia o programa
-        String comando = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
-        String caminhoPrograma = Main.class.getCanonicalName();
-        try {
-            ProcessBuilder pb = new ProcessBuilder(comando, "-cp", System.getProperty("java.class.path"), caminhoPrograma);
-            pb.start();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        
-        // Encerra o programa atual
-        System.exit(0);
-    }
-	
+	}
+
 	//Método que verifica se o jogador de turno ativo está em xeque:
 	//Usar Enum:
 	public String verificaXeque() {
@@ -375,5 +352,22 @@ public class Jogo {
 		    }
 		}
 		return null;
-	}	
+	}
+	
+	
+    private static void reiniciarPrograma() {
+        // Reinicia o programa
+        String comando = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
+        String caminhoPrograma = Main.class.getCanonicalName();
+        try {
+            ProcessBuilder pb = new ProcessBuilder(comando, "-cp", System.getProperty("java.class.path"), caminhoPrograma);
+            pb.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+        // Encerra o programa atual
+        System.exit(0);
+    }
+	
 }

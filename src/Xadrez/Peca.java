@@ -3,40 +3,28 @@ import javax.swing.JPanel;
 import javax.swing.ImageIcon;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.Point;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
 import java.util.ArrayList;
 
 public abstract class Peca extends JPanel{
-	//Importando imagem:
+
+	private static final long serialVersionUID = 1L;
 	private ImageIcon imagem;
-	
-	//Mudando a escala:
-	private ImageIcon resizedIcon;
-		
+	private ImageIcon resizedIcon;		
 	private final String cor;
 	private Casa posicao;
-	private boolean capturado;
+	private Jogo jogo;
 	private ArrayList<Casa> casasBase;
 	private ArrayList<Casa> casasValidas;
 	private ArrayList<Casa> casasAtacadas;
-	
-
 	private ArrayList<Peca> capturasPossiveis;
-	private Jogo jogo;
-
 	
 	//Construtor:
 	public Peca(String cor, Casa posicao, String path) {
 		this.cor = cor;
 		this.posicao = posicao;
-		this.capturado = false;
 		casasBase = new ArrayList<Casa>();
 		capturasPossiveis = new ArrayList<Peca>();
-		casasAtacadas = new ArrayList<Casa>();
-		
+		casasAtacadas = new ArrayList<Casa>();	
 		imagem = new ImageIcon(path);
 
 		//Mudando a escala:
@@ -58,15 +46,7 @@ public abstract class Peca extends JPanel{
 	public void setPosicao(Casa posicao) {
 		this.posicao = posicao;
 	}
-
-	public boolean isCapturado() {
-		return capturado;
-	}
-
-	public void setCapturado(boolean capturado) {
-		this.capturado = capturado;
-	}
-
+	
 	public ArrayList<Casa> getCasasBase() {
 		casasBase();
 		return casasBase;
@@ -141,12 +121,6 @@ public abstract class Peca extends JPanel{
 	}
 	
 	public abstract int casasBase();
-			
-	public void paintComponent(Graphics g) {
-		super.paintComponent(g);
-        resizedIcon.paintIcon(this, g, 0, 0);
-	}
-	
-
-
+				
+	public void paintComponent(Graphics g) {}
 }

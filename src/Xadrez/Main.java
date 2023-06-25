@@ -1,7 +1,5 @@
 package Xadrez;
-import java.util.ArrayList;
 import java.util.Random;
-
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -37,9 +35,8 @@ public class Main {
         f.setResizable(false);                                                   
         f.setLocationRelativeTo(null);                                           
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		//System.out.println("jogo criado");
 		Jogo jogo = new Jogo(jogador1, jogador2, tabuleiro);
-
+		System.out.println("Jogo " + jogo + " iniciado");
 	}
 	
 	public static String escolhaCor() {

@@ -1,10 +1,10 @@
 package Xadrez;
 
-import java.util.ArrayList;
-
+import java.util.ArrayList;	
 import javax.swing.ImageIcon;
 
 public class Torre extends Peca {
+	private static final long serialVersionUID = 1L;
 	private boolean movido;
 	
 	//Construtor:

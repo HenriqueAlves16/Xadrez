@@ -1,7 +1,6 @@
 package Xadrez;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 public class JogadorHumano extends Jogador {
 	

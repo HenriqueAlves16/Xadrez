@@ -3,17 +3,15 @@ import java.util.ArrayList;
 
 public abstract class Jogador {
 	private String cor;
+	private Jogo jogo;
 	private ArrayList<Peca> capturasPossiveis;
 	private ArrayList<Casa> casasAtacadas;
 	private ArrayList<Lance> lancesPossiveis;
 	private ArrayList<Lance> lancesEspeciais;
-	private boolean emXeque;
-	private Jogo jogo;
 
 	//Construtor:
 	public Jogador(String cor) {
 		this.cor = cor;
-		this.emXeque = false;
 		this.capturasPossiveis = new ArrayList<Peca>();
 		this.lancesPossiveis = new ArrayList<Lance>();
 		this.casasAtacadas = new ArrayList<Casa>();
@@ -50,14 +48,6 @@ public abstract class Jogador {
 
 	public void setCasasAtacadas(ArrayList<Casa> casasAtacadas) {
 		this.casasAtacadas = casasAtacadas;
-	}
-
-	public boolean isEmXeque() {
-		return emXeque;
-	}
-
-	public void setEmXeque(boolean emXeque) {
-		this.emXeque = emXeque;
 	}
 	
 	public ArrayList<Lance> getLancesPossiveis() {

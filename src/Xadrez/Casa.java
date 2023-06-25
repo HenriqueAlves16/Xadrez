@@ -1,11 +1,10 @@
 package Xadrez;
 
-
 public class Casa {
     private int linha;
     private char coluna;
     private Peca peca;
-    private Peca pecaTemp;
+	private static final int TAMANHO_CASA = 75;
 
     public Casa(char coluna, int linha, Peca peca) {
         this.linha = linha;
@@ -43,17 +42,13 @@ public class Casa {
         this.peca = peca;
     }   
     
-    public Peca getPecaTemp() {
-		return pecaTemp;
+    public static int getTamanhoCasa() {
+		return TAMANHO_CASA;
 	}
 
-	public void setPecaTemp(Peca pecaTemp) {
-		this.pecaTemp = pecaTemp;
-	}
-
+	//toString()
 	@Override
     public String toString() {
     	return "" + coluna + linha;
     }
-
 }

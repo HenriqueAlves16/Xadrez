@@ -2,12 +2,8 @@ package Xadrez;
 
 import java.util.ArrayList;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-
 public class Peao extends Peca implements MovableSpc{
+	private static final long serialVersionUID = 1L;
 	private ArrayList<Casa> casasAtacadas;
 	private ArrayList<Lance> lancesEspeciais;
 	
@@ -33,6 +29,12 @@ public class Peao extends Peca implements MovableSpc{
 
 	public void setLancesEspeciais(ArrayList<Lance> lancesEspeciais) {
 		this.lancesEspeciais = lancesEspeciais;
+	}
+	
+	//toString():
+	@Override
+	public String toString() {
+		return super.toString() + "P";
 	}
 	
 	public int casasBase() {
@@ -117,10 +119,5 @@ public class Peao extends Peca implements MovableSpc{
 		}	else	{
 			return "Imagens/b_pawn_png_128px.png";
 		}
-	}
-	
-	@Override
-	public String toString() {
-		return super.toString() + "P";
 	}
 }

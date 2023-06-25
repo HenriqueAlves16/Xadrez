@@ -1,12 +1,19 @@
 package Xadrez;
 
 import java.util.ArrayList;
-
 import javax.swing.ImageIcon;
 
 public class Rainha extends Peca {
+	private static final long serialVersionUID = 1L;
+
 	public Rainha(String cor, Casa posicao, String path) {
 		super(cor, posicao, path);
+	}
+	
+	//toString()
+	@Override
+	public String toString() {
+		return super.toString() + "Q";
 	}
 	
 	public int casasBase(){
@@ -165,10 +172,5 @@ public class Rainha extends Peca {
 		ImageIcon resizedIcon = (cor.equals("branco")) ? rainhaBranca.getResizedIcon() : rainhaPreta.getResizedIcon();
 		
 		return resizedIcon;
-	}
-	
-	@Override
-	public String toString() {
-		return super.toString() + "Q";
 	}
 }

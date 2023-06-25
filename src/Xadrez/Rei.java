@@ -3,6 +3,7 @@ package Xadrez;
 import java.util.ArrayList;
 
 public class Rei extends Peca implements MovableSpc{
+	private static final long serialVersionUID = 1L;
 	private boolean movido;
 	private ArrayList<Lance> lancesEspeciais;
 	
@@ -29,6 +30,13 @@ public class Rei extends Peca implements MovableSpc{
 	public void setLancesEspeciais(ArrayList<Lance> lancesEspeciais) {
 		this.lancesEspeciais = lancesEspeciais;
 	}
+	
+	//toString()
+	@Override
+	public String toString() {
+		return super.toString() + "K";
+	}
+	
 	
 	public int casasBase() {
 		ArrayList<Casa> lancesValidos = new ArrayList<Casa>();
@@ -66,7 +74,7 @@ public class Rei extends Peca implements MovableSpc{
 	    return lancesValidos.size();
 	}
 
-	public boolean casaInvalida(Casa casa, Jogador oponente) {
+	private boolean casaInvalida(Casa casa, Jogador oponente) {
 		ArrayList<Casa> casasInvalidas = oponente.getCasasAtacadas();
 		for(int i = 0; i < casasInvalidas.size(); i++) {
 			if(casasInvalidas.get(i).toString().equals(casa.toString())) {
@@ -109,7 +117,7 @@ public class Rei extends Peca implements MovableSpc{
 	}
 	
 	//Verifica se o caminho do roque não está ocupado nem atacado
-	public boolean caminhoLivre(int roque) {
+	private boolean caminhoLivre(int roque) {
 		int linhaRei = this.getPosicao().getLinha();
 		Jogador jogadorAdversario = (getJogo().getJogador1().getCor().equals(this.getCor())) ? getJogo().getJogador2() : getJogo().getJogador1();
 		ArrayList<Casa> casasAtacadasAdv = jogadorAdversario.getCasasAtacadas();
@@ -160,11 +168,5 @@ public class Rei extends Peca implements MovableSpc{
 			return "Imagens/b_king_png_128px.png";
 		}
 	}
-	
-	@Override
-	public String toString() {
-		return super.toString() + "K";
-	}
-	
 	
 }

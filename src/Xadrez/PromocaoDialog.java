@@ -3,14 +3,13 @@ package Xadrez;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 
 public class PromocaoDialog extends JDialog implements ActionListener{
-	
-    private Peao peao;
+	private static final long serialVersionUID = 1L;
+	private Peao peao;
     private JogadorHumano jogador;
     
     public PromocaoDialog(Peao peao, JogadorHumano jogador) {

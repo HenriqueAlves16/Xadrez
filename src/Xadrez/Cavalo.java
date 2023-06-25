@@ -1,14 +1,21 @@
 package Xadrez;
 
 import java.util.ArrayList;
-
 import javax.swing.ImageIcon;
 
 public class Cavalo extends Peca {
+
+	private static final long serialVersionUID = 1L;
+
 	public Cavalo(String cor, Casa posicao, String path) {
 		super(cor, posicao, path);
 	}
 	
+	//toString():
+	@Override
+	public String toString() {
+		return super.toString() + "N";
+	}
 	
 	public int casasBase() {
 		ArrayList<Casa> lancesValidos = new ArrayList<Casa>();
@@ -51,18 +58,11 @@ public class Cavalo extends Peca {
 		}
 	}
 	
-	
-	
 	public static ImageIcon getResizedIcon(String cor) {
 		Cavalo cavaloBranco = new Cavalo("branco", null, getImagePath("branco"));
 		Cavalo cavaloPreto = new Cavalo("preto", null, getImagePath("preto"));
 		ImageIcon resizedIcon = (cor.equals("branco")) ? cavaloBranco.getResizedIcon() : cavaloPreto.getResizedIcon();
 		
 		return resizedIcon;
-	}
-	
-	@Override
-	public String toString() {
-		return super.toString() + "N";
 	}
 }
