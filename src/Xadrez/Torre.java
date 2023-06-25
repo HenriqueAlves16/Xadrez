@@ -11,7 +11,6 @@ public class Torre extends Peca {
 	public Torre(String cor, Casa posicao, String path) {
 		super(cor, posicao, path);
 		this.movido = false;
-		//System.out.println("torre " + getCor());
 	}
 	
 	//Getters e setters:

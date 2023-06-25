@@ -28,9 +28,7 @@ public class Jogo {
 		this.jogador1 = jogador1;
 		this.jogador2 = jogador2;
 		
-		//System.out.println("associando coisas ao jogo");
 		associacaoJogo();
-		//System.out.println("Atualizando os lances e capturas");
 		atualizaLancesECapturas();
 		
 		if(jogador2 instanceof JogadorMaquina && jogador2.getCor().equals("branco")) {
@@ -181,14 +179,11 @@ public class Jogo {
 	//Arrumar situação de cravada
 	//Rei as vezes some com xeque
 	public boolean fazLance(Peca pecaSelecionada, Casa casaDestino) {
-		System.out.println("entrou em fazLance. Turno: " + turno);
 		if(turno.equals("branco")) {
     		setUltimoLance(getJogadorBranco().fazJogada(pecaSelecionada, casaDestino));
     	}	else	{
     		setUltimoLance(getJogadorPreto().fazJogada(pecaSelecionada, casaDestino));
     	}
-		System.out.println("///////////////ultimo lance: " + ultimoLance);
-		//System.out.println("////////////// ACABOU O FAZLANCE " + getTabuleiro().test);
 		finalizaTurno();
 		return (ultimoLance != null) ? true : false;
 	}
@@ -196,40 +191,30 @@ public class Jogo {
 	//Muda turno e faz o lance do computador, se esse for o caso
 	public void finalizaTurno() {
 		tabuleiro.setPecaClicada(null);
-		//System.out.println("finalizando turno. Ultimo lance: " + ultimoLance);
 		try {
 			if(ultimoLance.getPecaMovida() instanceof Rei) {
-				//System.out.println("MOVIDO: " + ((Rei)ultimoLance.getPecaMovida()).getMovido());
 				((Rei)ultimoLance.getPecaMovida()).setMovido(true);
 			} else if(ultimoLance.getPecaMovida() instanceof Torre) {
-				//System.out.println("MOVIDO: " + ((Torre)ultimoLance.getPecaMovida()).getMovido());
 				((Torre)ultimoLance.getPecaMovida()).setMovido(true);
 			}
 		}	catch(NullPointerException e) {}
-		//System.out.println("////////////// NAO EH LANCE roque " + getTabuleiro().test);
 		
 		if (ultimoLance != null) {
 			numeroLance++;
-			System.out.println("MUDANDO O TURNO! ANTES: " + turno);
 			String novoTurno = (turno.equals("branco")) ? "preto" : "branco";
 			setTurno(novoTurno);
-			System.out.println("DEPOIS: " + turno);
 			atualizaLancesECapturas();
         	verificaFimDoJogo();
 			
 			if(getJogador2() instanceof JogadorMaquina && turno.equals(jogador2.getCor())) {
 	        	do {
-	        		System.out.println("atualizando lances e capt");
 	        		atualizaLancesECapturas();
-	        		System.out.println("Verificando fim");
 	            	verificaFimDoJogo();
 		        	setUltimoLance(jogador2.fazJogada(null, null));
 		        	tabuleiro.repaint();
 	        	} while(getUltimoLance() == null);
 	        	finalizaTurno();
 	        }
-			//System.out.println("////////////// ATUALIZOU LANCES E CAPTURAS " + getTabuleiro().test);
-			//System.out.println("turno finalizado");
 		}
 	}
 
@@ -283,7 +268,6 @@ public class Jogo {
 		            } else if (peca instanceof Bispo && peca.getCor().equals("preto")) {
 		                bisposPretos++;
 		            } else if (!(peca instanceof Rei)) {
-		            	System.out.println("outra peca: " + peca + " em " + peca.getPosicao());
 		                outrasPecas = true; //Define a variável de controle como true para interromper o loop
 		                break;
 		            }
@@ -294,8 +278,6 @@ public class Jogo {
 		        break; // Interrompe o loop externo
 		    }
 		}
-		System.out.println("MATERIAL INSUFICIENTE - OUTRAS PEÇAS: " + outrasPecas);
-		System.out.println("WN: " + cavalosBrancos + " BN: " + cavalosPretos + " WB: " + bisposBrancos + " BB: " + bisposPretos);
 		//Casos possíveis de empate por material insuficiente:
 		if(!outrasPecas) {
 			if(cavalosBrancos <= 2 && cavalosPretos <= 2 && bisposBrancos == 0 && bisposPretos == 0) {
@@ -363,9 +345,6 @@ public class Jogo {
 		ArrayList<Casa> casasAtacadasJogadorPreto = jogadorPreto.getCasasAtacadas();		
 		
 		if(turno.equals("preto")) {
-			//System.out.println("casas atacadas pelo branco: " + jogadorBranco.getCasasAtacadas());
-			//System.out.println("Posição rei preto " + reiPreto.getPosicao());
-			
 			//Preto em xeque
 			for(int i = 0; i < casasAtacadasJogadorBranco.size(); i++) {
 				if(casasAtacadasJogadorBranco.get(i).toString().equals(reiPreto.getPosicao().toString())) {
@@ -374,12 +353,8 @@ public class Jogo {
 			}
 			//Branco em xeque
 		}	else	{
-			//System.out.println("casas atacadas pelo preto: " + jogadorPreto.getCasasAtacadas());
-			//System.out.println("Posição rei branco " + reiBranco.getPosicao());
 			for(int i = 0; i < casasAtacadasJogadorPreto.size(); i++) {
-				System.out.println("casa atacada pelo preto: " + casasAtacadasJogadorPreto.get(i));
 				if(casasAtacadasJogadorPreto.get(i).toString().equals(reiBranco.getPosicao().toString())) {
-					System.out.println("rei branco: " + reiBranco);
 					return "branco";
 				}
 			}
@@ -390,14 +365,10 @@ public class Jogo {
 	
 	//Acho que ele tentou fazer esse lance, mas a chamada ocorreu antes do problema
 	public Rei encontraRei(String cor) {
-		System.out.println("TABULEIRO EM ENCONTRA REI");
-		Tabuleiro.imprimeTabuleiro();
 		for (int l = 0; l < 8; l++) {
 		    for (int c = 0; c < 8; c++) {
 		    	try {
 			        if(Tabuleiro.getTabuleiro()[l][c].getPeca() instanceof Rei && Tabuleiro.getTabuleiro()[l][c].getPeca().getCor().equals(cor)) {
-			        	System.out.println("REI ENCONTRADO EM " + (char)(c + 'a') + (l + 1));
-			        	System.out.println(cor + "//" + Tabuleiro.getTabuleiro()[l][c].getPeca().getCor());
 			        	return (Rei)Tabuleiro.getTabuleiro()[l][c].getPeca();
 			        }
 		    	} catch(NullPointerException e) {}

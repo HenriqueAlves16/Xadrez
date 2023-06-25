@@ -35,38 +35,26 @@ public class Rei extends Peca implements MovableSpc{
 		ArrayList<Casa> casasAtacadas = new ArrayList<Casa>();
 	    ArrayList<Peca> capturasValidas = new ArrayList<Peca>();
 	    Jogador oponente = (getCor().equals(getJogo().getJogador1().getCor())) ? getJogo().getJogador2() : getJogo().getJogador1();
-	    //System.out.println("cor rei:" + this.getCor() + " // oponente: " + oponente.getCor());
 	    
 	    char colunaAtual = getPosicao().getColuna();
 	    int linhaAtual = getPosicao().getLinha();
-		//System.out.println("casa rei " + getCor() + " " + this.getPosicao());
 
 	    //Percorre as casas em volta do rei
 	    for(char c = (char)(colunaAtual - 1); c <= (char)(colunaAtual + 1); c++) {
 	    	for(int l = linhaAtual - 1; l <= linhaAtual + 1; l++) {
-	    	
-	    		//System.out.println("linha " + l + " coluna " + c);
-
-	    		//System.out.println("casas inválidas para o rei " + this.getCor() + casasInvalidas);
-	    		
+    		
 	    		if(l > 0 && l < 9 && c >= 'a' && c <= 'h') {
 	    			Casa casa = Tabuleiro.getCasa(c, l);
-		    		//System.out.println("rei " + getCor() + " iterando na casa " + casa);
-		    		
-	    			//if(!casa.equals(getPosicao())) {
+
+	    			if(!casa.equals(getPosicao())) {
 	    				casasAtacadas.add(casa);
-	    			//}
-	    			//System.out.println("casa " + casa + " adicionada na lista de casas atacadas");
-	    			//System.out.println("casa " + casa + " inválida: " + casaInvalida(casa, oponente));
-	    			
-			        if (casa.getPeca() == null && !casaInvalida(casa, oponente) && !casa.equals(this.getPosicao())) {		//Casa sem peça e válida
-			        	//System.out.println("casa livre: " + casa);
-			            lancesValidos.add(casa);
-			        } else if (casa.getPeca() != null && !(casa.getPeca().getCor().equals(this.getCor()))  && !casaInvalida(casa, oponente) && !casa.equals(this.getPosicao())) {		//Casa com peça adversária e válida
-			        	//System.out.println("casa ocupada e válida: " + casa);
-			            lancesValidos.add(casa);
-			        	capturasValidas.add(casa.getPeca());
-			        }
+				        if (casa.getPeca() == null && !casaInvalida(casa, oponente)) {		//Casa sem peça e válida
+				            lancesValidos.add(casa);
+				        } else if (casa.getPeca() != null && !(casa.getPeca().getCor().equals(this.getCor()))  && !casaInvalida(casa, oponente)) {		//Casa com peça adversária e válida
+				            lancesValidos.add(casa);
+				        	capturasValidas.add(casa.getPeca());
+				        }
+	    			}
 	    		}
 	    	}
 	    }
@@ -75,17 +63,13 @@ public class Rei extends Peca implements MovableSpc{
 	    this.setCasasBase(lancesValidos);
 	    this.setCapturasPossiveis(capturasValidas);
 	    
-	    // System.out.println("Lances válidos para o rei " + getCor() + " após atualização: " + getLancesPossiveis());
 	    return lancesValidos.size();
 	}
 
 	public boolean casaInvalida(Casa casa, Jogador oponente) {
 		ArrayList<Casa> casasInvalidas = oponente.getCasasAtacadas();
-		System.out.println("casas inválidas para o " + this.toString() + ": " + casasInvalidas);
 		for(int i = 0; i < casasInvalidas.size(); i++) {
-			//System.out.println(casasInvalidas.get(i) + " //// " + casa);
 			if(casasInvalidas.get(i).toString().equals(casa.toString())) {
-				//System.out.println("casa inválida: " + casa);
 				return true;
 			}
 		}

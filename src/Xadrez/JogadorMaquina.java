@@ -11,8 +11,6 @@ public class JogadorMaquina extends Jogador {
 	
 	@Override
 	public Lance fazJogada(Peca peca, Casa casa) {
-		System.out.println("xeque maquina:" + getJogo().verificaXeque());
-		Tabuleiro.imprimeTabuleiro();
 		Peca pecaSelecionada;
 		Casa casaOrigem;
 		Casa casaDestino;
@@ -25,7 +23,6 @@ public class JogadorMaquina extends Jogador {
 		verificaLancesPossiveis();
 		
 		if(xeque.equals(getCor())) {		//Jogador maquina em xeque
-			System.out.println("Lance aleatório xeque");
 			ArrayList<Lance> lancesPossiveis = getLancesPossiveisXeque();
 			int numeroAleatorio = random.nextInt(getLancesPossiveisXeque().size());
 			lanceEscolhido = lancesPossiveis.get(numeroAleatorio);
@@ -35,12 +32,8 @@ public class JogadorMaquina extends Jogador {
 			casaDestino = lanceEscolhido.getCasaDestino();
 			
 		}	else	{			//Jogador maquina não está em xeque
-			System.out.println("Lance aleatório sem xeque");
 			ArrayList<Lance> lancesEspeciais = getLancesEspeciais();
-			//System.out.println("qtd lances normais possiveis: " + getLancesPossiveis().size());
-			//System.out.println("qtd lances especiais possiveis: " + lancesEspeciais.size());
-			//System.out.println("Lances especiais possíveis: " + lancesEspeciais);
-			
+
 			//Escolhe um lance normal aleatório
 			int numeroAleatorioNormal = random.nextInt(getLancesPossiveis().size());
 			Lance lanceNormalAleatorio = getLancesPossiveis().get(numeroAleatorioNormal);
@@ -50,15 +43,12 @@ public class JogadorMaquina extends Jogador {
 			if(lancesEspeciais.size() > 0) {
 				int numeroAleatorioSpc = random.nextInt(lancesEspeciais.size());
 				Lance lanceSpcAleatorio = getLancesEspeciais().get(numeroAleatorioSpc);
-				//System.out.println("Lance Especial candidato: " + lanceSpcAleatorio);
 				
 				//Escolhe um lance normal ou especial:
 				n = random.nextInt(2);
 				lanceEscolhido = (n == 0) ? lanceNormalAleatorio : lanceSpcAleatorio;
 			}
-			
-			//System.out.println("//////////Lance Escolhido://///////// " + lanceEscolhido);
-			
+						
 			pecaSelecionada = lanceEscolhido.getPecaMovida();
 			casaOrigem = pecaSelecionada.getPosicao();
 			casaDestino = lanceEscolhido.getCasaDestino();
@@ -82,12 +72,8 @@ public class JogadorMaquina extends Jogador {
 			String texto = (getCor().equals("branco")) ? Lance.escreveLance(pecaSelecionada, casaDestino, getJogo().getNumeroLance()) : Lance.escreveLance(pecaSelecionada, casaDestino);
 			Lance.escreveNoArquivo(texto);
 			
-			System.out.println("lance máquina ok");
-			Tabuleiro.imprimeTabuleiro();
-			//System.out.println("MAQUINA: Peca selecionada: " + pecaSelecionada + "origem: " + casaOrigem + "casaDestino: " + casaDestino);
 			return new Lance(pecaSelecionada, casaDestino, casaOrigem);
 		}
-		System.out.println("chamada recursiva");
 		return fazJogada(null, null);
 	}
 	
