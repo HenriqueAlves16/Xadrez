@@ -55,7 +55,7 @@ public class JogadorHumano extends Jogador {
 		Casa origem = pecaSelecionada.getPosicao();
 		if(lanceMantemReiProtegido(pecaSelecionada, casaDestino))	{	//Não está em xeque e é um lance possível
 			getJogo().getTabuleiro().mudaTabuleiro(pecaSelecionada.getPosicao(), casaDestino);
-	        if((pecaSelecionada.getPosicao().getLinha() == 8 || pecaSelecionada.getPosicao().getLinha() == 1) && pecaSelecionada instanceof Peao) {
+	        if(pecaSelecionada instanceof Peao) {
 				promocao((Peao)pecaSelecionada);
 			}
 	        return new Lance(pecaSelecionada, casaDestino, origem);
@@ -105,7 +105,8 @@ public class JogadorHumano extends Jogador {
 		if ((peao.getCor().equals("branco") && peao.getPosicao().getLinha() == 8) || (peao.getCor().equals("preto") && peao.getPosicao().getLinha() == 1)) {
 			getJogo().getTabuleiro().repaint();
 	        // Crie a caixa de diálogo personalizada
-	        PromocaoDialog dialog = new PromocaoDialog(peao, this);
+			PromocaoDialog dialog = new PromocaoDialog(peao, this);
+	        dialog.setModal(true);
 	        dialog.setVisible(true);
 		}
 	}

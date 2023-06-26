@@ -142,7 +142,6 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
 			casaDestino.setPeca(peca);
 			casaOrigem.setPeca(null);
 			peca.setPosicao(casaDestino);
-			repaint();
 		}
 	}
 
@@ -226,9 +225,10 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
         }
         acusaXeque(g);
         desenhaPecas(g);
-        if(mouseX < 600 && mouseY < 600 && mouseX > 0 && mouseY > 0) {
+        
+        if(dragging && mouseX < 600 && mouseY < 600 && mouseX > 0 && mouseY > 0) {		//A animação da peça sendo arrastada só se dá dentro do tabuleiro.
         	desenhaPecaArrastada(g);
-        }	else	{
+        }	else	{		//Se sai do limite do tabuleiro, a peça é desenhada na sua posição de origem
         	dragging = false;
         	desenhaPecas(g);
         }
@@ -409,6 +409,7 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
 	@Override
     public void mouseReleased(MouseEvent e) { 
 		//tratar caso de soltar fora do tabuleiro
+        dragging = false;
 		try {
 	        if(e.getX() < 8 * Casa.getTamanhoCasa() && e.getY() < 8 * Casa.getTamanhoCasa() && pecaSelecionada.getCor().equals(jogo.getTurno())){             //Permite movimento apenas dentro do tabuleiro e na vez do jogador correto ()poderia melhorar criando uma exceção
 	        	int xReleased = e.getX();
@@ -447,10 +448,10 @@ public class Tabuleiro extends JPanel implements  MouseListener, MouseMotionList
 			                	}
 		                	} catch(ArrayIndexOutOfBoundsException g) {}
 		                }
+		            	jogo.finalizaJogo();
+
 	            	} catch(NullPointerException exp) {}
-	            
 	            }
-	            dragging = false;
 	            repaint();
 	        }
 		} catch(NullPointerException t)	{

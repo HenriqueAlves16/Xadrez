@@ -197,9 +197,11 @@ public class Jogo {
 		}	catch(NullPointerException e) {}
 		
 		if (ultimoLance != null) {
-			numeroLance++;
 			String novoTurno = (turno.equals("branco")) ? "preto" : "branco";
 			setTurno(novoTurno);
+			if(novoTurno.equals("branco")) {
+				numeroLance++;
+			}
 			atualizaLancesECapturas();
         	finalizaJogo();
 			
@@ -291,6 +293,11 @@ public class Jogo {
         //Verifica o resultado do jogo (branco ganhou, preto ganhou, empate)
         int resultado = verificaFim();
         int opcao = -1;
+        
+        if(resultado != 0) {
+        	tabuleiro.repaint();			//Atualiza a interface antes do jogo acabar
+        	Lance.escreveNoArquivo("\n");	//Pula linha no arquivo
+        }
 
         //Exibe a mensagem adequada com base no resultado
         if (resultado == 10) {
