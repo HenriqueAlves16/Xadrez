@@ -1,4 +1,4 @@
-package Xadrez;
+	package Xadrez;
 import java.util.ArrayList;
 
 public abstract class Jogador {
