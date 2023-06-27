@@ -20,7 +20,7 @@ O projeto consiste em um jogo de xadrez implementado em Java, com o objetivo de 
 - **Lances especiais:** Os lances especiais do jogo, como en passant e roque, são implementados usando uma interface chamada MovableSpc
 - **Promoção do peão para qualquer peça:** Quando um peão chega na casa de promoção, é exibido um painel com as opções de peça de promoção, a qual deve ser selecionda
 - **Escrita dos lances:** Os lances feitos pelos jogadores são registrados em um arquivo de texto
-- **Verificação autmoática de fim e possibilidade de novo jogo:** Ao fim do jogo, é exibida uma mensagem informando como o jogo acabou e é dada ao usuário a opção de jogar novamente ou sair
+- **Verificação automática de fim e possibilidade de novo jogo:** Ao fim do jogo, é exibida uma mensagem informando como o jogo acabou e é dada ao usuário a opção de jogar novamente ou sair
 
 ## Como Jogar
 
@@ -55,3 +55,6 @@ Todas as classes do projeto podem ser vistas no diagrama UML Xadrez_UML. As prin
 - **Classe Lance:** Classe que representa um lance feito por um jogador
 - **Classes NenhumaPecaSelecionadaException e PecaOponenteSelecionadaException:** Classes que representam exceções pertinentes ao jogo que são lançadas quando necessárioo
 
+## Vídeo explicativo:
+
+https://drive.google.com/file/d/1eXV1Cz8QVLmr9v2u99eZ-0p574en-RqN/view
